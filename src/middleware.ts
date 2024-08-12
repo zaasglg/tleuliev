@@ -1,8 +1,18 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-import { cookies } from 'next/headers'
 
-export function middlewarer(request: NextRequest) {
+const getCookie = (request: NextRequest, name: string): string | undefined => {
+    const cookies = request.headers.get('cookie');
+    if (!cookies) return undefined;
+
+    const cookieArray = cookies.split('; ').map(cookie => cookie.split('='));
+    let cookieMap: Map<string, string>;
+    // @ts-ignore
+    cookieMap = new Map(cookieArray);
+    return cookieMap.get(name);
+};
+
+export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
 
     const excludedRoutes = ['/login', '/register', '/public'];
@@ -11,7 +21,7 @@ export function middlewarer(request: NextRequest) {
         return NextResponse.next();
     }
 
-    const token = localStorage.getItem("token")
+    const token = request.headers.get('token');
 
     if (!token) {
         return NextResponse.redirect(new URL('/login', request.url));

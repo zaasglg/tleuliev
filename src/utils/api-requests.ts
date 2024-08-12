@@ -1,6 +1,6 @@
 import {useMutation, useQuery} from '@tanstack/react-query';
 import axios, {AxiosResponse} from 'axios';
-import {ApiResponse, Districts, Regions, User, Villages} from "../../utils/type";
+import {ApiResponse, Districts, Regions, User, Villages} from "./type";
 import {cookies} from "next/headers";
 
 // fetches
@@ -70,7 +70,7 @@ export const useLoginUser = (
     return useMutation<AxiosResponse<{ token: String }>, Error, { phone: string; password: string }>({
         mutationFn: loginUser,
             onSuccess: (data) => {
-                cookies().set('token', data.data.token.toString())
+                // cookies().set('token', data.data.token.toString())
 
                 if (onSuccess) {
                     onSuccess(data);

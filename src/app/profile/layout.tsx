@@ -1,4 +1,5 @@
 import { Metadata } from "next";
+import LayoutsApp from "@/app/(dashboard)/layouts-app";
 
 export const metadata: Metadata = {
     title: 'Жеке кабинет',
@@ -10,5 +11,11 @@ export default function TestLayout({
                                    }: {
     children: React.ReactNode;
 }) {
-    return <>{children}</>;
+    return (
+        <>
+            <LayoutsApp>
+                {children}
+            </LayoutsApp>
+        </>
+    );
 }

@@ -4,11 +4,22 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
+import {
+    TvMinimal,
+    User,
+    ListTodo, ChartBar, Files, MessageCircle
+} from "lucide-react";
+
 
 // Map of links to display in the side navigation.
 // Depending on the size of the application, this would be stored in a database.
 const links = [
-    { name: 'Басты бет', href: '/' },
+    { name: 'Басты бет', href: '/', icon: <TvMinimal /> },
+    { name: 'Жеке кабинет', href: '/profile', icon: <User /> },
+    { name: 'Тест', href: '/test', icon: <ListTodo /> },
+    { name: 'Статистика', href: '/chart', icon: <ChartBar /> },
+    { name: 'Материалдар', href: '/material', icon: <Files /> },
+    { name: 'Кері байланыс', href: '/feedback', icon: <MessageCircle /> },
 ];
 
 export default function NavLinks() {
@@ -28,6 +39,7 @@ export default function NavLinks() {
                             },
                         )}
                     >
+                        {link.icon}
                         <p className="hidden md:block">{link.name}</p>
                     </Link>
                 );

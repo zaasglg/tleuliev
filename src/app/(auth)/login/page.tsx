@@ -1,98 +1,152 @@
 "use client"
 
-import Logo from "@/components/Logo";
 import Link from "next/link";
-import FormInput from "@/components/form-input";
-import {useRef} from "react";
-import axios from 'axios';
-import {useRouter} from "next/router";
-import { postLogin} from "@/api/postLogin";
+import {useState} from "react";
+import {Label} from "@/components/ui/label";
+import {Input} from "@/components/ui/input";
+import {Button} from "@/components/ui/button";
+
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger
+} from "@/components/ui/dialog";
+import {useRouter} from "next/navigation";
+import {UserProps} from "@/utils/type";
+import {useLoginUser} from "@/utils/api-requests";
+import {AxiosResponse} from "axios";
+import { cookies } from 'next/headers'
 
 export default function Login() {
-    const phoneRef = useRef<HTMLInputElement>(null);
-    const passwordRef = useRef<HTMLInputElement>(null);
 
+    const router = useRouter()
 
-    const handleLogin = async () => {
-        const phone = phoneRef.current?.value;
-        const password = passwordRef.current?.value;
+    const [error, setError] = useState("");
+    const [formData, setFormData] = useState({
+        phone: '',
+        password: ''
+    })
 
-        if (!phone || !password) {
-            console.error('Username and password are required');
-            return;
-        }
-
-        try {
-            postLogin(phone, password);
-        } catch (error) {
-            console.error('Login failed:');
-        }
+    const handleSuccess = (response: AxiosResponse<{ token: String }>) => {
+        setError("Request failed with status code 401")
+        // console.log(response.data.token)
+        // cookies().set('token', response.data.token.toString())
+        // localStorage.setItem("token", response.data.token.toString())
+        // router.push("/")
     };
+
+    const handleError = (error: Error) => {
+        setError(error.message)
+        console.log(error)
+        // setModal(false)
+    };
+
+    const { mutate: login } = useLoginUser(handleSuccess, handleError);
+
+
+    const handleSubmit = () => {
+        console.log(formData)
+        login({
+            phone: formData.phone,
+            password: formData.password
+        })
+    }
 
     return (
         <>
-            <div className="min-h-screen bg-gray-100 flex justify-center items-center">
-                <div className="bg-white grid grid-cols-2 w-8/12 mx-auto rounded-xl">
-                    <div className="h-full flex justify-center items-center p-10">
-                        <div className="mx-auto w-full max-w-sm lg:w-96">
-                            <div>
-                                <Logo color="rgb(59 130 246)" size={20}/>
-                            </div>
-
-                            <div className="mt-8">
-
-                                <div className="mt-6">
-                                    <form onSubmit={handleLogin} className="space-y-6">
-                                        <div>
-                                            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">
-                                                Email
-                                            </label>
-                                            <div className="mt-1">
-                                                <FormInput id="phone" name="phone" type="text" ref={phoneRef}/>
-                                            </div>
-                                        </div>
-
-                                        <div className="space-y-1">
-                                            <label htmlFor="password"
-                                                   className="block text-sm font-medium text-gray-700">
-                                                Құпиясөз
-                                            </label>
-                                            <div className="mt-1">
-                                                <FormInput id="password" name="password" type="password" ref={passwordRef}/>
-                                            </div>
-                                        </div>
-
-                                        <div className="flex items-center justify-between">
-                                            <div className="text-sm">
-                                                <a href="#" className="text-xs text-gray-500 hover:text-indigo-500">
-                                                    Құпия сөзді ұмыттым
-                                                </a>
-                                            </div>
-                                        </div>
-
-                                        <div>
-                                            <button
-                                                type="submit"
-                                                className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-500 hover:bg-blue-600 focus:outline-none">
-                                                Кіру
-                                            </button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
+            <div className="w-full lg:grid lg:min-h-screen  lg:grid-cols-2">
+                <div className="flex items-center justify-center py-12">
+                    <div className="mx-auto grid w-[350px] gap-6">
+                        <div className="grid gap-2 text-left">
+                            <h1 className="text-3xl font-bold">Кіру</h1>
                         </div>
+
+                        <div className="grid gap-4">
+                            <div className="grid gap-2">
+                                <Label htmlFor="email">Телефон номер</Label>
+                                <Input
+                                    id="phone"
+                                    type="phone"
+                                    placeholder="+7 телефон номер"
+                                    value={formData.phone}
+                                    onChange={(event) => {
+                                        setFormData({
+                                            ...formData,
+                                            phone: event.target.value,
+                                        });
+                                    }}
+                                />
+                            </div>
+                            <div className="grid gap-2">
+                                <div className="flex items-center">
+                                    <Label htmlFor="password">Құпия сөз</Label>
+                                    <Dialog>
+                                        <DialogTrigger className="ml-auto inline-block text-sm underline">Құпия сөзді ұмыттым</DialogTrigger>
+                                        <DialogContent>
+                                            <DialogHeader>
+                                                <DialogTitle>Құпиясөзді қалпына келтіру</DialogTitle>
+                                                <DialogDescription>
+                                                    Біз сіздің почтаңызға sms түріңде жаңа құпия сөзіңізді жібереміз
+                                                </DialogDescription>
+                                            </DialogHeader>
+                                            <div className="flex w-full max-w-sm items-center space-x-2">
+                                                <Input type="email" placeholder="Email" />
+                                                <Button type="submit">Жіберу</Button>
+                                            </div>
+                                        </DialogContent>
+                                    </Dialog>
+
+                                    {/*<Link*/}
+                                    {/*    href="/forgot-password"*/}
+                                    {/*    className="ml-auto inline-block text-sm underline">*/}
+                                    {/*    Құпия сөзді ұмыттым*/}
+                                    {/*</Link>*/}
+                                </div>
+                                <Input id="password"
+                                       type="password"
+                                       placeholder="*********"
+                                       value={formData.password}
+                                       onChange={(event) => {
+                                           setFormData({
+                                               ...formData,
+                                               password: event.target.value,
+                                           });
+                                       }}
+                                />
+                            </div>
+
+                            {
+                                error
+                                    ? <p className="text-sm text-red-500 ">{error}</p>
+                                    : null
+                            }
+
+                            <Button type="submit" className="w-full" onClick={handleSubmit}>
+                                Кіру
+                            </Button>
+                        </div>
+                        {/*<div className="mt-4 text-center text-sm">*/}
+                        {/*    Есептік жазбаңыз жоқ па?{" "}*/}
+                        {/*    <Link href="#" className="underline">*/}
+                        {/*        Тіркелу*/}
+                        {/*    </Link>*/}
+                        {/*</div>*/}
                     </div>
-                    <div className="bg-gradient-to-r from-sky-500 to-indigo-500 p-10 rounded-tr-xl rounded-br-xl">
-                        <div className="flex justify-center items-center h-full">
-                            <div className="text-center">
-                                <h2 className="text-3xl text-white font-medium">Сені көргеніме қуаныштымын</h2>
-                                <span className="text-white font-[300] block leading-none my-3">ветеринарлык медицина бойынша теориялық <br/> білімді арттыру платформасы</span>
+                </div>
+                <div className="bg-sky-50 block h-[300px] lg:h-full">
+                    <div className="flex justify-center items-center h-full">
+                        <div className="text-center">
+                            <h2 className="text-3xl font-medium">Сені көргеніме қуаныштымын</h2>
+                            <span className="font-[300] block leading-none my-3">ветеринарлык медицина бойынша теориялық <br/> білімді арттыру платформасы</span>
+                            <Button asChild variant={"outline"} className="w-full mt-3">
                                 <Link
-                                    href="/register"
-                                    className="block mt-5 w-full flex justify-center py-3 px-4 rounded-md shadow-sm text-sm font-medium text-blue-500 bg-white hover:bg-blue-500 hover:text-white focus:outline-none">
+                                    href="/register">
                                     Тіркелу
                                 </Link>
-                            </div>
+                            </Button>
                         </div>
                     </div>
                 </div>
