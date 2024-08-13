@@ -10,7 +10,7 @@ import {
 import Link from "next/link";
 import {Card, CardContent, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
-import {Label} from "@/components/ui/label";
+
 import {Button} from "@/components/ui/button";
 import {CheckCheck, ChevronLeft} from "lucide-react";
 import React, {useState} from "react";
@@ -22,11 +22,40 @@ import {
     AlertDialogTitle
 } from "@/components/ui/alert-dialog";
 import {useRouter} from "next/navigation";
+import {Answer} from "@/types/test.types";
+import {useDistricts, useTest} from "@/utils/api-requests";
+import CardTest from "@/app/test/card-test";
+import {Label} from "@/components/ui/label";
+import axios from "axios";
 
 export default function TestDetail({ params }: {
-    params: { id: number }
+    params: { id: number },
 }) {
     const [modal, setModal] = useState(false);
+    const [answer, setAnswer] = useState("");
+    const { data: test,
+        error: testError,
+        isLoading: testLoading
+    } = useTest(params.id);
+
+    const router  = useRouter();
+
+    const handleSubmit = async () => {
+        try {
+            const response = await axios.post('/api/pass', JSON.stringify({
+                user_id: 1,
+                test_id: test && test.id,
+                answer_id: answer
+            }));
+
+            if (response.status === 200) {
+                setModal(true)
+            }
+        } catch (error) {
+            // @ts-ignore
+            console.log(error.message)
+        }
+    };
 
     return (
         <>
@@ -38,6 +67,7 @@ export default function TestDetail({ params }: {
                     <AlertDialogFooter>
                         <AlertDialogAction onClick={() => {
                             setModal(false)
+                            router.push('/test')
                         }}>Жабу</AlertDialogAction>
                     </AlertDialogFooter>
                 </AlertDialogContent>
@@ -51,7 +81,7 @@ export default function TestDetail({ params }: {
                                 <ChevronLeft />
                             </Link>
                         </Button>
-                        <h2 className="text-4xl font-medium">Тест #Э11 {modal}</h2>
+                        <h2 className="text-4xl font-medium">Тест #{ test && test.key }</h2>
                     </div>
                 </div>
 
@@ -61,23 +91,17 @@ export default function TestDetail({ params }: {
                         <BreadcrumbItem>
                             <BreadcrumbLink>
                                 Басты бет
-                                {/*<Link href="/">*/}
-                                {/*    Басты бет*/}
-                                {/*</Link>*/}
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                         <BreadcrumbSeparator />
                         <BreadcrumbItem>
                             <BreadcrumbLink>
                                 Тесттер
-                                {/*<Link href="/test">*/}
-                                {/*    Тесттер*/}
-                                {/*</Link>*/}
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                         <BreadcrumbSeparator />
                         <BreadcrumbItem>
-                            <BreadcrumbPage>Тест #Э11</BreadcrumbPage>
+                            <BreadcrumbPage>Тест #{ test && test.key }</BreadcrumbPage>
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
@@ -85,51 +109,44 @@ export default function TestDetail({ params }: {
             </section>
 
 
-            <section className="mt-5">
+            {
+                testLoading
+                    ? <div className="h-[550px] w-full flex justify-center items-center">
+                        <span>Загрузка...</span>
+                    </div>
+                    : <section className="mt-5">
 
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-xl font-normal">
-                            Эпизоотология дегеніміз -
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
+                        {testError && <p>Error loading tests: {testError.message}</p>}
 
-                        <RadioGroup defaultValue="option-one">
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="option-one" id="option-one"/>
-                                <Label htmlFor="option-one">Жануарлардың жұқпалы (жұқпалы) ауруларының пайда болу,
-                                    таралу және жойылу (тоқтату) заңдылықтары, олардың алдын алу және олармен күресу
-                                    әдістері туралы ғылым.</Label>
-                            </div>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-xl font-normal">
+                                    {test && test.question}
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
 
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="option-two" id="option-two"/>
-                                <Label htmlFor="option-two">Жануарлар арасында жұқпалы аурулардың пайда болуының,
-                                    көрінуінің, таралуының, тоқтатылуының объективті заңдылықтары және олардың алдын алу
-                                    және жою әдістері туралы ғылым.</Label>
-                            </div>
+                                <RadioGroup onValueChange={(value) => setAnswer(value)}>
+                                    {test && test.answers.map((answer) => (
+                                        <div key={answer.id} className="flex items-center space-x-2">
+                                            <RadioGroupItem value={answer.id.toString()}/>
+                                            <Label htmlFor="option-one">{answer.answer}</Label>
+                                        </div>
+                                    ))}
+                                </RadioGroup>
 
-                            <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="option-three" id="option-three"/>
-                                <Label htmlFor="option-three">Екі жауап та дұрыс.</Label>
-                            </div>
-                        </RadioGroup>
+                            </CardContent>
 
-                    </CardContent>
+                            <CardFooter>
+                                <Button className="space-x-3" onClick={handleSubmit}>
+                                    <span className="uppercase">Жауапты қабылдау</span>
+                                    <CheckCheck size={18}/>
+                                </Button>
+                            </CardFooter>
+                        </Card>
 
-                    <CardFooter>
-                        <Button className="space-x-3" onClick={() => {
-                            setModal(true);
-                            console.log("ewf")
-                        }}>
-                            <span className="uppercase" >Жауапты қабылдау</span>
-                            <CheckCheck size={18} />
-                        </Button>
-                    </CardFooter>
-                </Card>
-
-            </section>
+                    </section>
+            }
 
         </>
     )

@@ -1,4 +1,5 @@
-import LayoutsApp from "@/app/(dashboard)/layouts-app";
+"use client"
+
 import {
     Breadcrumb,
     BreadcrumbItem,
@@ -6,13 +7,16 @@ import {
     BreadcrumbList, BreadcrumbPage,
     BreadcrumbSeparator
 } from "@/components/ui/breadcrumb";
-import Link from "next/link";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
-import {useRouter} from "next/navigation";
+import {useUser} from "@/utils/api-requests";
 
 export default function Profile() {
+
+    const {data, error, isLoading} = useUser();
+
+
     return (
         <>
             <section>
@@ -26,68 +30,80 @@ export default function Profile() {
                         <BreadcrumbItem>
                             <BreadcrumbLink>
                                 Басты бет
-                                {/*<Link href="/">*/}
-                                {/*    Басты бет*/}
-                                {/*</Link>*/}
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                         <BreadcrumbSeparator />
                         <BreadcrumbItem>
-                            <BreadcrumbPage>Тесттер</BreadcrumbPage>
+                            <BreadcrumbPage>Жеке кабинет</BreadcrumbPage>
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
             </section>
 
-            <section className="mt-5 space-y-3">
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-xl font-normal">
-                            Жеке деректер
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="grid grid-cols-2 gap-5">
-                            <div>
-                                <Label>Аты жөні</Label>
-                                <Input value="Ердаулет" readOnly/>
-                            </div>
-                            <div>
-                                <Label>Email</Label>
-                                <Input value="n4msin@mail.ru" readOnly/>
-                            </div>
-                            <div>
-                                <Label>Телефон номер</Label>
-                                <Input value="+77773643421" readOnly/>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
+            {
+                isLoading
+                    ? <div className="h-[550px] w-full flex justify-center items-center">
+                        <span>Загрузка...</span>
+                    </div>
+                    : <section className="mt-5 space-y-3">
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-xl font-normal">
+                                    Жеке деректер
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="grid grid-cols-2 gap-5">
+                                    <div>
+                                        <Label>Аты жөні</Label>
+                                        <Input value={data && data.name} readOnly/>
+                                    </div>
+                                    <div>
+                                        <Label>Email</Label>
+                                        <Input value={data && data.email} readOnly/>
+                                    </div>
+                                    <div>
+                                        <Label>Телефон номер</Label>
+                                        <Input value={data && data.phone} readOnly/>
+                                    </div>
+                                    <div>
+                                        <Label>Туылған күні</Label>
+                                        <Input value={data && data.birthday} readOnly/>
+                                    </div>
+                                    <div>
+                                        <Label>Рөлі</Label>
+                                        <Input value={data && data.role[0]} readOnly/>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
 
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-xl font-normal">
-                            Қала
-                        </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                        <div className="grid grid-cols-2 gap-5">
-                            <div>
-                                <Label>Облыс</Label>
-                                <Input value="Түркістан облысы" readOnly/>
-                            </div>
-                            <div>
-                                <Label>Аудан қала</Label>
-                                <Input value="Бәйдібек ауданы" readOnly/>
-                            </div>
-                            <div>
-                                <Label>Округ</Label>
-                                <Input value="Ағыбет ауылдық округі" readOnly/>
-                            </div>
-                        </div>
-                    </CardContent>
-                </Card>
-            </section>
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-xl font-normal">
+                                    Қала
+                                </CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="grid grid-cols-2 gap-5">
+                                    <div>
+                                        <Label>Облыс</Label>
+                                        <Input value={data && data.region_name} readOnly/>
+                                    </div>
+                                    <div>
+                                        <Label>Аудан қала</Label>
+                                        <Input value={data && data.district_name} readOnly/>
+                                    </div>
+                                    <div>
+                                        <Label>Округ</Label>
+                                        <Input value={data && data.village_name} readOnly/>
+                                    </div>
+                                </div>
+                            </CardContent>
+                        </Card>
+                    </section>
+            }
+
         </>
     )
 }

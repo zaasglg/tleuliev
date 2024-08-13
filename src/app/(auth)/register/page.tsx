@@ -9,7 +9,7 @@ import ThirdStep from "@/app/(auth)/register/third-step";
 import FirstStep from "@/app/(auth)/register/first-step";
 import SecondStep from "@/app/(auth)/register/second-step";
 import FourthStep from "@/app/(auth)/register/fourth-step";
-import {useRegisterUser} from "@/utils/api-requests";
+import {useRegisterUser} from "@/utils/api-requests"
 
 import {
     AlertDialog,
@@ -100,18 +100,17 @@ export default function Login() {
                 setStep(4);
                 break;
             case 4:
-                console.log("ewfwe")
-                register({
-                    name: formData.name,
-                    email: formData.email,
-                    password: formData.password,
-                    phone: formData.phone,
-                    birthday: formData.birthday,
-                    region_id: formData.region,
-                    district_id: formData.district,
-                    village_id: formData.village,
-                    role: formData.role
-                });
+                // register({
+                //     name: formData.name,
+                //     email: formData.email,
+                //     password: formData.password,
+                //     phone: formData.phone,
+                //     birthday: formData.birthday,
+                //     region_id: formData.region_id,
+                //     district_id: formData.district_id,
+                //     village_id: formData.village_id,
+                //     role: formData.role
+                // });
                 break;
             default:
                 break;

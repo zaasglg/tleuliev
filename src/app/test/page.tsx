@@ -1,6 +1,6 @@
 "use client"
 
-import {useState} from "react";
+import {useEffect, useState, use} from "react";
 import {Search} from "lucide-react";
 import CardTest from "@/app/test/card-test";
 
@@ -24,43 +24,25 @@ import {
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {ToggleGroup, ToggleGroupItem} from "@/components/ui/toggle-group";
-
-const tests = [
-    {
-        id: 1,
-        key: 'Э11',
-        question: 'Эпизоотология дегеніміз -',
-    },
-    {
-        id: 2,
-        key: 'Э13',
-        question: 'Эпизоотология ғылым ретінде нені зерттейді?',
-    },
-    {
-        id: 3,
-        key: 'Э14',
-        question: 'Жеке жұқпалы аурулардың эпизоотологиялық сипаттамасы мен көріну ерекшеліктерін зерттейді? ',
-    },
-    {
-        id: 4,
-        key: 'Э15',
-        question: 'Инфекция дегеніміз не?',
-    },
-]
-
+import {useTests, useUser} from "@/utils/api-requests";
 
 export default function Page() {
     const [lang, setLang] = useState("kk");
 
+    const { data: tests,
+        error: testsError,
+        isLoading: testsLoading
+    } = useTests();
+
+    const { data: user, error: userError, isLoading: userLoading} = useUser();
+
     return (
         <>
-
             <section>
                 <div className="flex justify-between items-center gap-10">
                     <div>
                         <h2 className="text-4xl font-medium">Тесттер</h2>
                     </div>
-
 
                     <div className="flex items-center space-x-3">
 
@@ -119,11 +101,17 @@ export default function Page() {
 
 
             </section>
-
-            <section className="gap-3 items-stretch mt-10 space-y-3">
-                {tests.map((test) => (
+            {testsLoading && <div className="h-[550px] w-full flex justify-center items-center"><span>Загрузка...</span></div>}
+            {testsError && <p>Error loading tests: {testsError.message}</p>}
+            <section className="mt-10 grid grid-cols-2 gap-3">
+                {tests && tests.map((test) => (
                     <div key={test.id}>
-                        <CardTest id={test.id} keyQuestion={test.key} question={test.question}/>
+                        <CardTest
+                            id={test.id}
+                            keyQuestion={test.key}
+                            lang={test.lang}
+                            question={test.question}
+                        />
                     </div>
                 ))}
             </section>

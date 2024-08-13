@@ -1,13 +1,18 @@
 import {useMutation, useQuery} from '@tanstack/react-query';
-import axios, {AxiosResponse} from 'axios';
-import {ApiResponse, Districts, Regions, User, Villages} from "./type";
-import {cookies} from "next/headers";
+import axios from 'axios';
+import {Test} from "../types/test.types";
+import {User} from "../types/user.types";
+import {Districts, Regions, Villages} from "../types/region.types";
+import {Result} from "../types/result.types";
+import {Feedback} from "../types/feedback.types";
+import {ApiResponse, UserProps} from "./type";
 
 // fetches
 const fetchRegions = async (): Promise<Regions[]> => {
     const { data } = await axios.get<Regions[]>('http://api.agroduken.kz/api/regions');
     return data;
 };
+
 
 const fetchDistricts = async (id: number): Promise<Districts[]> => {
     const { data } = await axios.get<Districts[]>(`http://api.agroduken.kz/api/districts/${id}`);
@@ -19,16 +24,35 @@ const fetchVillages = async (id: number): Promise<Villages[]> => {
     return data;
 };
 
-const registerUser = async (user: User): Promise<ApiResponse> => {
+const fetchTests = async (): Promise<Test[]> => {
+    const { data } = await axios.get<Test[]>('/api/tests');
+    return data;
+};
+
+const fetchTest = async (id: number): Promise<Test> => {
+    const { data } = await axios.get<Test>(`/api/tests/${id}`);
+    return data;
+};
+
+const fetchUser = async (): Promise<User> => {
+    const { data } = await axios.get<User>('/api/user');
+    return data;
+};
+
+const fetchResults = async (): Promise<Result[]> => {
+    const { data } = await axios.get<Result[]>('/api/pass');
+    return data;
+};
+
+const fetchFeedbacks = async (): Promise<Feedback[]> => {
+    const { data } = await axios.get<Feedback[]>('/api/feedback');
+    return data;
+};
+
+const registerUser = async (user: UserProps): Promise<ApiResponse> => {
     const response = await axios.post('http://api.agroduken.kz/api/register', user);
     return response.data;
 };
-
-const loginUser = async ({phone, password}: {phone: String, password: String}): Promise<AxiosResponse<{ token: String }>> => {
-    const response = await axios.post('http://api.agroduken.kz/api/login', { phone, password });
-    return response;
-};
-
 
 // react query
 export const useRegions = () => {
@@ -52,30 +76,49 @@ export const useVillages = (id: number) => {
     });
 };
 
+export const useTests = () => {
+    return useQuery<Test[]>({
+        queryKey: ['tests'],
+        queryFn: fetchTests,
+    });
+};
+
+export const useTest = (id: number) => {
+    return useQuery<Test>({
+        queryKey: ['test', id],
+        queryFn: () => fetchTest(id),
+    });
+};
+
+export const useUser = () => {
+    return useQuery<User>({
+        queryKey: ['user'],
+        queryFn: fetchUser,
+    });
+};
+
+export const useResult = () => {
+    return useQuery<Result[]>({
+        queryKey: ['result'],
+        queryFn: fetchResults,
+    });
+};
+
+export const useFeedback = () => {
+    return useQuery<Feedback[]>({
+        queryKey: ['feedback'],
+        queryFn: fetchFeedbacks,
+    });
+};
+
+
 export const useRegisterUser = (
     onSuccess?: (data: ApiResponse) => void,
     onError?: (error: Error) => void
 ) => {
-    return useMutation<ApiResponse, Error, User>({
+    return useMutation<ApiResponse, Error, UserProps>({
         mutationFn: registerUser,
         onSuccess,
-        onError,
-    });
-};
-
-export const useLoginUser = (
-    onSuccess?: (data: AxiosResponse<{ token: String }>) => void,
-    onError?: (error: Error) => void
-) => {
-    return useMutation<AxiosResponse<{ token: String }>, Error, { phone: string; password: string }>({
-        mutationFn: loginUser,
-            onSuccess: (data) => {
-                // cookies().set('token', data.data.token.toString())
-
-                if (onSuccess) {
-                    onSuccess(data);
-                }
-            },
         onError,
     });
 };

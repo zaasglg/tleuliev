@@ -1,16 +1,6 @@
 import { NextResponse } from 'next/server';
 import type { NextRequest } from 'next/server';
-
-const getCookie = (request: NextRequest, name: string): string | undefined => {
-    const cookies = request.headers.get('cookie');
-    if (!cookies) return undefined;
-
-    const cookieArray = cookies.split('; ').map(cookie => cookie.split('='));
-    let cookieMap: Map<string, string>;
-    // @ts-ignore
-    cookieMap = new Map(cookieArray);
-    return cookieMap.get(name);
-};
+import {cookies} from "next/headers";
 
 export function middleware(request: NextRequest) {
     const { pathname } = request.nextUrl;
@@ -21,7 +11,7 @@ export function middleware(request: NextRequest) {
         return NextResponse.next();
     }
 
-    const token = request.headers.get('token');
+    const token = cookies().get('token');
 
     if (!token) {
         return NextResponse.redirect(new URL('/login', request.url));
@@ -31,5 +21,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/', '/test'],
+    matcher: ['/', '/tests'],
 };

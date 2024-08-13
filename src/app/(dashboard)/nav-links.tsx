@@ -17,7 +17,7 @@ const links = [
     { name: 'Басты бет', href: '/', icon: <TvMinimal /> },
     { name: 'Жеке кабинет', href: '/profile', icon: <User /> },
     { name: 'Тест', href: '/test', icon: <ListTodo /> },
-    { name: 'Статистика', href: '/chart', icon: <ChartBar /> },
+    { name: 'Статистика', href: '/result', icon: <ChartBar /> },
     { name: 'Материалдар', href: '/material', icon: <Files /> },
     { name: 'Кері байланыс', href: '/feedback', icon: <MessageCircle /> },
 ];

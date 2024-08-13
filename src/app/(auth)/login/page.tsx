@@ -15,10 +15,7 @@ import {
     DialogTrigger
 } from "@/components/ui/dialog";
 import {useRouter} from "next/navigation";
-import {UserProps} from "@/utils/type";
-import {useLoginUser} from "@/utils/api-requests";
-import {AxiosResponse} from "axios";
-import { cookies } from 'next/headers'
+import axios from "axios";
 
 export default function Login() {
 
@@ -30,30 +27,14 @@ export default function Login() {
         password: ''
     })
 
-    const handleSuccess = (response: AxiosResponse<{ token: String }>) => {
-        setError("Request failed with status code 401")
-        // console.log(response.data.token)
-        // cookies().set('token', response.data.token.toString())
-        // localStorage.setItem("token", response.data.token.toString())
-        // router.push("/")
+    const handleSubmit = async () => {
+        try {
+            const response = await axios.post('/api/login', JSON.stringify(formData));
+            router.push("/")
+        } catch (error) {
+            setError((error as Error).message);
+        }
     };
-
-    const handleError = (error: Error) => {
-        setError(error.message)
-        console.log(error)
-        // setModal(false)
-    };
-
-    const { mutate: login } = useLoginUser(handleSuccess, handleError);
-
-
-    const handleSubmit = () => {
-        console.log(formData)
-        login({
-            phone: formData.phone,
-            password: formData.password
-        })
-    }
 
     return (
         <>
