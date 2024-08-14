@@ -25,22 +25,22 @@ const fetchVillages = async (id: number): Promise<Villages[]> => {
 };
 
 const fetchTests = async (): Promise<Test[]> => {
-    const { data } = await axios.get<Test[]>('/api/tests');
+    const { data } = await axios.get<Test[]>('http://185.146.1.39:3000/api/tests');
     return data;
 };
 
 const fetchTest = async (id: number): Promise<Test> => {
-    const { data } = await axios.get<Test>(`/api/tests/${id}`);
+    const { data } = await axios.get<Test>(`http://185.146.1.39:3000/api/tests/${id}`);
     return data;
 };
 
 const fetchUser = async (): Promise<User> => {
-    const { data } = await axios.get<User>('/api/user');
+    const { data } = await axios.get<User>('http://185.146.1.39:3000/api/user');
     return data;
 };
 
 const fetchResults = async (): Promise<Result[]> => {
-    const { data } = await axios.get<Result[]>('/api/pass');
+    const { data } = await axios.get<Result[]>('http://185.146.1.39:3000/api/pass');
     return data;
 };
 
