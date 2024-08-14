@@ -16,6 +16,8 @@ export async function GET() {
 
         const data = response.data;
 
+
+
         // Return the data as JSON response
         return NextResponse.json(data, { status: 200 });
 

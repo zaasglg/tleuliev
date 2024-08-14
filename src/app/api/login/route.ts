@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
+import {useUser} from "@/utils/api-requests";
 
 export async function POST(req: Request) {
     try {
@@ -13,7 +14,7 @@ export async function POST(req: Request) {
         const token = response.data.token;
 
         // Создаем ответ и устанавливаем куки
-        const res = NextResponse.json({ token }, { status: 200 });
+        const res = NextResponse.json( token, { status: 200 });
         res.cookies.set('token', token, { httpOnly: true, secure: process.env.NODE_ENV === 'production' });
 
         return res;

@@ -6,6 +6,7 @@ import {PanelRightClose, PanelRightOpen, PowerIcon} from "lucide-react";
 import NavLinks from "@/app/(dashboard)/nav-links";
 import {cookies} from "next/headers";
 import {useRouter} from "next/navigation";
+import {useUser} from "@/utils/api-requests";
 
 export default function Aside() {
     const router = useRouter()
