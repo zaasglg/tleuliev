@@ -24,13 +24,34 @@ import {
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {ToggleGroup, ToggleGroupItem} from "@/components/ui/toggle-group";
-import {useTests, useUser} from "@/utils/api-requests";
 import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import Link from "next/link";
+import {Test} from "@/types/test.types";
+import Loading from "@/app/profile/loading";
+import fetchTests from "@/api/fetchTests";
+import fetchUnTakenTests from "@/api/fetchUnTakenTests";
 
 export default function Page() {
-    const { data, error, isLoading} = useTests();
+    // const { data, error, isLoading} = useTests();
+
+    const [tests, setTests] = useState<Test[]>();
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        fetchUnTakenTests()
+            .then((res) => {
+
+                // @ts-ignore
+                setTests(res);
+            })
+            .catch((error) => {
+                console.error("Failed to fetch user data:", error);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, []);
 
     return (
         <>
@@ -66,10 +87,9 @@ export default function Page() {
 
 
             </section>
-            {isLoading && <div className="h-[550px] w-full flex justify-center items-center"><span>Загрузка...</span></div>}
-            {error && <p>Error loading tests: {error.message}</p>}
+            {loading && <Loading />}
             <section className="mt-10">
-                {!isLoading && <Card className="mt-10">
+                {!loading && <Card className="mt-10">
                     <CardHeader>
                         <CardTitle className="text-xl font-medium">Тесттер</CardTitle>
                     </CardHeader>
@@ -85,7 +105,7 @@ export default function Page() {
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {data && data.map((item) => (
+                                {tests && tests.map((item) => (
                                     <TableRow key={item.id}>
                                         <TableCell>{item.id}</TableCell>
                                         <TableCell>{item.question}</TableCell>

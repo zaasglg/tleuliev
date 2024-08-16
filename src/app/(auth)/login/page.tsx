@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link";
-import {useState} from "react";
+import React, {useState} from "react";
 import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
@@ -16,11 +16,15 @@ import {
 } from "@/components/ui/dialog";
 import {useRouter} from "next/navigation";
 import axios from "axios";
+import loginUser from "@/utils/api/loginUser";
+import fetchData from "@/utils/api/fetchData";
+import {MaskedInput} from "react-text-input-mask";
 
 export default function Login() {
 
     const router = useRouter()
 
+    const [isLogining, setIsLogining] = useState<boolean>(false);
     const [error, setError] = useState("");
     const [formData, setFormData] = useState({
         phone: '',
@@ -28,9 +32,21 @@ export default function Login() {
     })
 
     const handleSubmit = async () => {
+        setIsLogining(true)
+
         try {
-            const response = await axios.post('/api/login', JSON.stringify(formData));
-            router.push("/")
+            loginUser(formData.phone, formData.password)
+                .then(result => {
+                    if (result.status === 200) {
+                        setIsLogining(false)
+                        router.push("/")
+                    } else {
+                        setIsLogining(false)
+
+                        // @ts-ignore
+                        setError(result.message);
+                    }
+                })
         } catch (error) {
             setError((error as Error).message);
         }
@@ -48,18 +64,16 @@ export default function Login() {
                         <div className="grid gap-4">
                             <div className="grid gap-2">
                                 <Label htmlFor="email">Телефон номер</Label>
-                                <Input
-                                    id="phone"
-                                    type="phone"
-                                    placeholder="+7 телефон номер"
-                                    value={formData.phone}
-                                    onChange={(event) => {
-                                        setFormData({
-                                            ...formData,
-                                            phone: event.target.value,
-                                        });
-                                    }}
-                                />
+                                <MaskedInput mask='+9 (999) 999 9999'
+                                             value={formData.phone}
+                                             onChange={(val) => {
+                                                 setFormData({
+                                                     ...formData,
+                                                     phone: val.target.value,
+                                                 })
+                                             }}>
+                                    <Input id="phone" type="text"/>
+                                </MaskedInput>
                             </div>
                             <div className="grid gap-2">
                                 <div className="flex items-center">
@@ -106,7 +120,7 @@ export default function Login() {
                             }
 
                             <Button type="submit" className="w-full" onClick={handleSubmit}>
-                                Кіру
+                                { isLogining ? "жүктелуде..." : "Кіру" }
                             </Button>
                         </div>
                         {/*<div className="mt-4 text-center text-sm">*/}

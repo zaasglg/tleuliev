@@ -1,6 +1,6 @@
 "use client"
 
-import {useEffect, useState, use} from "react";
+import React, {useEffect, useState, use} from "react";
 import {Search} from "lucide-react";
 import CardTest from "@/app/test/card-test";
 
@@ -24,17 +24,32 @@ import {
 import {Input} from "@/components/ui/input";
 import {Button} from "@/components/ui/button";
 import {ToggleGroup, ToggleGroupItem} from "@/components/ui/toggle-group";
-import {useTests, useUser} from "@/utils/api-requests";
+import {User} from "@/types/user.types";
+import fetchUser from "@/api/fetchUser";
+import fetchTests from "@/api/fetchTests";
+import Loading from "@/app/profile/loading";
+import {Test} from "@/types/test.types";
+import fetchData from "@/utils/api/fetchData";
 
 export default function Page() {
     const [lang, setLang] = useState("kk");
 
-    const { data: tests,
-        error: testsError,
-        isLoading: testsLoading
-    } = useTests();
+    const [tests, setTests] = useState<Test[]>();
+    const [loading, setLoading] = useState(true);
 
-    const { data: user, error: userError, isLoading: userLoading} = useUser();
+    useEffect(() => {
+
+        fetchData("tests/untaken/filter")
+            .then(res => {
+                console.log(res)
+                // @ts-ignore
+                setTests(res.data);
+            })
+            .finally(() => {
+                setLoading(false)
+            })
+    }, []);
+
 
     return (
         <>
@@ -87,9 +102,6 @@ export default function Page() {
                         <BreadcrumbItem>
                             <BreadcrumbLink>
                                 Басты бет
-                                {/*<Link href="/">*/}
-                                {/*    Басты бет*/}
-                                {/*</Link>*/}
                             </BreadcrumbLink>
                         </BreadcrumbItem>
                         <BreadcrumbSeparator />
@@ -101,8 +113,10 @@ export default function Page() {
 
 
             </section>
-            {testsLoading && <div className="h-[550px] w-full flex justify-center items-center"><span>Загрузка...</span></div>}
-            {testsError && <p>Error loading tests: {testsError.message}</p>}
+
+
+            {loading && <Loading />}
+
             <section className="mt-10 grid grid-cols-2 gap-3">
                 {tests && tests.map((test) => (
                     <div key={test.id}>

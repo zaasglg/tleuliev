@@ -27,12 +27,12 @@ import {Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card";
 import {Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow} from "@/components/ui/table";
 import {Label} from "@/components/ui/label";
 import axios from "axios";
-import {Feedback} from "@/types/feedback.types";
-import fetchFeedbacks from "@/api/fetchFeedbacks";
 import Loading from "@/app/profile/loading";
 import fetchData from "@/utils/api/fetchData";
-import fetchGet from "@/utils/fetch/fetchGet";
 import {Textarea} from "@/components/ui/textarea";
+import {User} from "@/types/user.types";
+import { Task } from "@/types/task.types";
+import { log } from "console";
 
 export default function Page() {
     const [formData, setFormData] = useState({
@@ -42,9 +42,9 @@ export default function Page() {
 
     const [modal, setModal] = useState(false);
 
-    const [feedbacks, setFeedbacks] = useState<{
+    const [tasks, setTasks] = useState<{
         loading: boolean;
-        result: Feedback[];
+        result: Task[];
         error: string;
     }>({
         loading: true,
@@ -52,11 +52,13 @@ export default function Page() {
         error: ""
     });
 
-    function fetchFeedbacks() {
-        fetchData('feedbacks/user/filter')
+
+    useEffect(() => {
+
+        fetchData('tasks/filter/redactor')
             .then(res => {
                 if (res.status === 200) {
-                    setFeedbacks({
+                    setTasks({
                         loading: false,
                         result: res.data,
                         error: ""
@@ -65,28 +67,20 @@ export default function Page() {
                     console.error("Error fetching data:", res.message);
                 }
             })
-    }
-
-
-    useEffect(() => {
-
-        fetchFeedbacks()
 
     }, []);
-
 
     return (
         <>
             <section>
                 <div className="flex justify-between items-center gap-10">
                     <div>
-                        <h2 className="text-4xl font-medium">Кері байланыс</h2>
+                        <h2 className="text-4xl font-medium">Жылдық тапсырма</h2>
                     </div>
 
                     <div>
-
                         <Button variant="outline" onClick={() => setModal(true)}>
-                            Кері байланыс қалдыру
+                            Тапсырма беру
                         </Button>
 
 
@@ -94,7 +88,7 @@ export default function Page() {
                         <Dialog open={modal}>
                             <DialogContent>
                                 <DialogHeader>
-                                    <DialogTitle>Кері байланыс</DialogTitle>
+                                    <DialogTitle>Тапсырма беру</DialogTitle>
                                 </DialogHeader>
                                 <div className="space-y-3">
                                     <div>
@@ -133,7 +127,6 @@ export default function Page() {
                                         fetchData("feedbacks", "POST", formData)
                                             .then(res => {
                                                 setModal(false)
-                                                fetchFeedbacks()
                                             })
                                     }}>
                                         Жіберу
@@ -142,7 +135,7 @@ export default function Page() {
                             </DialogContent>
                         </Dialog>
                     </div>
-                    
+
                 </div>
 
                 {/*breadcrumb*/}
@@ -163,10 +156,10 @@ export default function Page() {
 
             </section>
 
-            { feedbacks.loading && <Loading /> }
+            { tasks.loading && <Loading /> }
 
 
-            {!feedbacks.loading && (
+            {!tasks.loading && (
                 <Card className="mt-10">
                     <CardHeader>
                         <CardTitle className="text-xl font-medium">Пікірлер</CardTitle>
@@ -175,26 +168,24 @@ export default function Page() {
                         <Table>
                             <TableHeader>
                                 <TableRow>
-                                    <TableHead>Тақырыбы</TableHead>
-                                    <TableHead>Хат</TableHead>
+                                    <TableHead>Маман</TableHead>
+                                    <TableHead>Тест (#id)</TableHead>
+                                    <TableHead>Тест (Сұрақ)</TableHead>
                                     <TableHead>Әрекет</TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
-                                {feedbacks && feedbacks.result.map((item) => (
+                                {tasks && tasks.result.map((item) => (
                                     <TableRow key={item.id}>
-                                        <TableCell>{item.title}</TableCell>
-                                        <TableCell>{item.message}</TableCell>
+                                        <TableCell>{item.user.name} / {item.user.phone}</TableCell>
+                                        <TableCell>#{item.test.id}</TableCell>
+                                        <TableCell>{item.test.question}</TableCell>
                                         <TableCell>
-                                            <Button className="bg-red-500 hover:bg-red-700" onClick={() => {
-                                                fetchData(`feedbacks/${item.id}`, "DELETE")
-                                                    .then(res => {
-                                                        fetchFeedbacks()
-                                                    })
-                                            }}>
+                                            <Button className="bg-red-500 hover:bg-red-600">
                                                 Жою
                                             </Button>
                                         </TableCell>
+                                        
                                     </TableRow>
                                 ))}
                             </TableBody>

@@ -2,6 +2,8 @@ import {Label} from "@/components/ui/label";
 import {Input} from "@/components/ui/input";
 import React, {ChangeEvent} from "react";
 import {UserProps} from "@/utils/type";
+import {MaskedInput} from "react-text-input-mask";
+import formatPhoneNumber from "@/utils/format-phone";
 
 interface Props {
     formData: UserProps,
@@ -17,22 +19,18 @@ export default function SecondStep({ formData, setFormData }: Props) {
                     Телефон номер
                 </Label>
                 <div className="mt-1">
-                    <Input id="phone"
-                           type="text"
-                           name="phone"
-                           value={formData.phone}
-                           onChange={(event) => {
-                               setFormData({
-                                   ...formData,
-                                   phone: event.target.value,
-                               })
-                           }}
-                    />
-                    {
-                        formData.errors.phone
-                            ? <p className="text-xs text-red-500 mt-1">{formData.errors.phone}</p>
-                            : null
-                    }
+
+                    <MaskedInput mask='+9 (999) 999 9999'
+                                 value={formData.phone}
+                                 onChange={(val) => {
+                                     setFormData({
+                                         ...formData,
+                                         phone: val.target.value,
+                                     })
+                                 }}>
+                        <Input id="phone" type="text"/>
+                    </MaskedInput>
+                    {formData.errors.phone && <p className="text-xs text-red-500 mt-1">{formData.errors.phone}</p>}
                 </div>
             </div>
 
@@ -52,11 +50,7 @@ export default function SecondStep({ formData, setFormData }: Props) {
                                    profession: event.target.value,
                                })
                            }}/>
-                    {
-                        formData.errors.profession
-                            ? <p className="text-xs text-red-500 mt-1">{formData.errors.profession}</p>
-                            : null
-                    }
+                    {formData.errors.profession && <p className="text-xs text-red-500 mt-1">{formData.errors.profession}</p>}
                 </div>
             </div>
 
@@ -76,11 +70,7 @@ export default function SecondStep({ formData, setFormData }: Props) {
                                })
                            }}
                     />
-                    {
-                        formData.errors.birthday
-                            ? <p className="text-xs text-red-500 mt-1">{formData.errors.birthday}</p>
-                            : null
-                    }
+                    {formData.errors.birthday && <p className="text-xs text-red-500 mt-1">{formData.errors.birthday}</p>}
                 </div>
             </div>
         </>

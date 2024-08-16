@@ -1,10 +1,10 @@
-import React, { useState, useEffect, ChangeEvent } from 'react';
+import React, { useState, useEffect } from 'react';
 import {Label} from "@/components/ui/label";
 import {Select, SelectContent, SelectItem, SelectTrigger, SelectValue} from "@/components/ui/select";
-import {useQuery} from "@tanstack/react-query";
-import {useDistricts, useRegions, useVillages} from "@/utils/api-requests";
 import {UserProps} from "@/utils/type";
-// import apiRequests from '@/utils/api-requests'
+// import {fetchDistricts, fetchRegions, fetchVillages} from "@/api/fetchRegion";
+import {Districts, Regions, Villages} from "@/types/region.types";
+import fetchData from "@/utils/api/fetchData";
 
 interface Props {
     formData: UserProps,
@@ -13,22 +13,19 @@ interface Props {
 
 const ThirdStep = ({ formData, setFormData }: Props) => {
 
-    const { data: regions,
-        error: regionsError,
-        isLoading: regionsLoading
-    } = useRegions();
+    const [regions, setRegions] = useState<Regions[] | null>();
+    const [districts, setDistricts] = useState<Districts[] | null>();
+    const [villages, setVillages] = useState<Villages[] | null>();
 
-    const {
-        data: districts,
-        error: districtsError,
-        isLoading: districtsLoading
-    } = useDistricts(formData.region)
+    useEffect(() => {
 
-    const {
-        data: villages,
-        error: villagesError,
-        isLoading: villagesLoading
-    } = useVillages(formData.district)
+        fetchData('regions')
+            .then(res => {
+                console.log(res)
+                setRegions(res.data)
+            })
+
+    }, []);
 
     return (
         <>
@@ -41,12 +38,17 @@ const ThirdStep = ({ formData, setFormData }: Props) => {
                         ...formData,
                         region: Number(val)
                     })
+
+                    fetchData(`districts/${Number(val)}`)
+                        .then(res => {
+                            setDistricts(res.data)
+                        })
                 }}>
                     <SelectTrigger className="">
                         <SelectValue placeholder="-----------------"/>
                     </SelectTrigger>
                         <SelectContent>
-                            {regions?.map(region => (
+                            {regions && regions.map(region => (
                                 <SelectItem value={String(region.id)}
                                             key={region.id}>{region.name}</SelectItem>
                             ))}
@@ -59,16 +61,24 @@ const ThirdStep = ({ formData, setFormData }: Props) => {
                     Аудан қала
                 </Label>
                 <Select onValueChange={(val) => {
+
                     setFormData({
                         ...formData,
                         district: Number(val)
                     })
+
+
+                    fetchData(`villages/${Number(val)}`)
+                        .then(res => {
+                            setVillages(res.data)
+                        })
+
                 }}>
                     <SelectTrigger className="">
                         <SelectValue placeholder="-----------------"/>
                     </SelectTrigger>
                     <SelectContent>
-                        {districts?.map(district => (
+                        {districts && districts.map(district => (
                             <SelectItem value={String(district.id)} key={district.id}>{district.name}</SelectItem>
                         ))}
                     </SelectContent>
@@ -89,7 +99,7 @@ const ThirdStep = ({ formData, setFormData }: Props) => {
                         <SelectValue placeholder="-----------------"/>
                     </SelectTrigger>
                     <SelectContent>
-                        {villages?.map(village => (
+                        {villages && villages.map(village => (
                             <SelectItem value={String(village.id)} key={village.id}>{village.name}</SelectItem>
                         ))}
                     </SelectContent>

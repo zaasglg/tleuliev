@@ -74,10 +74,10 @@ export default function FirstStep ({formData, setFormData}: Props) {
                                      role: value,
                                  });
                              }}>
-                    <ToggleGroupItem value="user" aria-label="Toggle bold">
+                    <ToggleGroupItem value="redactor" aria-label="Toggle bold">
                         Тексеруші
                     </ToggleGroupItem>
-                    <ToggleGroupItem value="redactor">
+                    <ToggleGroupItem value="user">
                         Тапсырушы
                     </ToggleGroupItem>
                 </ToggleGroup>

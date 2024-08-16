@@ -1,5 +1,5 @@
 import {ArrowRight} from "lucide-react";
-import {Card, CardContent, CardDescription, CardHeader, CardTitle} from "@/components/ui/card";
+import {Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle} from "@/components/ui/card";
 import {Button} from "@/components/ui/button";
 import Link from "next/link";
 import {Badge} from "@/components/ui/badge";
@@ -13,17 +13,17 @@ export default function CardTest({ id, keyQuestion, question, lang }: {
     return (
         <Card className="h-full flex flex-col justify-between">
             <CardHeader>
-                <CardTitle className="font-medium text-base">{question}</CardTitle>
-                <CardDescription className="space-x-2">
-                    <Badge className="bg-sky-100 text-gray-800 font-normal hover:bg-sky-100">
+                <CardTitle className="space-x-2">
+                    <Badge className="border border-gray-300 bg-transparent text-gray-800 font-normal hover:bg-sky-100">
                         #{keyQuestion}
                     </Badge>
-                    <Badge className="bg-sky-100 text-gray-800 font-normal hover:bg-sky-100">
+                    <Badge className="border border-gray-300 bg-transparent text-gray-800 font-normal hover:bg-sky-100">
                         {lang}
                     </Badge>
-                </CardDescription>
+                </CardTitle>
+                <CardDescription>{question}</CardDescription>
             </CardHeader>
-            <CardContent>
+            <CardContent className="">
                 <Button className="uppercase space-x-3 hover:bg-blue-500 hover:text-white" variant="outline" asChild>
                     <Link href={`/test/${id}`}>
                         <span>Тапсыру</span>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import "@/utils/globals.css";
 import styles from "@/utils/fonts/futura/futura.module.css"
-import ReactQueryProvider from "@/providers/ReactQueryProvider";
+import {Toaster} from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Tleuliev tests",
@@ -16,9 +16,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={styles.futura}>
-        <ReactQueryProvider>
-            {children}
-        </ReactQueryProvider>
+        <main>{children}</main>
+        <Toaster />
       </body>
     </html>
   );

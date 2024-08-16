@@ -9,20 +9,11 @@ import ThirdStep from "@/app/(auth)/register/third-step";
 import FirstStep from "@/app/(auth)/register/first-step";
 import SecondStep from "@/app/(auth)/register/second-step";
 import FourthStep from "@/app/(auth)/register/fourth-step";
-import {useRegisterUser} from "@/utils/api-requests"
 
-import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
 import {ArrowLeft, ArrowRight, ChevronRight} from "lucide-react";
 import { useRouter } from 'next/navigation'
 import {UserProps} from "@/utils/type";
+import registerUser from "@/utils/api/registerUser";
 
 export default function Login() {
 
@@ -44,8 +35,9 @@ export default function Login() {
     })
 
 
+    const [isLogining, setIsLogining] = useState<boolean>(false);
+    const [error, setError] = useState("");
 
-    const [modal, setModal] = useState(false);
 
 
     const handleSuccess = (data: { message: string }) => {
@@ -56,8 +48,6 @@ export default function Login() {
         console.log(error.message)
         // setModal(false)
     };
-
-    const { mutate: register } = useRegisterUser(handleSuccess, handleError);
 
     // validation
     const validateStep = () => {
@@ -100,17 +90,32 @@ export default function Login() {
                 setStep(4);
                 break;
             case 4:
-                // register({
-                //     name: formData.name,
-                //     email: formData.email,
-                //     password: formData.password,
-                //     phone: formData.phone,
-                //     birthday: formData.birthday,
-                //     region_id: formData.region_id,
-                //     district_id: formData.district_id,
-                //     village_id: formData.village_id,
-                //     role: formData.role
-                // });
+                registerUser({
+                    profession: formData.profession,
+                    name: formData.name,
+                    email: formData.email,
+                    password: formData.password,
+                    phone: formData.phone,
+                    birthday: formData.birthday,
+                    region_id: formData.region,
+                    district_id: formData.district,
+                    village_id: formData.village,
+                    role: formData.role
+                })
+                    .then(result => {
+                        if (result.status === 200) {
+                            setIsLogining(false)
+                            router.push("/")
+                        } else {
+                            setIsLogining(false)
+
+                            // @ts-ignore
+                            setError(result.message);
+                        }
+                    })
+                    .finally(() => {
+                        setIsLogining(false)
+                    })
                 break;
             default:
                 break;
@@ -120,25 +125,6 @@ export default function Login() {
 
     return (
         <>
-
-            {/*Modal*/}
-            <AlertDialog open={modal}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Сіз Сәтті тіркелдіңіз</AlertDialogTitle>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogCancel onClick={() => {
-                            setModal(false);
-                        }}>Бас тарту</AlertDialogCancel>
-                        <AlertDialogAction onClick={() => {
-                            setModal(false)
-                            router.push('/login')
-                        }}>Аккаунтқа кіру</AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-
             <div className="w-full lg:grid lg:min-h-screen  lg:grid-cols-2">
                 <div className="bg-sky-50 block h-[300px] lg:h-full">
                     <div className="flex justify-center items-center h-full">
@@ -177,8 +163,7 @@ export default function Login() {
                                             <div className="flex space-x-3">
 
                                                 {
-                                                    step > 1
-                                                        ? <Button
+                                                    step > 1 && <Button
                                                             onClick={() => {
                                                                 setStep((prev) => prev - 1)
                                                             }}
@@ -188,8 +173,6 @@ export default function Login() {
                                                                 <ArrowLeft  size={15} />
                                                                 <span>Артқа</span>
                                                             </Button>
-
-                                                        : null
                                                 }
 
                                                 <Button

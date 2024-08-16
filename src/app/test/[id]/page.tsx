@@ -13,44 +13,69 @@ import {RadioGroup, RadioGroupItem} from "@/components/ui/radio-group";
 
 import {Button} from "@/components/ui/button";
 import {CheckCheck, ChevronLeft} from "lucide-react";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {
     AlertDialog, AlertDialogAction, AlertDialogCancel,
-    AlertDialogContent,
+    AlertDialogContent, AlertDialogDescription,
     AlertDialogFooter,
     AlertDialogHeader,
     AlertDialogTitle
 } from "@/components/ui/alert-dialog";
 import {useRouter} from "next/navigation";
-import {Answer} from "@/types/test.types";
-import {useDistricts, useTest} from "@/utils/api-requests";
-import CardTest from "@/app/test/card-test";
+import {Answer, Test} from "@/types/test.types";
 import {Label} from "@/components/ui/label";
 import axios from "axios";
+import Loading from "@/app/profile/loading";
+import fetchTest from "@/api/fetchTest";
+import {id} from "postcss-selector-parser";
+import {Skeleton} from "@/components/ui/skeleton";
+import passTest from "@/api/passTest";
+import {useToast} from "@/components/ui/use-toast";
+import {ToastAction} from "@/components/ui/toast";
+import fetchData from "@/utils/api/fetchData";
 
 export default function TestDetail({ params }: {
     params: { id: number },
 }) {
-    const [modal, setModal] = useState(false);
     const [answer, setAnswer] = useState("");
-    const { data: test,
-        error: testError,
-        isLoading: testLoading
-    } = useTest(params.id);
+
+    const [test, setTest] = useState<Test | null>();
+    const [loading, setLoading] = useState(true);
 
     const router  = useRouter();
 
+    const { toast } = useToast()
+
+    useEffect(() => {
+        fetchData(`tests/${params.id}`)
+            .then((res) => {
+                if (res.status === 200) {
+                    setTest(res.data);
+                }
+            })
+            .catch((error) => {
+                console.error("Failed to fetch user data:", error);
+            })
+            .finally(() => {
+                setLoading(false);
+            });
+    }, []);
+
     const handleSubmit = async () => {
         try {
-            const response = await axios.post('/api/pass', JSON.stringify({
-                user_id: 1,
-                test_id: test && test.id,
-                answer_id: answer
-            }));
-
-            if (response.status === 200) {
-                setModal(true)
-            }
+            fetchData("user-answers", "POST", {
+                test_id: params.id,
+                answer_id: answer,
+            })
+                .then(res => {
+                    console.log(res)
+                })
+                .finally(() => {
+                    toast({
+                        title: "Сұрауыңыз сәтті орындалды ",
+                        description: "Өзіңіз берген жауаптарды статистика бөлімінен көре аласыз",
+                    })
+                })
         } catch (error) {
             // @ts-ignore
             console.log(error.message)
@@ -59,20 +84,6 @@ export default function TestDetail({ params }: {
 
     return (
         <>
-            <AlertDialog open={modal}>
-                <AlertDialogContent>
-                    <AlertDialogHeader>
-                        <AlertDialogTitle>Сіздің жауабыңыз қабылданды</AlertDialogTitle>
-                    </AlertDialogHeader>
-                    <AlertDialogFooter>
-                        <AlertDialogAction onClick={() => {
-                            setModal(false)
-                            router.push('/test')
-                        }}>Жабу</AlertDialogAction>
-                    </AlertDialogFooter>
-                </AlertDialogContent>
-            </AlertDialog>
-
             <section>
                 <div className="flex justify-between items-center gap-10">
                     <div className="flex items-center space-x-2">
@@ -81,7 +92,9 @@ export default function TestDetail({ params }: {
                                 <ChevronLeft />
                             </Link>
                         </Button>
-                        <h2 className="text-4xl font-medium">Тест #{ test && test.key }</h2>
+                        <h2 className="text-4xl font-medium">
+                            {!loading ? `Тест #${ test && test.key }`: <Skeleton className="bg-gray-300 w-24 h-4 rounded" />}
+                        </h2>
                     </div>
                 </div>
 
@@ -101,22 +114,16 @@ export default function TestDetail({ params }: {
                         </BreadcrumbItem>
                         <BreadcrumbSeparator />
                         <BreadcrumbItem>
-                            <BreadcrumbPage>Тест #{ test && test.key }</BreadcrumbPage>
+                            <BreadcrumbPage>{!loading ? `Тест #${ test && test.key }`: <Skeleton className="bg-gray-300 w-9 h-2 rounded" />}</BreadcrumbPage>
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
 
             </section>
 
+            {loading && <Loading />}
 
-            {
-                testLoading
-                    ? <div className="h-[550px] w-full flex justify-center items-center">
-                        <span>Загрузка...</span>
-                    </div>
-                    : <section className="mt-5">
-
-                        {testError && <p>Error loading tests: {testError.message}</p>}
+            {!loading && <section className="mt-5">
 
                         <Card>
                             <CardHeader>

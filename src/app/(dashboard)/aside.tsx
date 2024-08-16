@@ -6,7 +6,7 @@ import {PanelRightClose, PanelRightOpen, PowerIcon} from "lucide-react";
 import NavLinks from "@/app/(dashboard)/nav-links";
 import {cookies} from "next/headers";
 import {useRouter} from "next/navigation";
-import {useUser} from "@/utils/api-requests";
+import {logout} from "@/utils/api/logout";
 
 export default function Aside() {
     const router = useRouter()
@@ -28,21 +28,8 @@ export default function Aside() {
                     <button
                         type="button"
                         onClick={async () => {
-                            try {
-                                const response = await fetch('/api/logout', {
-                                    method: 'DELETE',
-                                    headers: {
-                                        'Content-Type': 'application/json',
-                                    },
-                                });
-
-                                if (!response.ok) return
-
-
-                                router.push("/login")
-                            } catch (error) {
-                                console.log("error")
-                            }
+                            logout()
+                            router.push("/login")
                         }}
                         className="flex h-[48px] w-full grow items-center justify-center gap-2 rounded-md bg-gray-50 p-3 text-sm font-medium hover:bg-red-100 hover:text-red-600 md:flex-none md:justify-start md:p-2 md:px-3">
                         <PowerIcon className="w-6"/>
