@@ -2,7 +2,7 @@ import LayoutsApp from '@/app/(dashboard)/layouts-app'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
-	title: 'Кері байланыс',
+	title: 'Жылдық жоспар',
 	description: '...',
 }
 
