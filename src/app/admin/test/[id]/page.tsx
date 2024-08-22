@@ -34,9 +34,9 @@ import { useToast } from '@/components/ui/use-toast'
 import fetchData from '@/utils/api/fetchData'
 import { X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
-export default function Page() {
+export default function Page({ params }: { params: { id: number } }) {
 	const [question, setQuestion] = useState({
 		question: '',
 		question_ru: '',
@@ -44,8 +44,22 @@ export default function Page() {
 	})
 
 	const [answers, setAnswers] = useState([
-		{ id: 1, value: '', correct: false, lang: 'kk' },
+		{ id: 1, answer: '', correct: false, lang: 'kk', test_id: params.id },
 	])
+
+	useEffect(() => {
+		fetchData(`tests/${params.id}`)
+			.then(res => {
+				if (res.status === 200) {
+					setQuestion(res.data)
+					// console.log(res.data)
+					setAnswers(res.data.answers)
+				}
+			})
+			.catch(error => {
+				console.error('Failed to fetch user data:', error)
+			})
+	}, [])
 
 	const router = useRouter()
 	const { toast } = useToast()
@@ -124,11 +138,12 @@ export default function Page() {
 												<TableCell>
 													<Input
 														type='text'
+														value={answer.answer}
 														onChange={event => {
 															setAnswers(
 																answers.map(input =>
 																	input.id === answer.id
-																		? { ...input, value: event.target.value }
+																		? { ...input, answer: event.target.value } // Correct syntax for updating value
 																		: input
 																)
 															)
@@ -151,6 +166,7 @@ export default function Page() {
 												</TableCell>
 												<TableCell>
 													<Select
+														value={answer.lang}
 														onValueChange={val => {
 															setAnswers(
 																answers.map(input =>
@@ -203,9 +219,10 @@ export default function Page() {
 									...answers,
 									{
 										id: answers[answers.length - 1].id + 1,
-										value: '',
+										answer: '',
 										correct: false,
 										lang: 'kk',
+										test_id: params.id,
 									},
 								])
 							}}
@@ -214,12 +231,12 @@ export default function Page() {
 						</Button>
 						<Button
 							onClick={res => {
-								fetchData('tests', 'POST', question)
+								fetchData(`tests/${params.id}`, 'PUT', question)
 									.then(res => {
 										answers.map(answer => {
-											fetchData('answers', 'POST', {
-												test_id: res.data.id,
-												answer: answer.value,
+											fetchData(`answers/${answer.id}`, 'PUT', {
+												test_id: answer.test_id,
+												answer: answer.answer,
 												correct: answer.correct,
 												lang: answer.lang,
 											})

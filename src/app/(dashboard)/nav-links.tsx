@@ -65,13 +65,18 @@ export default function NavLinks() {
 			{ name: 'Жеке кабинет', href: '/profile', icon: <Contact size={size} /> },
 			{ name: 'Тест', href: '/admin/test', icon: <ListTodo size={size} /> },
 			{
-				name: 'Статистика',
-				href: '/admin/result',
+				name: 'Олыстар',
+				href: '/admin/regions',
 				icon: <ListTodo size={size} />,
 			},
 			{
-				name: 'Қалалар',
-				href: '/admin/regions',
+				name: 'Аудан қалалар',
+				href: '/admin/districts',
+				icon: <ListTodo size={size} />,
+			},
+			{
+				name: 'Округтар',
+				href: '/admin/villages',
 				icon: <ListTodo size={size} />,
 			},
 		],

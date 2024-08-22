@@ -1,24 +1,12 @@
 'use client'
 
-import {
-	Breadcrumb,
-	BreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
-import {
-	Card,
-	CardContent,
-	CardFooter,
-	CardHeader,
-	CardTitle,
-} from '@/components/ui/card'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group'
 import Link from 'next/link'
 
 import Loading from '@/app/profile/loading'
+import { BreadcrumbsCustom } from '@/components/breadcrumbs-custom'
+import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { Skeleton } from '@/components/ui/skeleton'
@@ -52,7 +40,7 @@ export default function TestDetail({ params }: { params: { id: number } }) {
 			.finally(() => {
 				setLoading(false)
 			})
-	}, [])
+	}, [params.id])
 
 	const handleSubmit = async () => {
 		try {
@@ -69,11 +57,7 @@ export default function TestDetail({ params }: { params: { id: number } }) {
 					})
 				})
 				.finally(() => {
-					toast({
-						title: 'Сұрауыңыз сәтті орындалды ',
-						description:
-							'Өзіңіз берген жауаптарды статистика бөлімінен көре аласыз',
-					})
+					router.push('/test')
 				})
 		} catch (error) {
 			// @ts-ignore
@@ -102,27 +86,7 @@ export default function TestDetail({ params }: { params: { id: number } }) {
 				</div>
 
 				{/*breadcrumb*/}
-				<Breadcrumb className='mt-5'>
-					<BreadcrumbList>
-						<BreadcrumbItem>
-							<BreadcrumbLink>Басты бет</BreadcrumbLink>
-						</BreadcrumbItem>
-						<BreadcrumbSeparator />
-						<BreadcrumbItem>
-							<BreadcrumbLink>Тесттер</BreadcrumbLink>
-						</BreadcrumbItem>
-						<BreadcrumbSeparator />
-						<BreadcrumbItem>
-							<BreadcrumbPage>
-								{!loading ? (
-									`Тест #${test && test.key}`
-								) : (
-									<Skeleton className='bg-gray-300 w-9 h-2 rounded' />
-								)}
-							</BreadcrumbPage>
-						</BreadcrumbItem>
-					</BreadcrumbList>
-				</Breadcrumb>
+				<BreadcrumbsCustom items={[`Тест ${test?.key}`]} />
 			</section>
 
 			{loading && <Loading />}
@@ -131,32 +95,84 @@ export default function TestDetail({ params }: { params: { id: number } }) {
 				<section className='mt-5'>
 					<Card>
 						<CardHeader>
-							<CardTitle className='text-xl font-normal'>
-								{test && test.question}
+							<CardTitle className='flex items-center space-x-3'>
+								<Badge>Қазақша</Badge>
+								<span>{test && test.question}</span>
 							</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<RadioGroup onValueChange={value => setAnswer(value)}>
+							<RadioGroup
+								value={answer}
+								onValueChange={value => setAnswer(value)}
+							>
 								{test &&
-									test.answers.map(answer => (
-										<div
-											key={answer.id}
-											className='flex items-center space-x-2'
-										>
-											<RadioGroupItem value={answer.id.toString()} />
-											<Label htmlFor='option-one'>{answer.answer}</Label>
-										</div>
-									))}
+									test.answers.map(
+										answer =>
+											answer.lang === 'kk' && (
+												<div
+													key={answer.id}
+													className='flex items-center space-x-2'
+												>
+													<RadioGroupItem
+														value={answer.id.toString()}
+														id={answer.id.toString()}
+													/>
+													<Label
+														htmlFor={answer.id.toString()}
+														className='text-sm font-light leading-none'
+													>
+														{answer.answer}
+													</Label>
+												</div>
+											)
+									)}
 							</RadioGroup>
 						</CardContent>
-
-						<CardFooter>
-							<Button className='space-x-3' onClick={handleSubmit}>
-								<span className='uppercase'>Жауапты қабылдау</span>
-								<CheckCheck size={18} />
-							</Button>
-						</CardFooter>
 					</Card>
+
+					<Card className='mt-5'>
+						<CardHeader>
+							<CardTitle className='flex items-center space-x-3'>
+								<Badge>Руский</Badge>
+								<span>{test && test.question_ru}</span>
+							</CardTitle>
+						</CardHeader>
+						<CardContent>
+							<RadioGroup
+								value={answer}
+								onValueChange={value => setAnswer(value)}
+							>
+								{test &&
+									test.answers.map(
+										answer =>
+											answer.lang === 'ru' && (
+												<div
+													key={answer.id}
+													className='flex items-center space-x-2'
+												>
+													<RadioGroupItem
+														value={answer.id.toString()}
+														id={answer.id.toString()}
+													/>
+													<Label
+														htmlFor={answer.id.toString()}
+														className='text-sm font-light leading-none'
+													>
+														{answer.answer}
+													</Label>
+												</div>
+											)
+									)}
+							</RadioGroup>
+						</CardContent>
+					</Card>
+
+					<div className='mt-5'>
+						<Button className='space-x-3' onClick={handleSubmit}>
+							<span className='uppercase'>Жауапты қабылдау</span>
+							<CheckCheck size={18} />
+						</Button>
+					</div>
 				</section>
 			)}
 		</>

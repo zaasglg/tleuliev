@@ -3,16 +3,8 @@
 import { CheckCheck, Minus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 
-import {
-	Breadcrumb,
-	BreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
-
 import Loading from '@/app/profile/loading'
+import { BreadcrumbsCustom } from '@/components/breadcrumbs-custom'
 import { Button } from '@/components/ui/button'
 import {
 	Card,
@@ -30,9 +22,10 @@ import {
 	TableHeader,
 	TableRow,
 } from '@/components/ui/table'
-import { ResultUser } from '@/types/result-user'
 import { UserAnswer } from '@/types/user-answer.types'
 import fetchData from '@/utils/api/fetchData'
+import { Label } from '@radix-ui/react-label'
+import Link from 'next/link'
 
 export default function Page() {
 	// user answers
@@ -48,7 +41,7 @@ export default function Page() {
 
 	const [resultUser, setResultUser] = useState<{
 		loading: boolean
-		result: ResultUser | null
+		result: Report | null
 		error: string | null
 	}>({
 		loading: true,
@@ -75,8 +68,9 @@ export default function Page() {
 				}))
 			})
 
-		fetchData('result/user').then(res => {
+		fetchData('user/reports').then(res => {
 			if (res.status === 200) {
+				console.log(res)
 				setResultUser({
 					loading: false,
 					result: res.data,
@@ -98,17 +92,7 @@ export default function Page() {
 				</div>
 
 				{/*breadcrumb*/}
-				<Breadcrumb className='mt-5'>
-					<BreadcrumbList>
-						<BreadcrumbItem>
-							<BreadcrumbLink>Басты бет</BreadcrumbLink>
-						</BreadcrumbItem>
-						<BreadcrumbSeparator />
-						<BreadcrumbItem>
-							<BreadcrumbPage>Статистика</BreadcrumbPage>
-						</BreadcrumbItem>
-					</BreadcrumbList>
-				</Breadcrumb>
+				<BreadcrumbsCustom items={['Статистика']} />
 			</section>
 
 			{userAnswers.loading && <Loading />}
@@ -120,13 +104,18 @@ export default function Page() {
 							<CardHeader>
 								<CardDescription>тапсырған тесттер</CardDescription>
 								<CardTitle>
-									{resultUser.result?.completed_tests}/
-									{resultUser.result?.total_tests}
+									{resultUser.result?.done} / {resultUser.result?.plan}
 								</CardTitle>
 							</CardHeader>
 
 							<CardContent>
-								<Progress value={33} />
+								<Progress
+									value={Number(resultUser.result?.done_pct)}
+									max={Number(resultUser.result?.plan)}
+								/>
+								<Label className='text-xs text-gray-500'>
+									{resultUser.result?.done_pct} %
+								</Label>
 							</CardContent>
 						</Card>
 
@@ -134,19 +123,23 @@ export default function Page() {
 							<CardHeader>
 								<CardDescription>Сізге қойылған тапсырмалар</CardDescription>
 								<CardTitle>
-									1 <span className='font-normal'>тапсырма</span>
+									{Number(resultUser.result?.plan) -
+										Number(resultUser.result?.done)}
+									<span className='font-normal'> тапсырма</span>
 								</CardTitle>
 							</CardHeader>
 
 							<CardContent>
-								<Button>Тапсырмаларды қарау</Button>
+								<Button asChild>
+									<Link href='/test'>Тапсырмаларды қарау</Link>
+								</Button>
 							</CardContent>
 						</Card>
 					</div>
 
 					<Card className='mt-3'>
 						<CardHeader>
-							<CardTitle className='text-xl font-medium'>Статистика</CardTitle>
+							<CardTitle>Статистика</CardTitle>
 						</CardHeader>
 						<CardContent>
 							<Table>

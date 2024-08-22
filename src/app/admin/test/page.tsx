@@ -2,16 +2,8 @@
 
 import { useEffect, useState } from 'react'
 
-import {
-	Breadcrumb,
-	BreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
-
 import Loading from '@/app/profile/loading'
+import { BreadcrumbsCustom } from '@/components/breadcrumbs-custom'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -23,6 +15,7 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 import { Test } from '@/types/test.types'
+import fetchData from '@/utils/api/fetchData'
 import Link from 'next/link'
 
 export default function Page() {
@@ -31,7 +24,17 @@ export default function Page() {
 	const [tests, setTests] = useState<Test[]>()
 	const [loading, setLoading] = useState(true)
 
-	useEffect(() => {}, [])
+	const fetchTest = () => {
+		fetchData('tests').then(res => {
+			console.log(res)
+			setTests(res.data)
+			setLoading(false)
+		})
+	}
+
+	useEffect(() => {
+		fetchTest()
+	}, [])
 
 	return (
 		<>
@@ -49,17 +52,7 @@ export default function Page() {
 				</div>
 
 				{/*breadcrumb*/}
-				<Breadcrumb className='mt-5'>
-					<BreadcrumbList>
-						<BreadcrumbItem>
-							<BreadcrumbLink>Басты бет</BreadcrumbLink>
-						</BreadcrumbItem>
-						<BreadcrumbSeparator />
-						<BreadcrumbItem>
-							<BreadcrumbPage>Тесттер</BreadcrumbPage>
-						</BreadcrumbItem>
-					</BreadcrumbList>
-				</Breadcrumb>
+				<BreadcrumbsCustom items={['Админ', 'Тесттер']} />
 			</section>
 			{loading && <Loading />}
 			<section className='mt-10'>
@@ -86,11 +79,22 @@ export default function Page() {
 												<TableCell>{item.id}</TableCell>
 												<TableCell>{item.question}</TableCell>
 												<TableCell>
-													<Button>Өзгерту</Button>
+													<Button>
+														<Link href={`/admin/test/${item.id}`}>Өзгерту</Link>
+													</Button>
 												</TableCell>
 
 												<TableCell>
-													<Button className='bg-red-500 hover:bg-red-600'>
+													<Button
+														className='bg-red-500 hover:bg-red-600'
+														onClick={() => {
+															fetchData(`tests/${item.id}`, 'DELETE').then(
+																res => {
+																	fetchTest()
+																}
+															)
+														}}
+													>
 														Жою
 													</Button>
 												</TableCell>
