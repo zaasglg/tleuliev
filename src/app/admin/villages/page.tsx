@@ -175,39 +175,11 @@ export default function Page() {
 									<TableCell>
 										<Popover>
 											<PopoverTrigger asChild>
-												<Button>Өңдеу</Button>
+												<Button>Өзгерту</Button>
 											</PopoverTrigger>
 											<PopoverContent className='w-80'>
 												<div className='grid gap-4'>
 													<div>
-														<div>
-															<Label htmlFor='regionId' className='text-right'>
-																Аудан
-															</Label>
-															<Select
-																onValueChange={val => {
-																	setFormData({
-																		...formData,
-																		districtId: Number(val),
-																	})
-																}}
-															>
-																<SelectTrigger className=''>
-																	<SelectValue placeholder='-----------------' />
-																</SelectTrigger>
-																<SelectContent>
-																	{districts &&
-																		districts.map(district => (
-																			<SelectItem
-																				value={String(district.id)}
-																				key={district.id}
-																			>
-																				{district.name}
-																			</SelectItem>
-																		))}
-																</SelectContent>
-															</Select>
-														</div>
 														<div className='mt-3'>
 															<Label htmlFor='width'>Атауы</Label>
 															<Input
@@ -229,7 +201,7 @@ export default function Page() {
 															onClick={() => {
 																fetchData(`villages/${village.id}`, 'PUT', {
 																	name: formData.name,
-																	district_id: formData.districtId,
+																	district_id: village.district.id,
 																}).then(res => {
 																	fetchVillages()
 																	setFormData({

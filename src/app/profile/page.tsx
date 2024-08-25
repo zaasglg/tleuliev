@@ -76,7 +76,19 @@ export default function Profile() {
 								</div>
 								<div>
 									<Label>Телефон номер</Label>
-									<Input value={userData ? userData.phone : ''} readOnly />
+									<Input
+										value={
+											userData?.phone
+												? `+${String(userData.phone).slice(0, 1)} (${String(
+														userData.phone
+												  ).slice(1, 4)}) ${String(userData.phone).slice(
+														4,
+														7
+												  )} ${String(userData.phone).slice(7)}`
+												: ''
+										}
+										readOnly
+									/>
 								</div>
 								<div>
 									<Label>Туылған күні</Label>

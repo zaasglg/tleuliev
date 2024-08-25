@@ -81,7 +81,7 @@ export default function FirstStep({ formData, setFormData }: Props) {
 						</SelectGroup>
 						<SelectGroup>
 							<SelectLabel className='font-bold text-sm'>Тексеруші</SelectLabel>
-							<SelectItem value='redactor_redion'>Облыс бойынша</SelectItem>
+							<SelectItem value='region_admin'>Облыс бойынша</SelectItem>
 							<SelectItem value='district_admin'>Аудан бойынша</SelectItem>
 							<SelectItem value='village_admin'>Округ бойынша</SelectItem>
 						</SelectGroup>

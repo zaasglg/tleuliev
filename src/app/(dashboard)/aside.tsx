@@ -17,7 +17,10 @@ export default function Aside() {
 				href='/'
 			>
 				<div className='w-32 text-white md:w-40'>
-					<Logo color='white' size={20} />
+					<Logo color='white' size={20} /> <br />
+					<span className='text-xs leading-none block mt-1 text-gray-100'>
+						Ветеринарлық медицина бойынша теориялық білімді арттыру платформасы
+					</span>
 				</div>
 			</Link>
 			<div className='flex grow flex-row justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2'>

@@ -123,7 +123,7 @@ export default function Page() {
 									<TableCell>
 										<Popover>
 											<PopoverTrigger asChild>
-												<Button>Өңдеу</Button>
+												<Button>Өзгерту</Button>
 											</PopoverTrigger>
 											<PopoverContent className='w-80'>
 												<div className='grid gap-4'>

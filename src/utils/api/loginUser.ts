@@ -5,8 +5,10 @@ import { cookies } from 'next/headers'
 
 export default async function loginUser(phone: string, password: string) {
 	try {
-		const response = await axios.post('http://api.agroduken.kz/api/login', {
-			phone,
+		let new_phone = String(phone).replace(/\D/g, '')
+
+		const response = await axios.post('http://tleuliev.test/api/login', {
+			phone: new_phone,
 			password,
 		})
 

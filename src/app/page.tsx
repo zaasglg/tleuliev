@@ -1,35 +1,24 @@
-"use client"
+'use client'
 
-import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList, BreadcrumbPage,
-    BreadcrumbSeparator
-} from "@/components/ui/breadcrumb";
-import Link from "next/link";
-import LayoutsApp from "@/app/(dashboard)/layouts-app";
+import LayoutsApp from '@/app/(dashboard)/layouts-app'
+import { BreadcrumbsCustom } from '@/components/breadcrumbs-custom'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export default function Home() {
+	const [page, setPage] = useState()
+	const router = useRouter()
 
-  return (
-      <LayoutsApp>
+	return (
+		<LayoutsApp>
+			<section>
+				<div>
+					<h2 className='text-4xl font-medium'>Басты бет</h2>
+				</div>
 
-          <section>
-              <div>
-                  <h2 className="text-4xl font-medium">Басты бет</h2>
-              </div>
-
-              {/*breadcrumb*/}
-              <Breadcrumb className="mt-5">
-                  <BreadcrumbList>
-                      <BreadcrumbItem>
-                          <BreadcrumbLink>Басты бет</BreadcrumbLink>
-                      </BreadcrumbItem>
-                  </BreadcrumbList>
-              </Breadcrumb>
-          </section>
-
-      </LayoutsApp>
-  );
+				{/* breadcrums */}
+				<BreadcrumbsCustom items={[]} />
+			</section>
+		</LayoutsApp>
+	)
 }

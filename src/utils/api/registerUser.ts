@@ -27,11 +27,13 @@ export default async function registerUser({
 	password: string
 }) {
 	try {
-		const response = await axios.post('http://api.agroduken.kz/api/register', {
+		let new_phone = String(phone).replace(/\D/g, '')
+
+		const response = await axios.post('http://tleuliev.test/api/register', {
 			role,
 			name,
 			email,
-			phone,
+			phone: new_phone,
 			profession,
 			birthday,
 			region_id,

@@ -65,7 +65,7 @@ export default function NavLinks() {
 			{ name: 'Жеке кабинет', href: '/profile', icon: <Contact size={size} /> },
 			{ name: 'Тест', href: '/admin/test', icon: <ListTodo size={size} /> },
 			{
-				name: 'Олыстар',
+				name: 'Облыстар',
 				href: '/admin/regions',
 				icon: <ListTodo size={size} />,
 			},
@@ -77,6 +77,16 @@ export default function NavLinks() {
 			{
 				name: 'Округтар',
 				href: '/admin/villages',
+				icon: <ListTodo size={size} />,
+			},
+			{
+				name: 'Мамандар',
+				href: '/admin/users',
+				icon: <ListTodo size={size} />,
+			},
+			{
+				name: 'Тексерушілер',
+				href: '/admin/provers',
 				icon: <ListTodo size={size} />,
 			},
 		],
