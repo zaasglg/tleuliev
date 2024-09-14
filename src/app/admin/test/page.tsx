@@ -26,7 +26,6 @@ export default function Page() {
 
 	const fetchTest = () => {
 		fetchData('tests').then(res => {
-			console.log(res)
 			setTests(res.data)
 			setLoading(false)
 		})
@@ -65,8 +64,9 @@ export default function Page() {
 							<Table>
 								<TableHeader>
 									<TableRow>
-										<TableHead>#ID</TableHead>
+										<TableHead>#КЛЮЧ</TableHead>
 										<TableHead>Сұрағы</TableHead>
+										<TableHead></TableHead>
 										<TableHead></TableHead>
 										<TableHead></TableHead>
 										<TableHead></TableHead>
@@ -74,32 +74,45 @@ export default function Page() {
 								</TableHeader>
 								<TableBody>
 									{tests &&
-										tests.map(item => (
-											<TableRow key={item.id}>
-												<TableCell>{item.id}</TableCell>
-												<TableCell>{item.question}</TableCell>
-												<TableCell>
-													<Button>
-														<Link href={`/admin/test/${item.id}`}>Өзгерту</Link>
-													</Button>
-												</TableCell>
+										tests
+											.slice()
+											.reverse()
+											.map(item => (
+												<TableRow key={item.id}>
+													<TableCell>#{item.key}</TableCell>
+													<TableCell>{item.question}</TableCell>
+													<TableCell>
+														<Button>
+															<Link href={`/admin/test/${item.id}`}>
+																Өзгерту
+															</Link>
+														</Button>
+													</TableCell>
 
-												<TableCell>
-													<Button
-														className='bg-red-500 hover:bg-red-600'
-														onClick={() => {
-															fetchData(`tests/${item.id}`, 'DELETE').then(
-																res => {
-																	fetchTest()
-																}
-															)
-														}}
-													>
-														Жою
-													</Button>
-												</TableCell>
-											</TableRow>
-										))}
+													<TableCell>
+														<Button
+															className='bg-red-500 hover:bg-red-600'
+															onClick={() => {
+																fetchData(`tests/${item.id}`, 'DELETE').then(
+																	res => {
+																		fetchTest()
+																	}
+																)
+															}}
+														>
+															Жою
+														</Button>
+													</TableCell>
+
+													<TableCell>
+														<Button asChild>
+															<Link href={`/admin/test/${item.id}/answer`}>
+																Жауаптар
+															</Link>
+														</Button>
+													</TableCell>
+												</TableRow>
+											))}
 								</TableBody>
 							</Table>
 						</CardContent>

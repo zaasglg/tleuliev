@@ -3,7 +3,7 @@
 import LayoutsApp from '@/app/(dashboard)/layouts-app'
 import { BreadcrumbsCustom } from '@/components/breadcrumbs-custom'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import {useEffect, useState} from 'react'
 
 export default function Home() {
 	const [page, setPage] = useState()
@@ -18,6 +18,7 @@ export default function Home() {
 
 				{/* breadcrums */}
 				<BreadcrumbsCustom items={[]} />
+
 			</section>
 		</LayoutsApp>
 	)

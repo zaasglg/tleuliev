@@ -11,28 +11,9 @@ import {
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import {
-	Select,
-	SelectContent,
-	SelectGroup,
-	SelectItem,
-	SelectLabel,
-	SelectTrigger,
-	SelectValue,
-} from '@/components/ui/select'
-import { Switch } from '@/components/ui/switch'
-import {
-	Table,
-	TableBody,
-	TableCell,
-	TableHead,
-	TableHeader,
-	TableRow,
-} from '@/components/ui/table'
 import { ToastAction } from '@/components/ui/toast'
 import { useToast } from '@/components/ui/use-toast'
 import fetchData from '@/utils/api/fetchData'
-import { X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
@@ -43,17 +24,12 @@ export default function Page({ params }: { params: { id: number } }) {
 		key: '',
 	})
 
-	const [answers, setAnswers] = useState([
-		{ id: 1, answer: '', correct: false, lang: 'kk', test_id: params.id },
-	])
-
 	useEffect(() => {
 		fetchData(`tests/${params.id}`)
 			.then(res => {
 				if (res.status === 200) {
 					setQuestion(res.data)
 					// console.log(res.data)
-					setAnswers(res.data.answers)
 				}
 			})
 			.catch(error => {
@@ -118,130 +94,13 @@ export default function Page({ params }: { params: { id: number } }) {
 									/>
 								</div>
 							</div>
-
-							<h2 className='mt-5 mb-1'>Жауаптар</h2>
-							<div>
-								<Table>
-									<TableHeader>
-										<TableRow>
-											<TableHead>#ID</TableHead>
-											<TableHead>Жауап</TableHead>
-											<TableHead>Дұрыс/Бұрыс</TableHead>
-											<TableHead>Тіл</TableHead>
-											<TableHead>Әрекет</TableHead>
-										</TableRow>
-									</TableHeader>
-									<TableBody>
-										{answers.map(answer => (
-											<TableRow key={answer.id}>
-												<TableCell>{answer.id}</TableCell>
-												<TableCell>
-													<Input
-														type='text'
-														value={answer.answer}
-														onChange={event => {
-															setAnswers(
-																answers.map(input =>
-																	input.id === answer.id
-																		? { ...input, answer: event.target.value } // Correct syntax for updating value
-																		: input
-																)
-															)
-														}}
-													/>
-												</TableCell>
-												<TableCell>
-													<Switch
-														checked={answer.correct}
-														onCheckedChange={val => {
-															setAnswers(
-																answers.map(input =>
-																	input.id === answer.id
-																		? { ...input, correct: val }
-																		: input
-																)
-															)
-														}}
-													/>
-												</TableCell>
-												<TableCell>
-													<Select
-														value={answer.lang}
-														onValueChange={val => {
-															setAnswers(
-																answers.map(input =>
-																	input.id === answer.id
-																		? { ...input, lang: val }
-																		: input
-																)
-															)
-														}}
-													>
-														<SelectTrigger className='w-[180px]'>
-															<SelectValue placeholder='Тілді тандаңыз' />
-														</SelectTrigger>
-														<SelectContent>
-															<SelectGroup>
-																<SelectLabel>Тілдер</SelectLabel>
-																<SelectItem value='kk'>Қазақша</SelectItem>
-																<SelectItem value='ru'>Руский</SelectItem>
-															</SelectGroup>
-														</SelectContent>
-													</Select>
-												</TableCell>
-												<TableCell>
-													<Button
-														type='button'
-														disabled={answers.length === 1}
-														variant='ghost'
-														className='w-9 h-9 p-0 text-red-500 hover:text-red-600'
-														onClick={() => {
-															setAnswers(
-																answers.filter(old => old.id !== answer.id)
-															)
-														}}
-													>
-														<X />
-													</Button>
-												</TableCell>
-											</TableRow>
-										))}
-									</TableBody>
-								</Table>
-							</div>
 						</form>
 					</CardContent>
 					<CardFooter className='flex space-x-3'>
 						<Button
-							variant='outline'
-							onClick={() => {
-								setAnswers([
-									...answers,
-									{
-										id: answers[answers.length - 1].id + 1,
-										answer: '',
-										correct: false,
-										lang: 'kk',
-										test_id: params.id,
-									},
-								])
-							}}
-						>
-							Жауап қосу
-						</Button>
-						<Button
 							onClick={res => {
 								fetchData(`tests/${params.id}`, 'PUT', question)
-									.then(res => {
-										answers.map(answer => {
-											fetchData(`answers/${answer.id}`, 'PUT', {
-												test_id: answer.test_id,
-												answer: answer.answer,
-												correct: answer.correct,
-												lang: answer.lang,
-											})
-										})
-									})
+									.then(res => {})
 									.finally(() => {
 										toast({
 											title: 'Сұрауыңыз сәтті орындалды ',

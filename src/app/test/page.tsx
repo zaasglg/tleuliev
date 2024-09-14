@@ -29,13 +29,13 @@ export default function Page() {
 		fetchTests()
 	}, [])
 
-	useEffect(() => {
-		if (search === '') {
-			fetchTests()
-		} else {
-			handleSearch(search)
-		}
-	}, [search, tests])
+	// useEffect(() => {
+	// 	if (search === '') {
+	// 		fetchTests()
+	// 	} else {
+	// 		handleSearch(search)
+	// 	}
+	// }, [search, tests])
 
 	const handleSearch = (value: string) => {
 		const filteredTests = tests?.filter(
