@@ -1,6 +1,5 @@
 'use client'
 
-import { BreadcrumbsCustom } from '@/components/breadcrumbs-custom'
 import { Button } from '@/components/ui/button'
 import {
 	Card,
@@ -34,10 +33,10 @@ import { NextPage } from 'next'
 import { useEffect, useState } from 'react'
 
 interface Props {
-	params: { id: number }
+	testId: number
 }
 
-const Page: NextPage<Props> = ({ params }) => {
+const AddOrEditswersTest: NextPage<Props> = ({ testId }) => {
 	const [answer, setAnswer] = useState({
 		id: 1,
 		value: '',
@@ -46,7 +45,7 @@ const Page: NextPage<Props> = ({ params }) => {
 	})
 
 	const fetchTest = () => {
-		fetchData(`tests/${params.id}`)
+		fetchData(`tests/${testId}`)
 			.then(res => {
 				if (res.status === 200) {
 					setTest(res.data)
@@ -62,7 +61,7 @@ const Page: NextPage<Props> = ({ params }) => {
 
 	useEffect(() => {
 		fetchTest()
-	}, [params.id])
+	}, [testId])
 
 	const [test, setTest] = useState<Test | null>()
 	const [loading, setLoading] = useState(true)
@@ -70,13 +69,18 @@ const Page: NextPage<Props> = ({ params }) => {
 	const addAnswer = () => {
 		console.log(answer)
 		fetchData('answers', 'POST', {
-			test_id: params.id,
+			test_id: testId,
 			answer: answer.value,
 			correct: answer.correct,
 			lang: answer.lang,
 		})
 			.then(res => {
-				console.log(res)
+				setAnswer({
+					id: 1,
+					value: '',
+					correct: false,
+					lang: 'kk',
+				})
 
 				fetchTest()
 			})
@@ -98,17 +102,6 @@ const Page: NextPage<Props> = ({ params }) => {
 
 	return (
 		<>
-			<section>
-				<div className='flex justify-between items-center gap-10'>
-					<div>
-						<h2 className='text-4xl font-medium'>Жауаптар</h2>
-					</div>
-				</div>
-
-				{/*breadcrumb*/}
-				<BreadcrumbsCustom items={['Админ', 'Тест', 'Жауаптар']} />
-			</section>
-
 			<section className='mt-10'>
 				<Card>
 					<CardHeader>
@@ -212,7 +205,7 @@ const Page: NextPage<Props> = ({ params }) => {
 												<TableCell>{item.lang}</TableCell>
 												<TableCell>
 													<Button
-														className='bg-red-500'
+														className='bg-red-500 hover:bg-red-600'
 														onClick={() => deleteAnswer(item.id)}
 													>
 														Жою
@@ -230,4 +223,4 @@ const Page: NextPage<Props> = ({ params }) => {
 	)
 }
 
-export default Page
+export default AddOrEditswersTest

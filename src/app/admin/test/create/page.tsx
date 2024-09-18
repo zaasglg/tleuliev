@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import {
 	Card,
 	CardContent,
+	CardDescription,
 	CardFooter,
 	CardHeader,
 	CardTitle,
@@ -16,6 +17,7 @@ import { useToast } from '@/components/ui/use-toast'
 import fetchData from '@/utils/api/fetchData'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
+import AddOrEditswersTest from '../[id]/(answer)/page'
 
 export default function Page() {
 	const [question, setQuestion] = useState({
@@ -27,8 +29,11 @@ export default function Page() {
 	const router = useRouter()
 	const { toast } = useToast()
 
+	const [testId, setTestId] = useState<number>(0)
+
 	return (
 		<>
+			{/* header */}
 			<section>
 				<div className='flex justify-between items-center gap-10'>
 					<div>
@@ -39,10 +44,17 @@ export default function Page() {
 				{/*breadcrumb*/}
 				<BreadcrumbsCustom items={['Админ', 'Тест']} />
 			</section>
+
+			{/* main section */}
 			<section className='mt-10'>
 				<Card className=''>
 					<CardHeader>
-						<CardTitle className='text-xl font-medium'>Тест қосу</CardTitle>
+						<CardTitle>Тест қосу</CardTitle>
+						<CardDescription>
+							Ең алдымен тест сұрақтарың еңгізіп, Сақтау батырмасын басыңыз.
+							Әрекет сәтті орындалғанына көз жеткізгенен соң жауаптарды еңгізуді
+							бастаңыз
+						</CardDescription>
 					</CardHeader>
 					<CardContent>
 						<form>
@@ -104,14 +116,7 @@ export default function Page() {
 							onClick={res => {
 								fetchData('tests', 'POST', question)
 									.then(res => {
-										// answers.map(answer => {
-											// fetchData('answers', 'POST', {
-											// 	test_id: res.data.id,
-											// 	answer: answer.value,
-											// 	correct: answer.correct,
-											// 	lang: answer.lang,
-											// })
-										// })
+										setTestId(res.data['id'])
 									})
 									.finally(() => {
 										toast({
@@ -134,6 +139,9 @@ export default function Page() {
 					</CardFooter>
 				</Card>
 			</section>
+
+			{/* answer section */}
+			<AddOrEditswersTest testId={testId} />
 		</>
 	)
 }

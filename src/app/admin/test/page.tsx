@@ -69,7 +69,6 @@ export default function Page() {
 										<TableHead></TableHead>
 										<TableHead></TableHead>
 										<TableHead></TableHead>
-										<TableHead></TableHead>
 									</TableRow>
 								</TableHeader>
 								<TableBody>
@@ -101,14 +100,6 @@ export default function Page() {
 															}}
 														>
 															Жою
-														</Button>
-													</TableCell>
-
-													<TableCell>
-														<Button asChild>
-															<Link href={`/admin/test/${item.id}/answer`}>
-																Жауаптар
-															</Link>
 														</Button>
 													</TableCell>
 												</TableRow>

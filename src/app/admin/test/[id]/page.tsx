@@ -16,6 +16,7 @@ import { useToast } from '@/components/ui/use-toast'
 import fetchData from '@/utils/api/fetchData'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import AddOrEditswersTest from './(answer)/page'
 
 export default function Page({ params }: { params: { id: number } }) {
 	const [question, setQuestion] = useState({
@@ -42,6 +43,7 @@ export default function Page({ params }: { params: { id: number } }) {
 
 	return (
 		<>
+			{/* ? header block */}
 			<section>
 				<div className='flex justify-between items-center gap-10'>
 					<div>
@@ -52,6 +54,8 @@ export default function Page({ params }: { params: { id: number } }) {
 				{/*breadcrumb*/}
 				<BreadcrumbsCustom items={['Админ', 'Тест']} />
 			</section>
+
+			{/* main block */}
 			<section className='mt-10'>
 				<Card className=''>
 					<CardHeader>
@@ -122,6 +126,9 @@ export default function Page({ params }: { params: { id: number } }) {
 					</CardFooter>
 				</Card>
 			</section>
+
+			{/* answer block */}
+			<AddOrEditswersTest testId={params.id} />
 		</>
 	)
 }
