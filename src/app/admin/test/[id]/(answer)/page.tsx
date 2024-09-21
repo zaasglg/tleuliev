@@ -67,7 +67,6 @@ const AddOrEditswersTest: NextPage<Props> = ({ testId }) => {
 	const [loading, setLoading] = useState(true)
 
 	const addAnswer = () => {
-		console.log(answer)
 		fetchData('answers', 'POST', {
 			test_id: testId,
 			answer: answer.value,
@@ -75,14 +74,14 @@ const AddOrEditswersTest: NextPage<Props> = ({ testId }) => {
 			lang: answer.lang,
 		})
 			.then(res => {
+				fetchTest()
+
 				setAnswer({
 					id: 1,
 					value: '',
 					correct: false,
 					lang: 'kk',
 				})
-
-				fetchTest()
 			})
 			.catch(error => {
 				console.log(error)
@@ -113,7 +112,6 @@ const AddOrEditswersTest: NextPage<Props> = ({ testId }) => {
 							<Table>
 								<TableHeader>
 									<TableRow>
-										<TableHead>#ID</TableHead>
 										<TableHead>Жауап</TableHead>
 										<TableHead>Дұрыс/Бұрыс</TableHead>
 										<TableHead>Тіл</TableHead>
@@ -121,10 +119,10 @@ const AddOrEditswersTest: NextPage<Props> = ({ testId }) => {
 								</TableHeader>
 								<TableBody>
 									<TableRow key={answer.id}>
-										<TableCell>{answer.id}</TableCell>
 										<TableCell>
 											<Input
 												type='text'
+												value={answer.value}
 												onChange={event => {
 													setAnswer({
 														...answer,
