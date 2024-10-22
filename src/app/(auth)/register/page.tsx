@@ -129,15 +129,13 @@ export default function Login() {
 	return (
 		<>
 			<div className='w-full lg:grid lg:min-h-screen  lg:grid-cols-2'>
-				<div className='bg-sky-50 block h-[300px] lg:h-full'>
+				<div className='bg-sky-50 block h-[300px] lg:h-full px-10 lg:px-0'>
 					<div className='flex justify-center items-center h-full'>
 						<div className='text-center'>
-							<h2 className='text-3xl font-medium'>
-								Сені көргеніме қуаныштымын
-							</h2>
+							<h2 className='text-3xl font-medium'>Tleuliev VetTest</h2>
 							<span className='font-[300] block leading-none my-3'>
-								ветеринарлык медицина бойынша теориялық <br /> білімді арттыру
-								платформасы
+								ветеринарлык медицина бойынша теориялық{' '}
+								<br className='hidden lg:block' /> білімді арттыру платформасы
 							</span>
 							<Button asChild variant={'outline'} className='w-full mt-3'>
 								<Link href='/login'>Кіру</Link>
@@ -145,7 +143,7 @@ export default function Login() {
 						</div>
 					</div>
 				</div>
-				<div className='flex items-center justify-center py-12'>
+				<div className='flex items-center justify-center py-12 px-10 lg:px-0'>
 					<div className='mx-auto grid w-[350px] gap-6'>
 						<div className='flex justify-center items-center'>
 							<div className='mx-auto w-full max-w-sm lg:w-96'>

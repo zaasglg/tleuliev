@@ -1,19 +1,13 @@
 'use client'
 
 import Loading from '@/app/profile/loading'
-import {
-	Breadcrumb,
-	BreadcrumbItem,
-	BreadcrumbLink,
-	BreadcrumbList,
-	BreadcrumbPage,
-	BreadcrumbSeparator,
-} from '@/components/ui/breadcrumb'
+import { BreadcrumbsCustom } from '@/components/breadcrumbs-custom'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { User } from '@/types/user.types'
 import fetchData from '@/utils/api/fetchData'
+import { API_ENDPOINTS } from '@/utils/endpoint'
 import { useEffect, useState } from 'react'
 
 export default function Profile() {
@@ -21,7 +15,7 @@ export default function Profile() {
 	const [loading, setLoading] = useState(true)
 
 	useEffect(() => {
-		fetchData('user')
+		fetchData(API_ENDPOINTS.user)
 			.then(res => {
 				if (res.status === 200) {
 					setUserData(res.data)
@@ -39,21 +33,11 @@ export default function Profile() {
 		<>
 			<section>
 				<div>
-					<h2 className='text-4xl font-medium'>Жеке кабинет</h2>
+					<h2 className='text-lg lg:text-4xl font-bold'>Жеке кабинет</h2>
 				</div>
 
 				{/*breadcrumb*/}
-				<Breadcrumb className='mt-5'>
-					<BreadcrumbList>
-						<BreadcrumbItem>
-							<BreadcrumbLink>Басты бет</BreadcrumbLink>
-						</BreadcrumbItem>
-						<BreadcrumbSeparator />
-						<BreadcrumbItem>
-							<BreadcrumbPage>Жеке кабинет</BreadcrumbPage>
-						</BreadcrumbItem>
-					</BreadcrumbList>
-				</Breadcrumb>
+				<BreadcrumbsCustom items={['Жеке кабинет']} />
 			</section>
 
 			{loading && <Loading />}
@@ -65,7 +49,7 @@ export default function Profile() {
 							<CardTitle>Жеке деректер</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<div className='grid grid-cols-2 gap-5'>
+							<div className='grid grid-cols-1 lg:grid-cols-2 gap-5'>
 								<div>
 									<Label>Аты жөні</Label>
 									<Input value={userData ? userData.name : ''} readOnly />
@@ -103,7 +87,7 @@ export default function Profile() {
 							<CardTitle className='text-xl font-normal'>Қала</CardTitle>
 						</CardHeader>
 						<CardContent>
-							<div className='grid grid-cols-2 gap-5'>
+							<div className='grid grid-cols-1 lg:grid-cols-2 gap-5'>
 								<div>
 									<Label>Облыс</Label>
 									<Input

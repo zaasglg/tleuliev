@@ -1,3 +1,13 @@
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import {
 	Table,
@@ -56,16 +66,33 @@ export default function UsersTable({
 								<UpdateUser fetchUsers={fetchUsers} user={user} />
 							</TableCell>
 							<TableCell>
-								<Button
-									variant='ghost'
-									onClick={() => {
-										fetchData(`users/${user.id}`, 'DELETE').then(res => {
-											fetchUsers()
-										})
-									}}
-								>
-									<Trash2 size={18} />
-								</Button>
+								<AlertDialog>
+									<AlertDialogTrigger asChild>
+										<Button variant='ghost'>
+											<Trash2 size={18} />
+										</Button>
+									</AlertDialogTrigger>
+									<AlertDialogContent>
+										<AlertDialogHeader>
+											<AlertDialogTitle>
+												Осы маманды жоюға келісесіз бе?
+											</AlertDialogTitle>
+										</AlertDialogHeader>
+										<AlertDialogFooter>
+											<AlertDialogCancel>Бас тарту</AlertDialogCancel>
+											<AlertDialogAction
+												className='bg-red-500 hover:bg-red-600'
+												onClick={() => {
+													fetchData(`users/${user.id}`, 'DELETE').then(res => {
+														fetchUsers()
+													})
+												}}
+											>
+												Жою
+											</AlertDialogAction>
+										</AlertDialogFooter>
+									</AlertDialogContent>
+								</AlertDialog>
 							</TableCell>
 						</TableRow>
 					))}

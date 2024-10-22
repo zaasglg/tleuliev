@@ -4,6 +4,16 @@ import { useEffect, useState } from 'react'
 
 import Loading from '@/app/profile/loading'
 import { BreadcrumbsCustom } from '@/components/breadcrumbs-custom'
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import {
 	Dialog,
@@ -30,6 +40,7 @@ import {
 } from '@/components/ui/table'
 import { Regions } from '@/types/region.types'
 import fetchData from '@/utils/api/fetchData'
+import { ListPlus } from 'lucide-react'
 
 export default function Page() {
 	const [regions, setRegions] = useState<Regions[]>()
@@ -55,13 +66,16 @@ export default function Page() {
 			<section>
 				<div className='flex justify-between items-center gap-10'>
 					<div>
-						<h2 className='text-4xl font-medium'>Облыстар</h2>
+						<h2 className='text-lg lg:text-4xl font-bold'>Облыстар</h2>
 					</div>
 
 					<div className='flex items-center space-x-3'>
 						<Dialog open={modal} onOpenChange={setModal}>
 							<DialogTrigger asChild>
-								<Button variant='outline'>Қосу</Button>
+								<Button variant='outline'>
+									<span className='hidden lg:block'>Қосу</span>
+									<ListPlus className='block lg:hidden' />
+								</Button>
 							</DialogTrigger>
 							<DialogContent className='sm:max-w-[425px]'>
 								<DialogHeader>
@@ -163,19 +177,36 @@ export default function Page() {
 										</Popover>
 									</TableCell>
 									<TableCell>
-										<Button
-											className='bg-red-500 hover:bg-red-600'
-											onClick={() => {
-												fetchData(`regions/${region.id}`, 'DELETE').then(
-													res => {
-														console.log(res)
-														fetchRegions()
-													}
-												)
-											}}
-										>
-											Жою
-										</Button>
+										<AlertDialog>
+											<AlertDialogTrigger asChild>
+												<Button className='bg-red-500 hover:bg-red-600'>
+													Жою
+												</Button>
+											</AlertDialogTrigger>
+											<AlertDialogContent>
+												<AlertDialogHeader>
+													<AlertDialogTitle>
+														Осы облысты жоюға келісесіз бе?
+													</AlertDialogTitle>
+												</AlertDialogHeader>
+												<AlertDialogFooter>
+													<AlertDialogCancel>Бас тарту</AlertDialogCancel>
+													<AlertDialogAction
+														className='bg-red-500 hover:bg-red-600'
+														onClick={() => {
+															fetchData(`regions/${region.id}`, 'DELETE').then(
+																res => {
+																	console.log(res)
+																	fetchRegions()
+																}
+															)
+														}}
+													>
+														Жою
+													</AlertDialogAction>
+												</AlertDialogFooter>
+											</AlertDialogContent>
+										</AlertDialog>
 									</TableCell>
 								</TableRow>
 							))}

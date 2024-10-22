@@ -18,6 +18,7 @@ import {
 } from '@/components/ui/select'
 import { Districts, Regions, Villages } from '@/types/region.types'
 import fetchData from '@/utils/api/fetchData'
+import { ListPlus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { MaskedInput } from 'react-text-input-mask'
 
@@ -54,7 +55,13 @@ export default function CreateUserModal({
 		<>
 			<Dialog open={modal} onOpenChange={setModal}>
 				<DialogTrigger asChild>
-					<Button variant='outline'>Маман қосу</Button>
+					<Button variant='outline'>
+						<span className='hidden lg:block'>
+							<span className='hidden lg:block'>Маман қосу</span>
+							<ListPlus className='block lg:hidden' />
+						</span>
+						<ListPlus className='block lg:hiden' />
+					</Button>
 				</DialogTrigger>
 				<DialogContent className='sm:max-w-[50%]'>
 					<DialogHeader>

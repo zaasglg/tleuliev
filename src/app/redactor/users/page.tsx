@@ -19,8 +19,7 @@ export default function Page() {
 	})
 
 	const fetchUsers = () => {
-		fetchData('admin/users/provers').then(res => {
-			console.log(res)
+		fetchData('redactor/users/user').then(res => {
 			setUsers(res.data)
 			setLoading(false)
 		})
@@ -35,7 +34,7 @@ export default function Page() {
 			<section>
 				<div className='flex justify-between items-center gap-10'>
 					<div>
-						<h2 className='text-lg lg:text-4xl font-bold'>Аудандық админдер</h2>
+						<h2 className='text-xl lg:text-4xl font-bold'>Мамандар</h2>
 					</div>
 
 					<div className='flex items-center space-x-3'>
@@ -44,7 +43,7 @@ export default function Page() {
 				</div>
 
 				{/*breadcrumb*/}
-				<BreadcrumbsCustom items={['Админ', 'Аудандық админдер']} />
+				<BreadcrumbsCustom items={['Админ', 'Округтар']} />
 			</section>
 			{loading && <Loading />}
 			<section className='mt-10'>

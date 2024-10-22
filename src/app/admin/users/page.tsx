@@ -35,7 +35,7 @@ export default function Page() {
 			<section>
 				<div className='flex justify-between items-center gap-10'>
 					<div>
-						<h2 className='text-4xl font-medium'>Мамандар</h2>
+						<h2 className='text-xl lg:text-4xl font-bold'>Мамандар</h2>
 					</div>
 
 					<div className='flex items-center space-x-3'>

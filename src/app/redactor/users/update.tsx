@@ -12,22 +12,23 @@ import { Label } from '@/components/ui/label'
 import {
 	Select,
 	SelectContent,
-	SelectGroup,
 	SelectItem,
-	SelectLabel,
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select'
 import { Districts, Regions, Villages } from '@/types/region.types'
+import { User } from '@/types/user.types'
 import fetchData from '@/utils/api/fetchData'
-import { ListPlus } from 'lucide-react'
+import { Settings2 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { MaskedInput } from 'react-text-input-mask'
 
-export default function CreateUserModal({
+export default function UpdateUser({
 	fetchUsers,
+	user,
 }: {
 	fetchUsers: () => void
+	user: User
 }) {
 	const [modal, setModal] = useState(false)
 
@@ -38,16 +39,26 @@ export default function CreateUserModal({
 	const [formData, setFormData] = useState({
 		name: '',
 		email: '',
-		password: '',
 		birthday: '',
 		phone: '',
 		region_id: 0,
 		district_id: 0,
 		village_id: 0,
-		role: '',
+		role: 'user',
 	})
 
 	useEffect(() => {
+		setFormData({
+			...formData,
+			name: user.name,
+			email: user.email,
+			birthday: user.birthday,
+			phone: String(user.phone),
+			region_id: user.region_id,
+			district_id: user.district_id,
+			village_id: user.village_id,
+		})
+
 		fetchData('regions').then(res => {
 			setRegions(res.data)
 		})
@@ -57,14 +68,13 @@ export default function CreateUserModal({
 		<>
 			<Dialog open={modal} onOpenChange={setModal}>
 				<DialogTrigger asChild>
-					<Button variant='outline'>
-						<span className='hidden lg:block'>Маман қосу</span>
-						<ListPlus className='block lg:hidden' />
+					<Button variant='ghost'>
+						<Settings2 size={18} />
 					</Button>
 				</DialogTrigger>
 				<DialogContent className='sm:max-w-[50%]'>
 					<DialogHeader>
-						<DialogTitle>Маман қосу</DialogTitle>
+						<DialogTitle>Өзгерту</DialogTitle>
 					</DialogHeader>
 					<div className='grid grid-cols-2 gap-3'>
 						{/* name */}
@@ -130,56 +140,11 @@ export default function CreateUserModal({
 							/>
 						</div>
 
-						{/* password */}
-						<div>
-							<Label htmlFor='password'>Құпиясөз</Label>
-							<Input
-								id='password'
-								type='password'
-								value={formData.password}
-								onChange={event =>
-									setFormData({
-										...formData,
-										password: event.target.value,
-									})
-								}
-							/>
-						</div>
-
-						{/* role */}
-						<div>
-							<Label>Рөлі</Label>
-							<Select
-								value={formData.role}
-								onValueChange={value => {
-									setFormData({
-										...formData,
-										role: value,
-									})
-								}}
-							>
-								<SelectTrigger className=''>
-									<SelectValue placeholder='-----------------' />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectGroup>
-										<SelectLabel className='font-bold text-sm'>
-											Тексеруші
-										</SelectLabel>
-										<SelectItem value='region_admin'>Облыс бойынша</SelectItem>
-										<SelectItem value='district_admin'>
-											Аудан бойынша
-										</SelectItem>
-										<SelectItem value='village_admin'>Округ бойынша</SelectItem>
-									</SelectGroup>
-								</SelectContent>
-							</Select>
-						</div>
-
 						{/* regions */}
 						<div>
 							<Label>Облыс</Label>
 							<Select
+								value={String(formData.region_id)}
 								onValueChange={val => {
 									setFormData({
 										...formData,
@@ -206,60 +171,67 @@ export default function CreateUserModal({
 						</div>
 
 						{/* districts */}
-						<div className='space-y-1'>
-							<Label>Аудан қала</Label>
-							<Select
-								value={String(formData.district_id)}
-								onValueChange={val => {
-									setFormData({
-										...formData,
-										district_id: Number(val),
-									})
+						{districts && (
+							<div className='space-y-1'>
+								<Label>Аудан қала</Label>
+								<Select
+									value={String(formData.district_id)}
+									onValueChange={val => {
+										setFormData({
+											...formData,
+											district_id: Number(val),
+										})
 
-									fetchData(`villages/${Number(val)}`).then(res => {
-										setVillages(res.data)
-									})
-								}}
-							>
-								<SelectTrigger className=''>
-									<SelectValue placeholder='-----------------' />
-								</SelectTrigger>
-								<SelectContent>
-									{districts &&
-										districts.map(district => (
-											<SelectItem value={String(district.id)} key={district.id}>
-												{district.name}
-											</SelectItem>
-										))}
-								</SelectContent>
-							</Select>
-						</div>
+										fetchData(`villages/${Number(val)}`).then(res => {
+											setVillages(res.data)
+										})
+									}}
+								>
+									<SelectTrigger className=''>
+										<SelectValue placeholder='-----------------' />
+									</SelectTrigger>
+									<SelectContent>
+										{districts &&
+											districts.map(district => (
+												<SelectItem
+													value={String(district.id)}
+													key={district.id}
+												>
+													{district.name}
+												</SelectItem>
+											))}
+									</SelectContent>
+								</Select>
+							</div>
+						)}
 
 						{/* villages */}
-						<div className='space-y-1'>
-							<Label>Округ</Label>
-							<Select
-								value={String(formData.village_id)}
-								onValueChange={val => {
-									setFormData({
-										...formData,
-										village_id: Number(val),
-									})
-								}}
-							>
-								<SelectTrigger className=''>
-									<SelectValue placeholder='-----------------' />
-								</SelectTrigger>
-								<SelectContent>
-									{villages &&
-										villages.map(village => (
-											<SelectItem value={String(village.id)} key={village.id}>
-												{village.name}
-											</SelectItem>
-										))}
-								</SelectContent>
-							</Select>
-						</div>
+						{villages && (
+							<div className='space-y-1'>
+								<Label>Округ</Label>
+								<Select
+									value={String(formData.village_id)}
+									onValueChange={val => {
+										setFormData({
+											...formData,
+											village_id: Number(val),
+										})
+									}}
+								>
+									<SelectTrigger className=''>
+										<SelectValue placeholder='-----------------' />
+									</SelectTrigger>
+									<SelectContent>
+										{villages &&
+											villages.map(village => (
+												<SelectItem value={String(village.id)} key={village.id}>
+													{village.name}
+												</SelectItem>
+											))}
+									</SelectContent>
+								</Select>
+							</div>
+						)}
 					</div>
 					<DialogFooter>
 						<Button
@@ -270,13 +242,11 @@ export default function CreateUserModal({
 									phone: String(formData.phone).replace(/\D/g, ''),
 								})
 
-								fetchData('users', 'POST', formData).then(res => {
+								fetchData(`users/${user.id}`, 'PUT', formData).then(res => {
 									console.log(res)
 									fetchUsers()
 									setModal(false)
 								})
-
-								setFormData
 							}}
 						>
 							Қосу

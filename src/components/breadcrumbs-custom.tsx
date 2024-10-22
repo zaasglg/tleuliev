@@ -11,7 +11,7 @@ import { Fragment } from 'react'
 export function BreadcrumbsCustom({ items }: { items: string[] }) {
 	return (
 		<>
-			<Breadcrumb className='mt-5'>
+			<Breadcrumb className='mt-1 lg:mt-5'>
 				<BreadcrumbList>
 					<BreadcrumbItem>
 						<BreadcrumbLink>Басты бет</BreadcrumbLink>

@@ -34,6 +34,8 @@ import {
 import { Textarea } from '@/components/ui/textarea'
 import { Feedback } from '@/types/feedback.types'
 import fetchData from '@/utils/api/fetchData'
+import { API_ENDPOINTS } from '@/utils/endpoint'
+import { MessageCircle } from 'lucide-react'
 
 export default function Page() {
 	const [formData, setFormData] = useState({
@@ -54,7 +56,7 @@ export default function Page() {
 	})
 
 	function fetchFeedbacks() {
-		fetchData('user/feedbacks').then(res => {
+		fetchData(API_ENDPOINTS.userFeedbacks).then(res => {
 			if (res.status === 200) {
 				setFeedbacks({
 					loading: false,
@@ -74,14 +76,15 @@ export default function Page() {
 	return (
 		<>
 			<section>
-				<div className='flex justify-between items-center gap-10'>
+				<div className='flex  justify-between items-center gap-3 lg:gap-10'>
 					<div>
-						<h2 className='text-4xl font-medium'>Кері байланыс</h2>
+						<h2 className='text-lg lg:text-4xl font-bold'>Кері байланыс</h2>
 					</div>
 
 					<div>
 						<Button variant='outline' onClick={() => setModal(true)}>
-							Кері байланыс қалдыру
+							<span className='hidden lg:block'>Кері байланыс қалдыру</span>
+							<MessageCircle className='block lg:hidden' />
 						</Button>
 
 						{/*modal*/}
@@ -122,10 +125,12 @@ export default function Page() {
 									<Button
 										type='button'
 										onClick={() => {
-											fetchData('feedbacks', 'POST', formData).then(res => {
-												setModal(false)
-												fetchFeedbacks()
-											})
+											fetchData(API_ENDPOINTS.feedbacks, 'POST', formData).then(
+												res => {
+													setModal(false)
+													fetchFeedbacks()
+												}
+											)
 										}}
 									>
 										Жіберу
@@ -176,11 +181,12 @@ export default function Page() {
 												<Button
 													className='bg-red-500 hover:bg-red-700'
 													onClick={() => {
-														fetchData(`feedbacks/${item.id}`, 'DELETE').then(
-															res => {
-																fetchFeedbacks()
-															}
-														)
+														fetchData(
+															API_ENDPOINTS.feedbacksDetail(item.id),
+															'DELETE'
+														).then(res => {
+															fetchFeedbacks()
+														})
 													}}
 												>
 													Жою

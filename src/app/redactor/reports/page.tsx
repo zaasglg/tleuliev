@@ -22,7 +22,7 @@ import {
 	TableRow,
 } from '@/components/ui/table'
 import fetchData from '@/utils/api/fetchData'
-import { Settings2 } from 'lucide-react'
+import { ListPlus, Settings2 } from 'lucide-react'
 import CreateReportProvers from './modal'
 
 export default function Page() {
@@ -67,12 +67,15 @@ export default function Page() {
 			<section>
 				<div className='flex justify-between items-center gap-10'>
 					<div>
-						<h2 className='text-4xl font-medium'>Жылдық жоспар</h2>
+						<h2 className='text-lg lg:text-4xl font-bold lg:font-medium'>
+							Жылдық жоспар
+						</h2>
 					</div>
 
 					<div>
 						<Button variant='outline' onClick={() => setModal(true)}>
-							Маман қосу
+							<span className='hidden lg:block'>Маман қосу</span>
+							<ListPlus className='block lg:hidden' />
 						</Button>
 
 						{/*

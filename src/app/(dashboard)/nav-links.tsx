@@ -3,6 +3,7 @@
 import { Skeleton } from '@/components/ui/skeleton'
 import { User } from '@/types/user.types'
 import fetchData from '@/utils/api/fetchData'
+import { API_ENDPOINTS } from '@/utils/endpoint'
 import { clsx } from 'clsx'
 import {
 	ChartBar,
@@ -31,9 +32,8 @@ export default function NavLinks() {
 	const size = 13
 
 	useEffect(() => {
-		fetchData('user')
+		fetchData(API_ENDPOINTS.user)
 			.then(res => {
-				console.log(res)
 				if (res.status === 200) {
 					setUserData(res.data)
 				}
@@ -54,6 +54,11 @@ export default function NavLinks() {
 				name: 'Жылдық жоспар',
 				href: '/redactor/reports',
 				icon: <ClipboardCheck />,
+			},
+			{
+				name: 'Мамандар',
+				href: '/redactor/users',
+				icon: <ListTodo />,
 			},
 		],
 		[]
@@ -85,7 +90,7 @@ export default function NavLinks() {
 				icon: <ListTodo size={size} />,
 			},
 			{
-				name: 'Тексерушілер',
+				name: 'Аудандық админдер',
 				href: '/admin/provers',
 				icon: <ListTodo size={size} />,
 			},
@@ -115,7 +120,7 @@ export default function NavLinks() {
 				key={link.name}
 				href={link.href}
 				className={clsx(
-					'flex h-[48px] grow items-center justify-center gap-2 rounded-lg bg-white p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
+					'flex h-[48px] grow items-center justify-start lg:justify-start gap-2 rounded-lg bg-white p-3 text-sm font-medium hover:bg-sky-100 hover:text-blue-600 md:flex-none md:justify-start md:p-2 md:px-3',
 					{
 						'!bg-blue-500 text-white !hover:bg-transparent !hover:text-white':
 							pathname === link.href,
@@ -129,7 +134,7 @@ export default function NavLinks() {
 				>
 					{link.icon}
 				</div>
-				<p className='hidden md:block text-xs'>{link.name}</p>
+				<p className='block text-xs'>{link.name}</p>
 			</Link>
 		))
 

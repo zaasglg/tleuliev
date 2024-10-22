@@ -249,7 +249,7 @@ export default function UpdateUser({
 								})
 							}}
 						>
-							Қосу
+							Өзгерту
 						</Button>
 					</DialogFooter>
 				</DialogContent>

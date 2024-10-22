@@ -24,6 +24,7 @@ import {
 } from '@/components/ui/table'
 import { UserAnswer } from '@/types/user-answer.types'
 import fetchData from '@/utils/api/fetchData'
+import { API_ENDPOINTS } from '@/utils/endpoint'
 import { Label } from '@radix-ui/react-label'
 import Link from 'next/link'
 
@@ -51,7 +52,7 @@ export default function Page() {
 
 	useEffect(() => {
 		// fetch answers
-		fetchData('user/answers')
+		fetchData(API_ENDPOINTS.fetchUserAnswers)
 			.then(res => {
 				if (res.status === 200) {
 					setUserAnswers({
@@ -68,7 +69,7 @@ export default function Page() {
 				}))
 			})
 
-		fetchData('user/reports').then(res => {
+		fetchData(API_ENDPOINTS.fetchUserReports).then(res => {
 			if (res.status === 200) {
 				console.log(res)
 				setResultUser({
@@ -99,7 +100,7 @@ export default function Page() {
 
 			{!userAnswers.loading && (
 				<section className='mt-10'>
-					<div className='grid grid-cols-2 gap-5'>
+					<div className='grid grid-cols-1 lg:grid-cols-2 gap-5'>
 						<Card>
 							<CardHeader>
 								<CardDescription>тапсырған тесттер</CardDescription>
@@ -145,6 +146,7 @@ export default function Page() {
 							<Table>
 								<TableHeader>
 									<TableRow>
+										<TableHead>Ключ</TableHead>
 										<TableHead>Тест сұрағы</TableHead>
 										<TableHead>Жауабы</TableHead>
 										<TableHead>Дұрыс/Бұрыс</TableHead>
@@ -154,6 +156,7 @@ export default function Page() {
 									{userAnswers &&
 										userAnswers.results.map(item => (
 											<TableRow key={item.id}>
+												<TableCell>#{item.test.key}</TableCell>
 												<TableCell>{item.test.question}</TableCell>
 												<TableCell>{item.answer.answer}</TableCell>
 												<TableCell>

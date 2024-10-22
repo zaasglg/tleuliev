@@ -12,9 +12,7 @@ import { Label } from '@/components/ui/label'
 import {
 	Select,
 	SelectContent,
-	SelectGroup,
 	SelectItem,
-	SelectLabel,
 	SelectTrigger,
 	SelectValue,
 } from '@/components/ui/select'
@@ -44,7 +42,7 @@ export default function CreateUserModal({
 		region_id: 0,
 		district_id: 0,
 		village_id: 0,
-		role: '',
+		role: 'user',
 	})
 
 	useEffect(() => {
@@ -58,8 +56,11 @@ export default function CreateUserModal({
 			<Dialog open={modal} onOpenChange={setModal}>
 				<DialogTrigger asChild>
 					<Button variant='outline'>
-						<span className='hidden lg:block'>Маман қосу</span>
-						<ListPlus className='block lg:hidden' />
+						<span className='hidden lg:block'>
+							<span className='hidden lg:block'>Маман қосу</span>
+							<ListPlus className='block lg:hidden' />
+						</span>
+						<ListPlus className='block lg:hiden' />
 					</Button>
 				</DialogTrigger>
 				<DialogContent className='sm:max-w-[50%]'>
@@ -146,36 +147,6 @@ export default function CreateUserModal({
 							/>
 						</div>
 
-						{/* role */}
-						<div>
-							<Label>Рөлі</Label>
-							<Select
-								value={formData.role}
-								onValueChange={value => {
-									setFormData({
-										...formData,
-										role: value,
-									})
-								}}
-							>
-								<SelectTrigger className=''>
-									<SelectValue placeholder='-----------------' />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectGroup>
-										<SelectLabel className='font-bold text-sm'>
-											Тексеруші
-										</SelectLabel>
-										<SelectItem value='region_admin'>Облыс бойынша</SelectItem>
-										<SelectItem value='district_admin'>
-											Аудан бойынша
-										</SelectItem>
-										<SelectItem value='village_admin'>Округ бойынша</SelectItem>
-									</SelectGroup>
-								</SelectContent>
-							</Select>
-						</div>
-
 						{/* regions */}
 						<div>
 							<Label>Облыс</Label>
@@ -209,7 +180,6 @@ export default function CreateUserModal({
 						<div className='space-y-1'>
 							<Label>Аудан қала</Label>
 							<Select
-								value={String(formData.district_id)}
 								onValueChange={val => {
 									setFormData({
 										...formData,
@@ -239,7 +209,6 @@ export default function CreateUserModal({
 						<div className='space-y-1'>
 							<Label>Округ</Label>
 							<Select
-								value={String(formData.village_id)}
 								onValueChange={val => {
 									setFormData({
 										...formData,
@@ -271,12 +240,9 @@ export default function CreateUserModal({
 								})
 
 								fetchData('users', 'POST', formData).then(res => {
-									console.log(res)
 									fetchUsers()
 									setModal(false)
 								})
-
-								setFormData
 							}}
 						>
 							Қосу

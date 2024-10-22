@@ -1,6 +1,5 @@
 'use client'
 
-import CardTest from '@/app/test/card-test'
 import { useEffect, useState } from 'react'
 
 import Loading from '@/app/profile/loading'
@@ -8,18 +7,21 @@ import { BreadcrumbsCustom } from '@/components/breadcrumbs-custom'
 import { Input } from '@/components/ui/input'
 import { Test } from '@/types/test.types'
 import fetchData from '@/utils/api/fetchData'
+import { API_ENDPOINTS } from '@/utils/endpoint'
+import CardTest from './card-test'
 
 export default function Page() {
 	const [tests, setTests] = useState<Test[]>()
+	const [filteredTests, setFilteredTests] = useState<Test[]>([])
 	const [loading, setLoading] = useState(true)
 	const [search, setSearch] = useState('')
 
 	const fetchTests = () =>
-		fetchData(`user/tests`)
+		fetchData(API_ENDPOINTS.userTests)
 			.then(res => {
-				console.log(res.data)
 				// @ts-ignore
 				setTests(res.data)
+				setFilteredTests(res.data)
 			})
 			.finally(() => {
 				setLoading(false)
@@ -29,29 +31,37 @@ export default function Page() {
 		fetchTests()
 	}, [])
 
-	// useEffect(() => {
-	// 	if (search === '') {
-	// 		fetchTests()
+	// const handleSearch = (value: string) => {
+	// 	if (!value) {
+	// 		setFilteredTests(tests || [])
 	// 	} else {
-	// 		handleSearch(search)
+	// 		const result = fuse.search(value).map(({ item }) => item)
+	// 		console.log(tests)
+	// 		setFilteredTests(result)
 	// 	}
-	// }, [search, tests])
+
+	// }
 
 	const handleSearch = (value: string) => {
-		const filteredTests = tests?.filter(
-			test =>
-				test.question.toLowerCase().includes(value.toLowerCase()) ||
-				test.key.toLowerCase().includes(value.toLowerCase())
-		)
-		setTests(filteredTests)
+		fetchData(API_ENDPOINTS.seachTest(value))
+			.then(res => {
+				if (!value) {
+					setFilteredTests(tests || [])
+				} else {
+					setFilteredTests(res.data)
+				}
+			})
+			.finally(() => {
+				setLoading(false)
+			})
 	}
 
 	return (
 		<>
 			<section>
-				<div className='flex justify-between items-center gap-10'>
+				<div className='flex flex-wrap justify-between items-center gap-3 lg:gap-10 mb-5 lg:mb-0'>
 					<div>
-						<h2 className='text-4xl font-medium'>Тесттер</h2>
+						<h2 className='text-lg lg:text-4xl font-bold'>Тесттер</h2>
 					</div>
 
 					<div className='flex items-center space-x-3 w-[500px]'>
@@ -60,14 +70,8 @@ export default function Page() {
 							value={search}
 							onChange={event => {
 								const value = event.target.value
-
 								setSearch(event.target.value)
-
-								if (value === '') {
-									fetchTests()
-								} else {
-									handleSearch(value)
-								}
+								handleSearch(value)
 							}}
 						/>
 					</div>
@@ -79,9 +83,9 @@ export default function Page() {
 
 			{loading && <Loading />}
 
-			<section className='mt-10 grid grid-cols-2 gap-3'>
-				{tests &&
-					tests.map(test => (
+			<section className='mt-10 grid grid-cols-1 lg:grid-cols-2 gap-3'>
+				{filteredTests &&
+					filteredTests.map(test => (
 						<div key={test.id}>
 							<CardTest
 								id={test.id}

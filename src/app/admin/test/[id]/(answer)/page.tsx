@@ -82,6 +82,8 @@ const AddOrEditswersTest: NextPage<Props> = ({ testId }) => {
 					correct: false,
 					lang: 'kk',
 				})
+
+				console.log(res)
 			})
 			.catch(error => {
 				console.log(error)
@@ -129,6 +131,7 @@ const AddOrEditswersTest: NextPage<Props> = ({ testId }) => {
 														value: event.target.value,
 													})
 												}}
+												className='w-[150px] lg:w-full'
 											/>
 										</TableCell>
 										<TableCell>

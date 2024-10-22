@@ -4,6 +4,16 @@ import { useEffect, useState } from 'react'
 
 import Loading from '@/app/profile/loading'
 import { BreadcrumbsCustom } from '@/components/breadcrumbs-custom'
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
@@ -16,6 +26,7 @@ import {
 } from '@/components/ui/table'
 import { Test } from '@/types/test.types'
 import fetchData from '@/utils/api/fetchData'
+import { ListPlus } from 'lucide-react'
 import Link from 'next/link'
 
 export default function Page() {
@@ -38,14 +49,17 @@ export default function Page() {
 	return (
 		<>
 			<section>
-				<div className='flex justify-between items-center gap-10'>
+				<div className='flex flex-wrap justify-between items-center gap-3 lg:gap-10'>
 					<div>
-						<h2 className='text-4xl font-medium'>Тесттер</h2>
+						<h2 className='text-lg lg:text-4xl font-bold'>Тесттер</h2>
 					</div>
 
 					<div className='flex items-center space-x-3'>
 						<Button variant='outline' asChild>
-							<Link href='/admin/test/create'>Қосу</Link>
+							<Link href='/admin/test/create'>
+								<span className='hidden lg:block'>Қосу</span>
+								<ListPlus className='block lg:hidden' />
+							</Link>
 						</Button>
 					</div>
 				</div>
@@ -89,18 +103,38 @@ export default function Page() {
 													</TableCell>
 
 													<TableCell>
-														<Button
-															className='bg-red-500 hover:bg-red-600'
-															onClick={() => {
-																fetchData(`tests/${item.id}`, 'DELETE').then(
-																	res => {
-																		fetchTest()
-																	}
-																)
-															}}
-														>
-															Жою
-														</Button>
+														<AlertDialog>
+															<AlertDialogTrigger asChild>
+																<Button className='bg-red-500 hover:bg-red-600'>
+																	Жою
+																</Button>
+															</AlertDialogTrigger>
+															<AlertDialogContent>
+																<AlertDialogHeader>
+																	<AlertDialogTitle>
+																		Осы тестті жоюға келісесіз бе?
+																	</AlertDialogTitle>
+																</AlertDialogHeader>
+																<AlertDialogFooter>
+																	<AlertDialogCancel>
+																		Бас тарту
+																	</AlertDialogCancel>
+																	<AlertDialogAction
+																		className='bg-red-500 hover:bg-red-600'
+																		onClick={() => {
+																			fetchData(
+																				`tests/${item.id}`,
+																				'DELETE'
+																			).then(res => {
+																				fetchTest()
+																			})
+																		}}
+																	>
+																		Жою
+																	</AlertDialogAction>
+																</AlertDialogFooter>
+															</AlertDialogContent>
+														</AlertDialog>
 													</TableCell>
 												</TableRow>
 											))}

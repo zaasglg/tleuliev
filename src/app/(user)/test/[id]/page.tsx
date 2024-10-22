@@ -13,6 +13,7 @@ import { Skeleton } from '@/components/ui/skeleton'
 import { useToast } from '@/components/ui/use-toast'
 import { Test } from '@/types/test.types'
 import fetchData from '@/utils/api/fetchData'
+import { API_ENDPOINTS } from '@/utils/endpoint'
 import { CheckCheck, ChevronLeft } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -28,7 +29,7 @@ export default function TestDetail({ params }: { params: { id: number } }) {
 	const { toast } = useToast()
 
 	useEffect(() => {
-		fetchData(`tests/${params.id}`)
+		fetchData(API_ENDPOINTS.testDetail(params.id))
 			.then(res => {
 				if (res.status === 200) {
 					setTest(res.data)
@@ -44,20 +45,17 @@ export default function TestDetail({ params }: { params: { id: number } }) {
 
 	const handleSubmit = async () => {
 		try {
-			fetchData('user-answers', 'POST', {
+			fetchData(API_ENDPOINTS.userAnswers, 'POST', {
 				test_id: params.id,
 				answer_id: answer,
 			})
 				.then(res => {
-					console.log(res.data.answer.correct)
-					fetchData('user/update/reports/done', 'POST', {
+					fetchData(API_ENDPOINTS.userReportsDone, 'POST', {
 						correct: res.data.answer.correct,
-					}).then(res => {
-						console.log(res)
-					})
+					}).then(res => {})
 				})
 				.finally(() => {
-					router.push('/test')
+					router.push('/result')
 				})
 		} catch (error) {
 			// @ts-ignore

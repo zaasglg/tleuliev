@@ -4,6 +4,16 @@ import { useEffect, useState } from 'react'
 
 import Loading from '@/app/profile/loading'
 import { BreadcrumbsCustom } from '@/components/breadcrumbs-custom'
+import {
+	AlertDialog,
+	AlertDialogAction,
+	AlertDialogCancel,
+	AlertDialogContent,
+	AlertDialogFooter,
+	AlertDialogHeader,
+	AlertDialogTitle,
+	AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import {
 	Dialog,
@@ -37,6 +47,7 @@ import {
 } from '@/components/ui/table'
 import { Districts, Regions } from '@/types/region.types'
 import fetchData from '@/utils/api/fetchData'
+import { ListPlus } from 'lucide-react'
 
 export default function Page() {
 	const [districts, setDistricts] = useState<Districts[]>()
@@ -51,7 +62,6 @@ export default function Page() {
 
 	const fetchDistricts = () => {
 		fetchData('districts').then(res => {
-			console.log(res)
 			setDistricts(res.data)
 			setLoading(false)
 		})
@@ -62,7 +72,6 @@ export default function Page() {
 
 		fetchData('regions').then(res => {
 			setRegions(res.data)
-			console.log(res.data)
 		})
 	}, [])
 
@@ -71,13 +80,16 @@ export default function Page() {
 			<section>
 				<div className='flex justify-between items-center gap-10'>
 					<div>
-						<h2 className='text-4xl font-medium'>Аудан қала</h2>
+						<h2 className='text-lg lg:text-4xl font-bold'>Аудан қала</h2>
 					</div>
 
 					<div className='flex items-center space-x-3'>
 						<Dialog open={modal} onOpenChange={setModal}>
 							<DialogTrigger asChild>
-								<Button variant='outline'>Қосу</Button>
+								<Button variant='outline'>
+									<span className='hidden lg:block'>Қосу</span>
+									<ListPlus className='' />
+								</Button>
 							</DialogTrigger>
 							<DialogContent className='sm:max-w-[425px]'>
 								<DialogHeader>
@@ -153,6 +165,54 @@ export default function Page() {
 				</div>
 				{/*breadcrumb*/}
 				<BreadcrumbsCustom items={['Админ', 'Аудан қала']} />
+
+				<div className='mt-5 grid grid-cols-1 lg:grid-cols-5 gap-3 lg:gap-10 items-end'>
+					<div className='lg:col-span-2'>
+						<Label>Іздеу</Label>
+						<Input
+							onChange={val => {
+								fetchData('seach/districts', 'POST', {
+									name: val.target.value,
+								}).then(res => {
+									setDistricts(res.data)
+								})
+							}}
+						/>
+					</div>
+
+					<div className='lg:col-span-2'>
+						<Label>Облыс бойынша сұрыптау</Label>
+						<Select
+							onValueChange={val => {
+								fetchData(`districts/${val}`).then(res => {
+									setDistricts(res.data)
+								})
+							}}
+						>
+							<SelectTrigger className=''>
+								<SelectValue placeholder='-----------------' />
+							</SelectTrigger>
+							<SelectContent>
+								{regions &&
+									regions.map(region => (
+										<SelectItem value={String(region.id)} key={region.id}>
+											{region.name}
+										</SelectItem>
+									))}
+							</SelectContent>
+						</Select>
+					</div>
+
+					<div>
+						<Button
+							onClick={() => {
+								fetchDistricts()
+							}}
+						>
+							Барлығын көрсету
+						</Button>
+					</div>
+				</div>
 			</section>
 			{loading && <Loading />}
 			<section className='mt-10'>
@@ -221,19 +281,37 @@ export default function Page() {
 										</Popover>
 									</TableCell>
 									<TableCell>
-										<Button
-											className='bg-red-500 hover:bg-red-600'
-											onClick={() => {
-												fetchData(`districts/${district.id}`, 'DELETE').then(
-													res => {
-														console.log(res)
-														fetchDistricts()
-													}
-												)
-											}}
-										>
-											Жою
-										</Button>
+										<AlertDialog>
+											<AlertDialogTrigger asChild>
+												<Button className='bg-red-500 hover:bg-red-600'>
+													Жою
+												</Button>
+											</AlertDialogTrigger>
+											<AlertDialogContent>
+												<AlertDialogHeader>
+													<AlertDialogTitle>
+														Осы ауданды жоюға келісесіз бе?
+													</AlertDialogTitle>
+												</AlertDialogHeader>
+												<AlertDialogFooter>
+													<AlertDialogCancel>Бас тарту</AlertDialogCancel>
+													<AlertDialogAction
+														className='bg-red-500 hover:bg-red-600'
+														onClick={() => {
+															fetchData(
+																`districts/${district.id}`,
+																'DELETE'
+															).then(res => {
+																console.log(res)
+																fetchDistricts()
+															})
+														}}
+													>
+														Жою
+													</AlertDialogAction>
+												</AlertDialogFooter>
+											</AlertDialogContent>
+										</AlertDialog>
 									</TableCell>
 								</TableRow>
 							))}
