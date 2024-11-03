@@ -20,6 +20,7 @@ import {
 import { User } from '@/types/user.types'
 import fetchData from '@/utils/api/fetchData'
 import { Trash2 } from 'lucide-react'
+import DetailProver from './detail'
 import UpdateUser from './update'
 
 export default function UsersTable({
@@ -39,10 +40,11 @@ export default function UsersTable({
 						<TableHead>Email</TableHead>
 						<TableHead>Туылған күні</TableHead>
 						<TableHead>Телефон номер</TableHead>
-						<TableHead>Рөлі</TableHead>
+						{/* <TableHead>Рөлі</TableHead>
 						<TableHead>Облыс</TableHead>
 						<TableHead>Аудан / қала</TableHead>
-						<TableHead>Округ</TableHead>
+						<TableHead>Округ</TableHead> */}
+						<TableHead>Толығырақ</TableHead>
 						<TableHead>Әрекет</TableHead>
 						<TableHead>Әрекет</TableHead>
 					</TableRow>
@@ -56,12 +58,21 @@ export default function UsersTable({
 							<TableCell className='font-medium'>{user.email}</TableCell>
 							<TableCell className='font-medium'>{user.birthday}</TableCell>
 							<TableCell className='font-medium'>{user.phone}</TableCell>
-							<TableCell className='font-medium'>{user.role[0]}</TableCell>
-							<TableCell className='font-medium'>{user.region_name}</TableCell>
-							<TableCell className='font-medium'>
+							{/* <TableCell className='font-medium'>{user.role[0]}</TableCell>
+							<TableCell className='font-medium'>{user.region_name}</TableCell> */}
+							{/* <TableCell className='font-medium'>
 								{user.district_name}
+							</TableCell> */}
+							{/* <TableCell className='font-medium'>{user.village_name}</TableCell> */}
+							<TableCell>
+								<DetailProver
+									role={user.role[0]}
+									permission={user.permissions[0]}
+									region_name={user.region_name}
+									district_name={user.district_name}
+									village_name={user.village_name}
+								/>
 							</TableCell>
-							<TableCell className='font-medium'>{user.village_name}</TableCell>
 							<TableCell>
 								<UpdateUser fetchUsers={fetchUsers} user={user} />
 							</TableCell>

@@ -24,6 +24,7 @@ export default function Page() {
 			setUsers(res.data)
 			setLoading(false)
 		})
+		
 	}
 
 	useEffect(() => {

@@ -17,6 +17,7 @@ export default function Profile() {
 	useEffect(() => {
 		fetchData(API_ENDPOINTS.user)
 			.then(res => {
+				console.log(res)
 				if (res.status === 200) {
 					setUserData(res.data)
 				}
@@ -77,6 +78,10 @@ export default function Profile() {
 								<div>
 									<Label>Туылған күні</Label>
 									<Input value={userData ? userData.birthday : ''} readOnly />
+								</div>
+								<div>
+									<Label>Рөлі</Label>
+									<Input value={userData ? userData.role[0] : ''} readOnly />
 								</div>
 							</div>
 						</CardContent>

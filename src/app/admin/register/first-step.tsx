@@ -76,15 +76,11 @@ export default function FirstStep({ formData, setFormData }: Props) {
 					</SelectTrigger>
 					<SelectContent>
 						<SelectGroup>
-							<SelectLabel className='font-bold text-sm'>Маман</SelectLabel>
-							<SelectItem value='user'>Тапсырушы</SelectItem>
-						</SelectGroup>
-						{/* <SelectGroup>
 							<SelectLabel className='font-bold text-sm'>Тексеруші</SelectLabel>
 							<SelectItem value='region_admin'>Облыс бойынша</SelectItem>
 							<SelectItem value='district_admin'>Аудан бойынша</SelectItem>
 							<SelectItem value='village_admin'>Округ бойынша</SelectItem>
-						</SelectGroup> */}
+						</SelectGroup>
 					</SelectContent>
 				</Select>
 			</div>

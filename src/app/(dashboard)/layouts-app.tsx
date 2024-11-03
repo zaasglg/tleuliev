@@ -14,10 +14,10 @@ export default function LayoutsApp({
 	return (
 		<>
 			<div className='flex h-screen flex-col md:flex-row md:overflow-hidden'>
-				<div className='w-full lg:w-64 flex-none'>
+				<div className='w-full lg:w-64 flex-none fixed lg:relative bg-white lg:bg-transparent z-10'>
 					<Aside menu={menu} setMenu={setMenu} />
 				</div>
-				<div className='flex-grow p-6 md:overflow-y-auto md:p-12 bg-gray-50'>
+				<div className='mt-60 lg:mt-0 flex-grow p-6 md:overflow-y-auto md:p-12 bg-gray-50'>
 					{children}
 				</div>
 			</div>

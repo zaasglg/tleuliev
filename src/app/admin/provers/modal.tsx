@@ -45,6 +45,7 @@ export default function CreateUserModal({
 		district_id: 0,
 		village_id: 0,
 		role: '',
+		permission: '',
 	})
 
 	useEffect(() => {
@@ -106,7 +107,7 @@ export default function CreateUserModal({
 								onChange={val => {
 									setFormData({
 										...formData,
-										phone: val.target.value,
+										phone: String(val.target.value).replace(/\D/g, ''),
 									})
 								}}
 							>
@@ -171,6 +172,36 @@ export default function CreateUserModal({
 											Аудан бойынша
 										</SelectItem>
 										<SelectItem value='village_admin'>Округ бойынша</SelectItem>
+										<SelectItem value='observer'>Бақылаушы</SelectItem>
+									</SelectGroup>
+								</SelectContent>
+							</Select>
+						</div>
+
+						{/* permission */}
+						<div>
+							<Label>Рұқсат</Label>
+							<Select
+								value={formData.permission}
+								onValueChange={value => {
+									setFormData({
+										...formData,
+										permission: value,
+									})
+								}}
+							>
+								<SelectTrigger className=''>
+									<SelectValue placeholder='Таңдалмаған' />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										<SelectLabel className='font-bold text-sm'>
+											Рұқсаттар тізімі
+										</SelectLabel>
+										<SelectItem value='null'>Таңдалмаған</SelectItem>
+										<SelectItem value='region'>Облыс статистикасы</SelectItem>
+										<SelectItem value='district'>Аудан статистикасы</SelectItem>
+										<SelectItem value='village'>Округ статистикасы</SelectItem>
 									</SelectGroup>
 								</SelectContent>
 							</Select>
@@ -265,18 +296,24 @@ export default function CreateUserModal({
 						<Button
 							type='submit'
 							onClick={() => {
-								setFormData({
-									...formData,
-									phone: String(formData.phone).replace(/\D/g, ''),
-								})
-
 								fetchData('users', 'POST', formData).then(res => {
 									console.log(res)
 									fetchUsers()
 									setModal(false)
 								})
 
-								setFormData
+								setFormData({
+									name: '',
+									email: '',
+									password: '',
+									birthday: '',
+									phone: '',
+									region_id: 0,
+									district_id: 0,
+									village_id: 0,
+									role: '',
+									permission: '',
+								})
 							}}
 						>
 							Қосу

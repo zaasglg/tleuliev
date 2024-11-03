@@ -59,11 +59,11 @@ export default function Page() {
 	const [formData, setFormData] = useState({
 		name: '',
 		districtId: 0,
+		regionId: 0,
 	})
 
 	const fetchVillages = () => {
 		fetchData('villages').then(res => {
-			console.log(res)
 			setVillages(res.data)
 			setLoading(false)
 		})
@@ -71,10 +71,6 @@ export default function Page() {
 
 	useEffect(() => {
 		fetchVillages()
-
-		fetchData('districts').then(res => {
-			setDistricts(res.data)
-		})
 
 		fetchData('regions').then(res => {
 			setRegions(res.data)
@@ -103,9 +99,37 @@ export default function Page() {
 								</DialogHeader>
 								<div>
 									<div>
-										<Label htmlFor='regionId' className='text-right'>
-											Аудан
-										</Label>
+										<Label htmlFor='regionId'>Облыс</Label>
+										<Select
+											onValueChange={val => {
+												setFormData({
+													...formData,
+													regionId: Number(val),
+												})
+
+												fetchData(`districts/${val}`).then(res => {
+													setDistricts(res.data)
+												})
+											}}
+										>
+											<SelectTrigger className=''>
+												<SelectValue placeholder='-----------------' />
+											</SelectTrigger>
+											<SelectContent>
+												{regions &&
+													regions.map(region => (
+														<SelectItem
+															value={String(region.id)}
+															key={region.id}
+														>
+															{region.name}
+														</SelectItem>
+													))}
+											</SelectContent>
+										</Select>
+									</div>
+									<div>
+										<Label htmlFor='regionId'>Аудан</Label>
 										<Select
 											onValueChange={val => {
 												setFormData({

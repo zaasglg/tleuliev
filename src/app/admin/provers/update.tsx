@@ -45,6 +45,7 @@ export default function UpdateUser({
 		district_id: 0,
 		village_id: 0,
 		role: '',
+		permission: '',
 	})
 
 	useEffect(() => {

@@ -107,7 +107,7 @@ export default function CreateUserModal({
 								onChange={val => {
 									setFormData({
 										...formData,
-										phone: val.target.value,
+										phone: String(val.target.value).replace(/\D/g, ''),
 									})
 								}}
 							>
@@ -234,15 +234,22 @@ export default function CreateUserModal({
 						<Button
 							type='submit'
 							onClick={() => {
-								setFormData({
-									...formData,
-									phone: String(formData.phone).replace(/\D/g, ''),
-								})
-
 								fetchData('users', 'POST', formData).then(res => {
 									console.log(res)
 									fetchUsers()
 									setModal(false)
+								})
+
+								setFormData({
+									name: '',
+									email: '',
+									password: '',
+									birthday: '',
+									phone: '',
+									region_id: 0,
+									district_id: 0,
+									village_id: 0,
+									role: 'user',
 								})
 							}}
 						>

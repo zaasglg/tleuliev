@@ -45,7 +45,6 @@ export default function NavLinks() {
 				setLoading(false)
 			})
 	}, [])
-
 	const links: NavLink[] = useMemo(
 		() => [
 			{ name: 'Басты бет', href: '/', icon: <TvMinimal /> },
@@ -60,8 +59,66 @@ export default function NavLinks() {
 				href: '/redactor/users',
 				icon: <ListTodo />,
 			},
+			...(userData?.permissions[0] === 'region'
+				? [
+						{
+							name: 'Облыс статика',
+							href: '/redactor/statistics/region',
+							icon: <ChartBar />,
+						},
+				  ]
+				: userData?.permissions[0] === 'district'
+				? [
+						{
+							name: 'Аудан статика',
+							href: '/redactor/statistics/district',
+							icon: <ChartBar />,
+						},
+				  ]
+				: userData?.permissions[0] === 'village'
+				? [
+						{
+							name: 'Округ статика',
+							href: '/redactor/statistics/village',
+							icon: <ChartBar />,
+						},
+				  ]
+				: []),
 		],
-		[]
+		[userData]
+	)
+
+	const linksObserver: NavLink[] = useMemo(
+		() => [
+			{ name: 'Басты бет', href: '/', icon: <TvMinimal /> },
+			{ name: 'Жеке кабинет', href: '/profile', icon: <Contact /> },
+			...(userData?.permissions[0] === 'region'
+				? [
+						{
+							name: 'Облыс статика',
+							href: '/redactor/statistics/region',
+							icon: <ChartBar />,
+						},
+				  ]
+				: userData?.permissions[0] === 'district'
+				? [
+						{
+							name: 'Аудан статика',
+							href: '/redactor/statistics/district',
+							icon: <ChartBar />,
+						},
+				  ]
+				: userData?.permissions[0] === 'village'
+				? [
+						{
+							name: 'Округ статика',
+							href: '/redactor/statistics/village',
+							icon: <ChartBar />,
+						},
+				  ]
+				: []),
+		],
+		[userData]
 	)
 
 	const linksAdmin: NavLink[] = useMemo(
@@ -165,6 +222,7 @@ export default function NavLinks() {
 					region_admin: renderLinks(links),
 					district_admin: renderLinks(links),
 					village_admin: renderLinks(links),
+					observer: renderLinks(linksObserver),
 					admin: renderLinks(linksAdmin),
 					user: renderLinks(linksUser),
 				}[userData.role[0]]

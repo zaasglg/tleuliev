@@ -19,7 +19,7 @@ export default function Page() {
 	})
 
 	const fetchUsers = () => {
-		fetchData('redactor/users/user').then(res => {
+		fetchData('filter/users/location').then(res => {
 			setUsers(res.data)
 			setLoading(false)
 		})

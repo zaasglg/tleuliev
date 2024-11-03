@@ -63,6 +63,8 @@ export default function UsersTable({
 							<TableCell>
 								<UpdateUser fetchUsers={fetchUsers} user={user} />
 							</TableCell>
+
+							{/* Delete Block */}
 							<TableCell>
 								<AlertDialog>
 									<AlertDialogTrigger asChild>

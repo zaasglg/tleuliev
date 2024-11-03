@@ -17,7 +17,9 @@ import {
 	SelectValue,
 } from '@/components/ui/select'
 import { Districts, Regions, Villages } from '@/types/region.types'
+import { User } from '@/types/user.types'
 import fetchData from '@/utils/api/fetchData'
+import { API_ENDPOINTS } from '@/utils/endpoint'
 import { ListPlus } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { MaskedInput } from 'react-text-input-mask'
@@ -28,7 +30,7 @@ export default function CreateUserModal({
 	fetchUsers: () => void
 }) {
 	const [modal, setModal] = useState(false)
-
+	const [userData, setUserData] = useState<User | null>()
 	const [regions, setRegions] = useState<Regions[] | null>()
 	const [districts, setDistricts] = useState<Districts[] | null>()
 	const [villages, setVillages] = useState<Villages[] | null>()
@@ -48,6 +50,45 @@ export default function CreateUserModal({
 	useEffect(() => {
 		fetchData('regions').then(res => {
 			setRegions(res.data)
+		})
+
+		fetchData(API_ENDPOINTS.user).then(res => {
+			console.log(res)
+			if (res.status === 200) {
+				setUserData(res.data)
+
+				if (res.data.role[0] == 'region_admin') {
+					setFormData({
+						...formData,
+						region_id: res.data.region_id,
+					})
+
+					fetchData(`districts/${res.data.region_id}`).then(res => {
+						setDistricts(res.data)
+					})
+				}
+
+				if (res.data.role[0] == 'district_admin') {
+					setFormData({
+						...formData,
+						region_id: res.data.region_id,
+						district_id: res.data.district_id,
+					})
+
+					fetchData(`villages/${res.data.district_id}`).then(res => {
+						setVillages(res.data)
+					})
+				}
+
+				if (res.data.role[0] == 'village_admin') {
+					setFormData({
+						...formData,
+						region_id: res.data.region_id,
+						district_id: res.data.district_id,
+						village_id: res.data.village_id,
+					})
+				}
+			}
 		})
 	}, [])
 
@@ -107,7 +148,7 @@ export default function CreateUserModal({
 								onChange={val => {
 									setFormData({
 										...formData,
-										phone: val.target.value,
+										phone: String(val.target.value).replace(/\D/g, ''),
 									})
 								}}
 							>
@@ -147,88 +188,67 @@ export default function CreateUserModal({
 							/>
 						</div>
 
-						{/* regions */}
-						<div>
-							<Label>Облыс</Label>
-							<Select
-								onValueChange={val => {
-									setFormData({
-										...formData,
-										region_id: Number(val),
-									})
-
-									fetchData(`districts/${Number(val)}`).then(res => {
-										setDistricts(res.data)
-									})
-								}}
-							>
-								<SelectTrigger className=''>
-									<SelectValue placeholder='-----------------' />
-								</SelectTrigger>
-								<SelectContent>
-									{regions &&
-										regions.map(region => (
-											<SelectItem value={String(region.id)} key={region.id}>
-												{region.name}
-											</SelectItem>
-										))}
-								</SelectContent>
-							</Select>
-						</div>
-
 						{/* districts */}
-						<div className='space-y-1'>
-							<Label>Аудан қала</Label>
-							<Select
-								onValueChange={val => {
-									setFormData({
-										...formData,
-										district_id: Number(val),
-									})
+						{userData?.role[0] == 'district_admin' ||
+						userData?.role[0] == 'village_admin' ? null : (
+							<div className='space-y-1'>
+								<Label>Аудан қала</Label>
+								<Select
+									onValueChange={val => {
+										setFormData({
+											...formData,
+											district_id: Number(val),
+										})
 
-									fetchData(`villages/${Number(val)}`).then(res => {
-										setVillages(res.data)
-									})
-								}}
-							>
-								<SelectTrigger className=''>
-									<SelectValue placeholder='-----------------' />
-								</SelectTrigger>
-								<SelectContent>
-									{districts &&
-										districts.map(district => (
-											<SelectItem value={String(district.id)} key={district.id}>
-												{district.name}
-											</SelectItem>
-										))}
-								</SelectContent>
-							</Select>
-						</div>
+										fetchData(`villages/${Number(val)}`).then(res => {
+											setVillages(res.data)
+										})
+									}}
+								>
+									<SelectTrigger className=''>
+										<SelectValue placeholder='-----------------' />
+									</SelectTrigger>
+									<SelectContent>
+										{districts &&
+											districts.map(district => (
+												<SelectItem
+													value={String(district.id)}
+													key={district.id}
+												>
+													{district.name}
+												</SelectItem>
+											))}
+									</SelectContent>
+								</Select>
+							</div>
+						)}
 
 						{/* villages */}
-						<div className='space-y-1'>
-							<Label>Округ</Label>
-							<Select
-								onValueChange={val => {
-									setFormData({
-										...formData,
-										village_id: Number(val),
-									})
-								}}
-							>
-								<SelectTrigger className=''>
-									<SelectValue placeholder='-----------------' />
-								</SelectTrigger>
-								<SelectContent>
-									{villages &&
-										villages.map(village => (
-											<SelectItem value={String(village.id)} key={village.id}>
-												{village.name}
-											</SelectItem>
-										))}
-								</SelectContent>
-							</Select>
-						</div>
+						{userData?.role[0] == 'village_admin' ? null : (
+							<div className='space-y-1'>
+								<Label>Округ</Label>
+								<Select
+									onValueChange={val => {
+										setFormData({
+											...formData,
+											village_id: Number(val),
+										})
+									}}
+								>
+									<SelectTrigger className=''>
+										<SelectValue placeholder='-----------------' />
+									</SelectTrigger>
+									<SelectContent>
+										{villages &&
+											villages.map(village => (
+												<SelectItem value={String(village.id)} key={village.id}>
+													{village.name}
+												</SelectItem>
+											))}
+									</SelectContent>
+								</Select>
+							</div>
+						)}
 					</div>
 					<DialogFooter>
 						<Button

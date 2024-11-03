@@ -51,7 +51,7 @@ export default function CreateReportProvers({
 
 	useEffect(() => {
 		// ? fetch users
-		fetchData('users').then(res => {
+		fetchData('filter/users/location').then(res => {
 			if (res.status === 200) {
 				setUsers({
 					loading: false,

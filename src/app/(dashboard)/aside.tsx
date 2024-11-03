@@ -27,7 +27,7 @@ export default function Aside({ menu, setMenu }: Props) {
 	const router = useRouter()
 
 	return (
-		<div className='flex h-full flex-col px-3 py-4 md:px-2'>
+		<div className='flex h-auto lg:h-full flex-col px-3 py-4 md:px-2'>
 			<Link
 				className='relative mb-2 flex h-[150px] lg:h-40 items-end justify-start rounded-md bg-blue-600 p-4'
 				href='/'
