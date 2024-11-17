@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 
 import Loading from '@/app/profile/loading'
 import { BreadcrumbsCustom } from '@/components/breadcrumbs-custom'
+import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import {
 	Table,
@@ -15,6 +16,9 @@ import {
 } from '@/components/ui/table'
 import { VillageReport } from '@/types/village-report.types'
 import fetchData from '@/utils/api/fetchData'
+import ExcelJS from 'exceljs'
+import { saveAs } from 'file-saver'
+import { FileDown } from 'lucide-react'
 
 export default function Page() {
 	const [modal, setModal] = useState(false)
@@ -54,6 +58,41 @@ export default function Page() {
 		fetchReports()
 	}, [])
 
+	const exportToExcel = () => {
+		const workbook = new ExcelJS.Workbook()
+		const worksheet = workbook.addWorksheet('Reports')
+
+		// Add headers
+		worksheet.columns = [
+			{ header: 'Маманның А.Т.Ә.', key: 'user_name', width: 30 },
+			{ header: 'Жылдық жоспар', key: 'total_plan', width: 20 },
+			{ header: 'Орындалғаны', key: 'total_done', width: 20 },
+			{ header: '%', key: 'done_pct', width: 10 },
+			{ header: 'Дұрыс жауабы', key: 'total_correct', width: 20 },
+			{ header: '%', key: 'correct_pct', width: 10 },
+		]
+
+		// Add data
+		reports.result.forEach(item => {
+			worksheet.addRow({
+				user_name: item.user_name,
+				total_plan: item.total_plan,
+				total_done: item.total_done,
+				done_pct: `${item.done_pct} %`,
+				total_correct: item.total_correct,
+				correct_pct: `${item.correct_pct} %`,
+			})
+		})
+
+		// Generate Excel and save it
+		workbook.xlsx.writeBuffer().then(buffer => {
+			const blob = new Blob([buffer], {
+				type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
+			})
+			saveAs(blob, 'DistrictReports.xlsx')
+		})
+	}
+
 	return (
 		<>
 			<section>
@@ -76,6 +115,15 @@ export default function Page() {
 							<CardTitle className='text-xl font-medium'>
 								Округ статистика
 							</CardTitle>
+							<div>
+								<Button
+									onClick={exportToExcel}
+									className='space-x-4 flex items-center bg-green-700 hover:bg-green-800'
+								>
+									<FileDown size={15} />
+									<span>EXCEL</span>
+								</Button>
+							</div>
 						</CardHeader>
 						<CardContent>
 							<Table>

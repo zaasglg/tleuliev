@@ -106,10 +106,6 @@ export default function Page() {
 													...formData,
 													regionId: Number(val),
 												})
-
-												fetchData(`districts/${val}`).then(res => {
-													setDistricts(res.data)
-												})
 											}}
 										>
 											<SelectTrigger className=''>
@@ -179,6 +175,7 @@ export default function Page() {
 												fetchVillages()
 												setFormData({
 													name: '',
+													regionId: 0,
 													districtId: 0,
 												})
 												setModal(false)
@@ -196,8 +193,8 @@ export default function Page() {
 				{/*breadcrumb*/}
 				<BreadcrumbsCustom items={['Админ', 'Округтар']} />
 
-				<div className='mt-5 grid grid-cols-1 lg:grid-cols-7 gap-3 lg:gap-10 items-end'>
-					<div className='lg:col-span-2'>
+				<div className='mt-5 grid grid-cols-1 lg:grid-cols-4 gap-3 lg:gap-5 items-end'>
+					<div>
 						<Label>Іздеу</Label>
 						<Input
 							onChange={val => {
@@ -210,10 +207,13 @@ export default function Page() {
 						/>
 					</div>
 
-					<div className='lg:col-span-2'>
+					<div>
 						<Label>Облыс бойынша сұрыптау</Label>
 						<Select
 							onValueChange={val => {
+								fetchData(`districts/${val}`).then(res => {
+									setDistricts(res.data)
+								})
 								fetchData(`seach/villages/${val}`).then(res => {
 									setVillages(res.data)
 								})
@@ -233,11 +233,11 @@ export default function Page() {
 						</Select>
 					</div>
 
-					<div className='lg:col-span-2'>
+					<div>
 						<Label>Аудан бойынша сұрыптау</Label>
 						<Select
 							onValueChange={val => {
-								fetchData(`villages/${val}`).then(res => {
+								fetchData(`seach/villages/${val}`).then(res => {
 									setVillages(res.data)
 								})
 							}}
@@ -320,9 +320,9 @@ export default function Page() {
 																	fetchVillages()
 																	setFormData({
 																		name: '',
+																		regionId: 0,
 																		districtId: 0,
 																	})
-																	console.log(res)
 																})
 															}}
 														>

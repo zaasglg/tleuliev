@@ -14,7 +14,14 @@ export default function LayoutsApp({
 	return (
 		<>
 			<div className='flex h-screen flex-col md:flex-row md:overflow-hidden'>
-				<div className='w-full lg:w-64 flex-none fixed lg:relative bg-white lg:bg-transparent z-10'>
+				<div
+					className={clsx(
+						'w-full lg:w-64 flex-none fixed lg:relative bg-white lg:bg-transparent z-10',
+						{
+							'!z-auto !relative': menu,
+						}
+					)}
+				>
 					<Aside menu={menu} setMenu={setMenu} />
 				</div>
 				<div className='mt-60 lg:mt-0 flex-grow p-6 md:overflow-y-auto md:p-12 bg-gray-50'>
@@ -30,7 +37,7 @@ export default function LayoutsApp({
 					}
 				)}
 			>
-				<div className='z-10 relative'>
+				<div className='z-20 relative'>
 					<div className='w-full text-center'>
 						<Button
 							variant='ghost'

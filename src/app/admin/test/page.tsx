@@ -16,6 +16,7 @@ import {
 } from '@/components/ui/alert-dialog'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Input } from '@/components/ui/input'
 import {
 	Table,
 	TableBody,
@@ -26,6 +27,7 @@ import {
 } from '@/components/ui/table'
 import { Test } from '@/types/test.types'
 import fetchData from '@/utils/api/fetchData'
+import { API_ENDPOINTS } from '@/utils/endpoint'
 import { ListPlus } from 'lucide-react'
 import Link from 'next/link'
 
@@ -33,18 +35,45 @@ export default function Page() {
 	// const { data, error, isLoading} = useTests();
 
 	const [tests, setTests] = useState<Test[]>()
+	const [filteredTests, setFilteredTests] = useState<Test[]>([])
 	const [loading, setLoading] = useState(true)
+	const [search, setSearch] = useState('')
 
-	const fetchTest = () => {
-		fetchData('tests').then(res => {
-			setTests(res.data)
-			setLoading(false)
-		})
-	}
+	const fetchTests = () =>
+		fetchData('tests')
+			.then(res => {
+				// @ts-ignore
+				setTests(res.data)
+				setFilteredTests(res.data)
+			})
+			.finally(() => {
+				setLoading(false)
+			})
 
 	useEffect(() => {
-		fetchTest()
+		fetchTests()
 	}, [])
+
+	// const fetchTest = () => {
+	// 	fetchData('tests').then(res => {
+	// 		setTests(res.data)
+	// 		setLoading(false)
+	// 	})
+	// }
+
+	const handleSearch = (value: string) => {
+		fetchData(API_ENDPOINTS.seachTest(value))
+			.then(res => {
+				if (!value) {
+					setFilteredTests(tests || [])
+				} else {
+					setFilteredTests(res.data)
+				}
+			})
+			.finally(() => {
+				setLoading(false)
+			})
+	}
 
 	return (
 		<>
@@ -73,6 +102,15 @@ export default function Page() {
 					<Card className='mt-10'>
 						<CardHeader>
 							<CardTitle className='text-xl font-medium'>Тесттер</CardTitle>
+							<Input
+								placeholder='Іздеу....'
+								value={search}
+								onChange={event => {
+									const value = event.target.value
+									setSearch(event.target.value)
+									handleSearch(value)
+								}}
+							/>
 						</CardHeader>
 						<CardContent>
 							<Table>
@@ -86,8 +124,8 @@ export default function Page() {
 									</TableRow>
 								</TableHeader>
 								<TableBody>
-									{tests &&
-										tests
+									{filteredTests &&
+										filteredTests
 											.slice()
 											.reverse()
 											.map(item => (
@@ -126,7 +164,7 @@ export default function Page() {
 																				`tests/${item.id}`,
 																				'DELETE'
 																			).then(res => {
-																				fetchTest()
+																				fetchTests()
 																			})
 																		}}
 																	>
