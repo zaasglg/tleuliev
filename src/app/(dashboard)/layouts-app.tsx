@@ -1,6 +1,7 @@
 'use client'
 
 import Aside from '@/app/(dashboard)/aside'
+import DashboardHeader from '@/components/app/dashboard-header'
 import { Button } from '@/components/ui/button'
 import clsx from 'clsx'
 import { ReactNode, useState } from 'react'
@@ -13,7 +14,8 @@ export default function LayoutsApp({
 
 	return (
 		<>
-			<div className='flex h-screen flex-col md:flex-row md:overflow-hidden'>
+			<DashboardHeader />
+			<div className='flex h-screen flex-col md:flex-row md:overflow-hidden pt-[93px]'>
 				<div
 					className={clsx(
 						'w-full lg:w-64 flex-none fixed lg:relative bg-white lg:bg-transparent z-10',

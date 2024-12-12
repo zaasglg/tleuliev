@@ -135,9 +135,7 @@ export default function Page() {
 										<TableHead>Округ атауы</TableHead>
 										<TableHead>Жылдық жоспар</TableHead>
 										<TableHead>Орындалғаны</TableHead>
-										<TableHead>%</TableHead>
 										<TableHead>Дұрыс жауабы</TableHead>
-										<TableHead>%</TableHead>
 										<TableHead></TableHead>
 									</TableRow>
 								</TableHeader>
@@ -148,9 +146,7 @@ export default function Page() {
 												<TableCell>{item.village_name}</TableCell>
 												<TableCell>{item.total_plan}</TableCell>
 												<TableCell>{item.total_done}</TableCell>
-												<TableCell>{item.done_pct} %</TableCell>
 												<TableCell>{item.total_correct}</TableCell>
-												<TableCell>{item.correct_pct} %</TableCell>
 												<TableCell>
 													<Button
 														variant='ghost'

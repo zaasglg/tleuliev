@@ -106,6 +106,7 @@ export default function Page() {
 													...formData,
 													regionId: Number(val),
 												})
+												
 											}}
 										>
 											<SelectTrigger className=''>

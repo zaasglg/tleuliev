@@ -1,7 +1,6 @@
 'use client'
 
 import NavLinks from '@/app/(dashboard)/nav-links'
-import Logo from '@/components/Logo'
 import {
 	AlertDialog,
 	AlertDialogAction,
@@ -15,7 +14,6 @@ import {
 import { Button } from '@/components/ui/button'
 import { logout } from '@/utils/api/logout'
 import { MenuIcon, PowerIcon } from 'lucide-react'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 
 interface Props {
@@ -27,18 +25,7 @@ export default function Aside({ menu, setMenu }: Props) {
 	const router = useRouter()
 
 	return (
-		<div className='flex h-auto lg:h-full flex-col px-3 py-4 md:px-2'>
-			<Link
-				className='relative mb-2 flex h-[150px] lg:h-40 items-end justify-start rounded-md bg-blue-600 p-4'
-				href='/'
-			>
-				<div className='w-full lg:w-32 text-white md:w-40'>
-					<Logo color='white' size={20} /> <br />
-					<span className='text-xs leading-none block mt-1 text-gray-100'>
-						Ветеринарлық медицина бойынша теориялық білімді арттыру платформасы
-					</span>
-				</div>
-			</Link>
+		<div className='flex h-auto lg:h-full flex-col px-3 py-4 md:px-2 border-r'>
 			<div className='flex grow flex-row justify-start lg:justify-between space-x-2 md:flex-col md:space-x-0 md:space-y-2'>
 				<div className='block lg:hidden'>
 					<Button

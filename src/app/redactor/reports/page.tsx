@@ -108,9 +108,7 @@ export default function Page() {
 										<TableHead>Маманның А.Т.Ә.</TableHead>
 										<TableHead>Жылдық жоспар</TableHead>
 										<TableHead>Орындалғаны</TableHead>
-										<TableHead>%</TableHead>
 										<TableHead>Дұрыс жауабы</TableHead>
-										<TableHead>%</TableHead>
 									</TableRow>
 								</TableHeader>
 								<TableBody>
@@ -158,9 +156,7 @@ export default function Page() {
 													</Popover>
 												</TableCell>
 												<TableCell>{item.done}</TableCell>
-												<TableCell>{item.done_pct} %</TableCell>
 												<TableCell>{item.correct}</TableCell>
-												<TableCell>{item.correct_pct} %</TableCell>
 											</TableRow>
 										))}
 								</TableBody>
