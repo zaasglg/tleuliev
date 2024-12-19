@@ -102,7 +102,7 @@ export default function Page() {
 				<div className='flex justify-between items-center gap-10'>
 					<div>
 						<h2 className='text-lg lg:text-4xl font-bold lg:font-medium'>
-							Аудан статика
+							Аудан статистика
 						</h2>
 					</div>
 				</div>
@@ -116,7 +116,7 @@ export default function Page() {
 					<Card className='mt-10'>
 						<CardHeader>
 							<CardTitle className='text-xl font-medium'>
-								Аудан статика
+								Аудан статистика
 							</CardTitle>
 							<div>
 								<Button

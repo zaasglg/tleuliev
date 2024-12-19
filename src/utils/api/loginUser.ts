@@ -7,7 +7,7 @@ export default async function loginUser(phone: string, password: string) {
 	try {
 		let new_phone = String(phone).replace(/\D/g, '')
 
-		const response = await axios.post('https://api.agroduken.kz/api/login', {
+		const response = await axios.post('http://api.agroduken.kz/api/login', {
 			phone: new_phone,
 			password,
 		})

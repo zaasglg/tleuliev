@@ -10,6 +10,8 @@ import Header from '@/components/app/header'
 import loginUser from '@/utils/api/loginUser'
 import { useRouter } from 'next/navigation'
 import { MaskedInput } from 'react-text-input-mask'
+import fetchData from '@/utils/api/fetchData'
+import { API_ENDPOINTS } from '@/utils/endpoint'
 
 export default function Login() {
 	const router = useRouter()
@@ -26,9 +28,35 @@ export default function Login() {
 
 		try {
 			loginUser(formData.phone, formData.password).then(result => {
+				console.log(result);
 				if (result.status === 200) {
 					setIsLogining(false)
-					router.push('/')
+
+							fetchData(API_ENDPOINTS.user)
+								.then(res => {
+									// console.log();
+									if (res.data['role'][0] == 'user') {
+										router.push('/test')
+									} else if (res.data['role'][0] == 'region_admin' || res.data['role'][0] == 'district_admin' || res.data['role'][0] == 'village_admin	') {
+										if (res.data['permissions'][0] == 'region') {
+											router.push('/redactor/statistics/region')
+										} else if (res.data['permissions'][0] == 'district') {
+											router.push('/redactor/statistics/district')
+										} else if (res.data['permissions'][0] == 'village') {
+											router.push('/redactor/statistics/village')
+										} else {
+											router.push('/redactor/reports')
+										}
+										
+									} else if (res.data['role'][0] == 'admin') {
+										router.push('/admin/users')
+									}
+								})
+								.catch(error => {
+									console.error('Failed to fetch user data:', error)
+								})
+
+
 				} else {
 					setIsLogining(false)
 

@@ -45,6 +45,7 @@ export default function NavLinks() {
 				setLoading(false)
 			})
 	}, [])
+	
 	const links: NavLink[] = useMemo(
 		() => [
 			{ name: 'Басты бет', href: '/', icon: <TvMinimal /> },

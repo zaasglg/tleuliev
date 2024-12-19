@@ -1,3 +1,5 @@
+'use client'
+
 import Footer from '@/components/app/footer'
 import Header from '@/components/app/header'
 import { NextPage } from 'next'

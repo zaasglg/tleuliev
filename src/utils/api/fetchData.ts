@@ -15,7 +15,7 @@ export default async function fetchData(
 
 		const options: AxiosRequestConfig = {
 			method: method,
-			url: `https://api.agroduken.kz/api/${url}`,
+			url: `http://api.agroduken.kz/api/${url}`,
 			headers: {
 				Accept: 'application/json',
 				'Content-Type': 'application/json',
