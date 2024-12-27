@@ -49,10 +49,10 @@ export default function Home() {
 
 			{/* MARK: WELCOME */}
 			<section className='bg-blue-800'>
-				<div className='grid items-center grid-cols-2 gap-10 w-9/12 mx-auto py-12'>
+				<div className='grid items-center grid-cols-1 lg:grid-cols-2 gap-10 w-11/12 lg:w-9/12 mx-auto py-12'>
 					<div className='space-y-5' data-aos="zoom-out">
 						<h2 className='text-white font-bold' >TLEULIEV VetTest</h2>
-						<span className='text-white block text-4xl uppercase font-extrabold'>
+						<span className='text-white block text-2xl lg:text-4xl uppercase font-extrabold'>
 							ВЕТЕРИНАРЛЫҚ МЕДИЦИНА бойынша тест сұрақтары
 						</span>
 						<p className='text-white font-thin'>
@@ -71,7 +71,7 @@ export default function Home() {
 
 			{/* MARK: BLOCKS */}
 			<section className='bg-gray-50'>
-				<div className='w-9/12 mx-auto py-12 grid grid-cols-3 gap-5'>
+				<div className='w-11/12 lg:w-9/12 mx-auto py-12 grid grid-cols-1 lg:grid-cols-3 gap-5'>
 					{/* ======================================== */}
 					<div className='shadow bg-white rounded-md'>
 						<img
@@ -157,12 +157,12 @@ export default function Home() {
 
 			{/* MARK: VIDEO */}
 			<section className='py-12'>
-				<div className='w-9/12 mx-auto'>
-					<h2 className='text-center text-3xl font-bold uppercase'>
+				<div className='w-11/12 lg:w-9/12 mx-auto'>
+					<h2 className='text-center text-2xl lg:text-3xl font-bold uppercase'>
 						Платформаны қолдану жайлы видеонұсқаулық
 					</h2>
 					<div className='relative mt-10' data-aos="zoom-in">
-						<img src='/video.png' alt='' className='rounded-lg h-[500px]' />
+						<img src='/video.png' alt='' className='rounded-lg h-[250px] lg:h-[500px]' />
 						<div className='absolute w-full bg-black bg-opacity-70 h-full top-0 left-0 rounded-lg flex items-center justify-center'>
 							<Button
 								variant='ghost'

@@ -46,128 +46,49 @@ export default function NavLinks() {
 			})
 	}, [])
 	
+
+	// MARK: MENU District admin
 	const links: NavLink[] = useMemo(
 		() => [
-			{ name: 'Басты бет', href: '/', icon: <TvMinimal /> },
-			{ name: 'Жеке кабинет', href: '/profile', icon: <Contact /> },
-			{
-				name: 'Жылдық жоспар',
-				href: '/redactor/reports',
-				icon: <ClipboardCheck />,
-			},
-			{
-				name: 'Мамандар',
-				href: '/redactor/users',
-				icon: <ListTodo />,
-			},
-			...(userData?.permissions[0] === 'region'
-				? [
-						{
-							name: 'Облыс статика',
-							href: '/redactor/statistics/region',
-							icon: <ChartBar />,
-						},
-				  ]
-				: userData?.permissions[0] === 'district'
-				? [
-						{
-							name: 'Аудан статика',
-							href: '/redactor/statistics/district',
-							icon: <ChartBar />,
-						},
-				  ]
-				: userData?.permissions[0] === 'village'
-				? [
-						{
-							name: 'Округ статика',
-							href: '/redactor/statistics/village',
-							icon: <ChartBar />,
-						},
-				  ]
-				: []),
+			{ name: 'Жылдық жоспар', href: '/redactor/reports', icon: <ClipboardCheck />, },
+			{ name: 'Мамандар тізімі', href: '/redactor/users', icon: <ListTodo />, },
+			{ name: 'Нұсқаулық', href: '/instruction', icon: <ListTodo />, },
 		],
 		[userData]
 	)
 
-	const linksObserver: NavLink[] = useMemo(
+	// MARK: MENU Viewer
+	const linksViewer: NavLink[] = useMemo(
 		() => [
-			{ name: 'Басты бет', href: '/', icon: <TvMinimal /> },
-			{ name: 'Жеке кабинет', href: '/profile', icon: <Contact /> },
-			...(userData?.permissions[0] === 'region'
-				? [
-						{
-							name: 'Облыс статика',
-							href: '/redactor/statistics/region',
-							icon: <ChartBar />,
-						},
-				  ]
-				: userData?.permissions[0] === 'district'
-				? [
-						{
-							name: 'Аудан статика',
-							href: '/redactor/statistics/district',
-							icon: <ChartBar />,
-						},
-				  ]
-				: userData?.permissions[0] === 'village'
-				? [
-						{
-							name: 'Округ статика',
-							href: '/redactor/statistics/village',
-							icon: <ChartBar />,
-						},
-				  ]
-				: []),
+			{ name: 'Статистика', href: '/statistics/region', icon: <TvMinimal /> },
+			{ name: 'Нұсқаулық', href: '/instruction', icon: <ChartBar /> },
 		],
-		[userData]
+		[]
 	)
 
+	// MARK: MENU Admin
 	const linksAdmin: NavLink[] = useMemo(
 		() => [
 			{ name: 'Басты бет', href: '/', icon: <TvMinimal size={size} /> },
 			{ name: 'Жеке кабинет', href: '/profile', icon: <Contact size={size} /> },
 			{ name: 'Тест', href: '/admin/test', icon: <ListTodo size={size} /> },
-			{
-				name: 'Облыстар',
-				href: '/admin/regions',
-				icon: <ListTodo size={size} />,
-			},
-			{
-				name: 'Аудан қалалар',
-				href: '/admin/districts',
-				icon: <ListTodo size={size} />,
-			},
-			{
-				name: 'Округтар',
-				href: '/admin/villages',
-				icon: <ListTodo size={size} />,
-			},
-			{
-				name: 'Мамандар',
-				href: '/admin/users',
-				icon: <ListTodo size={size} />,
-			},
-			{
-				name: 'Аудандық админдер',
-				href: '/admin/provers',
-				icon: <ListTodo size={size} />,
-			},
+			{ name: 'Облыстар', href: '/admin/regions', icon: <ListTodo size={size} />, },
+			{ name: 'Аудан қалалар', href: '/admin/districts', icon: <ListTodo size={size} />, },
+			{ name: 'Округтар', href: '/admin/villages', icon: <ListTodo size={size} />, },
+			{ name: 'Мамандар', href: '/admin/users', icon: <ListTodo size={size} />, },
+			{ name: 'Аудандық админдер', href: '/admin/provers', icon: <ListTodo size={size} />, },
+			{ name: 'Статистика админдер', href: '/admin/statistics', icon: <ListTodo size={size} />, },
 		],
 		[]
 	)
 
+	// MARK: MENU User
 	const linksUser: NavLink[] = useMemo(
 		() => [
-			{ name: 'Басты бет', href: '/', icon: <TvMinimal size={size} /> },
+			{ name: 'Тест тапсыру', href: '/test', icon: <ListTodo size={size} /> },
+			{ name: 'Жылдық жоспар', href: '/result', icon: <ChartBar size={size} /> },
+			{ name: 'Нұсқаулық', href: '/instruction', icon: <Contact size={size} /> },
 			{ name: 'Жеке кабинет', href: '/profile', icon: <Contact size={size} /> },
-			{ name: 'Тест', href: '/test', icon: <ListTodo size={size} /> },
-			{ name: 'Статистика', href: '/result', icon: <ChartBar size={size} /> },
-			{ name: 'Материалдар', href: '/material', icon: <Files size={size} /> },
-			{
-				name: 'Кері байланыс',
-				href: '/feedback',
-				icon: <MessageCircle size={size} />,
-			},
 		],
 		[]
 	)
@@ -220,10 +141,8 @@ export default function NavLinks() {
 		<>
 			{
 				{
-					region_admin: renderLinks(links),
 					district_admin: renderLinks(links),
-					village_admin: renderLinks(links),
-					observer: renderLinks(linksObserver),
+					viewer_only: renderLinks(linksViewer),
 					admin: renderLinks(linksAdmin),
 					user: renderLinks(linksUser),
 				}[userData.role[0]]

@@ -11,13 +11,11 @@ import { useState } from 'react'
 
 export default function DetailProver({
 	role,
-	permission,
 	region_name,
 	district_name,
 	village_name,
 }: {
 	role: string
-	permission: string
 	region_name: string
 	district_name: string
 	village_name: string
@@ -42,13 +40,6 @@ export default function DetailProver({
 							<h6 className='font-thin text-sm'>Рөлі</h6>
 							<span>
 								<b>{role}</b>
-							</span>
-						</div>
-
-						<div className='border rounded-lg p-3'>
-							<h6 className='font-thin text-sm'>Рұқсат</h6>
-							<span>
-								<b>{permission}</b>
 							</span>
 						</div>
 

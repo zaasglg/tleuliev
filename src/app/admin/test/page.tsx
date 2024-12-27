@@ -54,13 +54,6 @@ export default function Page() {
 		fetchTests()
 	}, [])
 
-	// const fetchTest = () => {
-	// 	fetchData('tests').then(res => {
-	// 		setTests(res.data)
-	// 		setLoading(false)
-	// 	})
-	// }
-
 	const handleSearch = (value: string) => {
 		fetchData(API_ENDPOINTS.seachTest(value))
 			.then(res => {

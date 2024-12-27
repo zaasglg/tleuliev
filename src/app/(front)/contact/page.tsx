@@ -13,7 +13,7 @@ const Contact: NextPage<Props> = ({}) => {
 			<Header />
 
 			<section className='bg-white'>
-				<div className='w-9/12 py-12 mx-auto'>
+				<div className='w-11/12 lg:w-9/12 py-12 mx-auto'>
 					<div>
 						<p className='font-medium text-blue-500 dark:text-blue-400'>
 							Байланыс

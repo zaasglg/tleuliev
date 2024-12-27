@@ -15,6 +15,7 @@ import {
 } from '@/components/ui/dialog'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { User } from '@/types/user.types'
 import fetchData from '@/utils/api/fetchData'
 import clsx from 'clsx'
@@ -47,6 +48,7 @@ export default function CreateReportProvers({
 	const [formData, setFormData] = useState({
 		user_id: 0,
 		plan: '0',
+		year: '2025'
 	})
 
 	useEffect(() => {
@@ -138,6 +140,30 @@ export default function CreateReportProvers({
 									})
 								}}
 							/>
+						</div>
+
+						<div className='mt-5'>
+							<Label>Жыл</Label>
+							<Select 
+								onValueChange={val => {
+									setFormData({
+										...formData,
+										year: val,
+									})
+								}}
+							>
+								<SelectTrigger className="w-full">
+									<SelectValue placeholder="Жылды тандаңыз" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										<SelectLabel>Жыл</SelectLabel>
+										<SelectItem value="2025">2025</SelectItem>
+										<SelectItem value="2026">2026</SelectItem>
+										<SelectItem value="2027">2027</SelectItem>
+									</SelectGroup>
+								</SelectContent>
+							</Select>
 						</div>
 
 						<Button

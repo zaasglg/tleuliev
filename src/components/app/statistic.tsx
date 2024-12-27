@@ -59,12 +59,12 @@ const Statistic: NextPage<Props> = ({}) => {
 
 	return (
 		<section className='bg-blue-800'>
-			<div className='w-9/12 mx-auto py-12'>
+			<div className='w-11/12 lg:w-9/12 mx-auto py-12'>
 				<h2 className='text-white font-bold uppercase text-center text-3xl'>
 					Тіркелушілер саны:
 				</h2>
 
-				<div className='flex justify-center mt-10 space-x-3'>
+				<div className='flex flex-wrap justify-center mt-10 space-x-3'>
 					<span
 						className={
 							active == 0
@@ -181,7 +181,7 @@ const Statistic: NextPage<Props> = ({}) => {
 
 					<div className='flex flex-col items-center justify-center'>
 						<div className='flex items-center justify-center mt-5 border w-[150px] h-[150px] rounded-full'>
-							<div className='text-white text-4xl font-bold flex flex-col text-center'>
+							<div className='text-white text-4xl font-bold flex flex-wrap flex-col text-center'>
 								<span>{userCount}</span>
 								<span className='text-sm font-thin'> Маман тіркелді</span>
 							</div>

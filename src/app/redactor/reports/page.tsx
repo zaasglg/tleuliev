@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import Loading from '@/app/profile/loading'
 import { BreadcrumbsCustom } from '@/components/breadcrumbs-custom'
 import { Button } from '@/components/ui/button'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import {
@@ -24,6 +24,7 @@ import {
 import fetchData from '@/utils/api/fetchData'
 import { ListPlus, Settings2 } from 'lucide-react'
 import CreateReportProvers from './modal'
+import { Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigger, SelectValue } from '@/components/ui/select'
 
 export default function Page() {
 	const [modal, setModal] = useState(false)
@@ -46,6 +47,21 @@ export default function Page() {
 	const fetchReports = () => {
 		fetchData('reports').then(res => {
 			if (res.status === 200) {
+				setReports({
+					loading: false,
+					result: res.data,
+					error: '',
+				})
+			} else {
+				console.error('Error fetching data:', res.message)
+			}
+		})
+	}
+
+	const fetchReportsByYear = (year: string) => {
+		fetchData(`filter/reports/${year}`).then(res => {
+			if (res.status === 200) {
+				console.log(res.data);
 				setReports({
 					loading: false,
 					result: res.data,
@@ -100,6 +116,30 @@ export default function Page() {
 							<CardTitle className='text-xl font-medium'>
 								Жылдық қорытынды
 							</CardTitle>
+							<CardDescription>
+							<Select 
+								onValueChange={val => {
+									if (val == "0") {
+										fetchReports()
+									} else {
+										fetchReportsByYear(val)
+									}
+								}}
+							>
+								<SelectTrigger className="w-full">
+									<SelectValue placeholder="Жылды тандаңыз" />
+								</SelectTrigger>
+								<SelectContent>
+									<SelectGroup>
+										<SelectLabel>Жыл</SelectLabel>
+										<SelectItem value="0">Барлығы</SelectItem>
+										<SelectItem value="2025">2025</SelectItem>
+										<SelectItem value="2026">2026</SelectItem>
+										<SelectItem value="2027">2027</SelectItem>
+									</SelectGroup>
+								</SelectContent>
+							</Select>
+							</CardDescription>
 						</CardHeader>
 						<CardContent>
 							<Table>
@@ -109,6 +149,7 @@ export default function Page() {
 										<TableHead>Жылдық жоспар</TableHead>
 										<TableHead>Орындалғаны</TableHead>
 										<TableHead>Дұрыс жауабы</TableHead>
+										<TableHead>Жыл</TableHead>
 									</TableRow>
 								</TableHeader>
 								<TableBody>
@@ -157,6 +198,7 @@ export default function Page() {
 												</TableCell>
 												<TableCell>{item.done}</TableCell>
 												<TableCell>{item.correct}</TableCell>
+												<TableCell>{item.year}</TableCell>
 											</TableRow>
 										))}
 								</TableBody>

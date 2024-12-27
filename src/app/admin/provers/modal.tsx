@@ -33,19 +33,15 @@ export default function CreateUserModal({
 
 	const [regions, setRegions] = useState<Regions[] | null>()
 	const [districts, setDistricts] = useState<Districts[] | null>()
-	const [villages, setVillages] = useState<Villages[] | null>()
 
 	const [formData, setFormData] = useState({
 		name: '',
-		email: '',
 		password: '',
 		birthday: '',
 		phone: '',
 		region_id: 0,
 		district_id: 0,
-		village_id: 0,
-		role: '',
-		permission: '',
+		role: 'district_admin',
 	})
 
 	useEffect(() => {
@@ -59,7 +55,7 @@ export default function CreateUserModal({
 			<Dialog open={modal} onOpenChange={setModal}>
 				<DialogTrigger asChild>
 					<Button variant='outline'>
-						<span className='hidden lg:block'>Маман қосу</span>
+						<span className='hidden lg:block'>Аудандық админ қосу</span>
 						<ListPlus className='block lg:hidden' />
 					</Button>
 				</DialogTrigger>
@@ -83,21 +79,6 @@ export default function CreateUserModal({
 							/>
 						</div>
 
-						{/* email */}
-						<div>
-							<Label htmlFor='email'>Email</Label>
-							<Input
-								id='email'
-								value={formData.email}
-								onChange={event =>
-									setFormData({
-										...formData,
-										email: event.target.value,
-									})
-								}
-							/>
-						</div>
-
 						{/* phone number */}
 						<div>
 							<Label htmlFor='phone'>Телефон номер</Label>
@@ -113,22 +94,6 @@ export default function CreateUserModal({
 							>
 								<Input id='phone' type='text' />
 							</MaskedInput>
-						</div>
-
-						{/* birthday */}
-						<div>
-							<Label htmlFor='date'>Туылған күні</Label>
-							<Input
-								id='date'
-								type='date'
-								value={formData.birthday}
-								onChange={event =>
-									setFormData({
-										...formData,
-										birthday: event.target.value,
-									})
-								}
-							/>
 						</div>
 
 						{/* password */}
@@ -147,65 +112,6 @@ export default function CreateUserModal({
 							/>
 						</div>
 
-						{/* role */}
-						<div>
-							<Label>Рөлі</Label>
-							<Select
-								value={formData.role}
-								onValueChange={value => {
-									setFormData({
-										...formData,
-										role: value,
-									})
-								}}
-							>
-								<SelectTrigger className=''>
-									<SelectValue placeholder='-----------------' />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectGroup>
-										<SelectLabel className='font-bold text-sm'>
-											Тексеруші
-										</SelectLabel>
-										<SelectItem value='region_admin'>Облыс бойынша</SelectItem>
-										<SelectItem value='district_admin'>
-											Аудан бойынша
-										</SelectItem>
-										<SelectItem value='village_admin'>Округ бойынша</SelectItem>
-										<SelectItem value='observer'>Бақылаушы</SelectItem>
-									</SelectGroup>
-								</SelectContent>
-							</Select>
-						</div>
-
-						{/* permission */}
-						<div>
-							<Label>Рұқсат</Label>
-							<Select
-								value={formData.permission}
-								onValueChange={value => {
-									setFormData({
-										...formData,
-										permission: value,
-									})
-								}}
-							>
-								<SelectTrigger className=''>
-									<SelectValue placeholder='Таңдалмаған' />
-								</SelectTrigger>
-								<SelectContent>
-									<SelectGroup>
-										<SelectLabel className='font-bold text-sm'>
-											Рұқсаттар тізімі
-										</SelectLabel>
-										<SelectItem value='null'>Таңдалмаған</SelectItem>
-										<SelectItem value='region'>Облыс статистикасы</SelectItem>
-										<SelectItem value='district'>Аудан статистикасы</SelectItem>
-										<SelectItem value='village'>Округ статистикасы</SelectItem>
-									</SelectGroup>
-								</SelectContent>
-							</Select>
-						</div>
 
 						{/* regions */}
 						<div>
@@ -246,10 +152,6 @@ export default function CreateUserModal({
 										...formData,
 										district_id: Number(val),
 									})
-
-									fetchData(`villages/${Number(val)}`).then(res => {
-										setVillages(res.data)
-									})
 								}}
 							>
 								<SelectTrigger className=''>
@@ -266,31 +168,6 @@ export default function CreateUserModal({
 							</Select>
 						</div>
 
-						{/* villages */}
-						<div className='space-y-1'>
-							<Label>Округ</Label>
-							<Select
-								value={String(formData.village_id)}
-								onValueChange={val => {
-									setFormData({
-										...formData,
-										village_id: Number(val),
-									})
-								}}
-							>
-								<SelectTrigger className=''>
-									<SelectValue placeholder='-----------------' />
-								</SelectTrigger>
-								<SelectContent>
-									{villages &&
-										villages.map(village => (
-											<SelectItem value={String(village.id)} key={village.id}>
-												{village.name}
-											</SelectItem>
-										))}
-								</SelectContent>
-							</Select>
-						</div>
 					</div>
 					<DialogFooter>
 						<Button
@@ -304,15 +181,12 @@ export default function CreateUserModal({
 
 								setFormData({
 									name: '',
-									email: '',
 									password: '',
 									birthday: '',
 									phone: '',
 									region_id: 0,
 									district_id: 0,
-									village_id: 0,
-									role: '',
-									permission: '',
+									role: 'district_admin',
 								})
 							}}
 						>

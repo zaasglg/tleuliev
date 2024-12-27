@@ -37,9 +37,7 @@ export default function CreateUserModal({
 
 	const [formData, setFormData] = useState({
 		name: '',
-		email: '',
 		password: '',
-		birthday: '',
 		phone: '',
 		region_id: 0,
 		district_id: 0,
@@ -57,37 +55,15 @@ export default function CreateUserModal({
 			if (res.status === 200) {
 				setUserData(res.data)
 
-				if (res.data.role[0] == 'region_admin') {
-					setFormData({
-						...formData,
-						region_id: res.data.region_id,
-					})
+				setFormData({
+					...formData,
+					region_id: res.data.region_id,
+					district_id: res.data.district_id,
+				})
 
-					fetchData(`districts/${res.data.region_id}`).then(res => {
-						setDistricts(res.data)
-					})
-				}
-
-				if (res.data.role[0] == 'district_admin') {
-					setFormData({
-						...formData,
-						region_id: res.data.region_id,
-						district_id: res.data.district_id,
-					})
-
-					fetchData(`villages/${res.data.district_id}`).then(res => {
-						setVillages(res.data)
-					})
-				}
-
-				if (res.data.role[0] == 'village_admin') {
-					setFormData({
-						...formData,
-						region_id: res.data.region_id,
-						district_id: res.data.district_id,
-						village_id: res.data.village_id,
-					})
-				}
+				fetchData(`villages/${res.data.district_id}`).then(res => {
+					setVillages(res.data)
+				})
 			}
 		})
 	}, [])
@@ -124,20 +100,6 @@ export default function CreateUserModal({
 							/>
 						</div>
 
-						{/* email */}
-						<div>
-							<Label htmlFor='email'>Email</Label>
-							<Input
-								id='email'
-								value={formData.email}
-								onChange={event =>
-									setFormData({
-										...formData,
-										email: event.target.value,
-									})
-								}
-							/>
-						</div>
 
 						{/* phone number */}
 						<div>
@@ -156,21 +118,6 @@ export default function CreateUserModal({
 							</MaskedInput>
 						</div>
 
-						{/* birthday */}
-						<div>
-							<Label htmlFor='date'>Туылған күні</Label>
-							<Input
-								id='date'
-								type='date'
-								value={formData.birthday}
-								onChange={event =>
-									setFormData({
-										...formData,
-										birthday: event.target.value,
-									})
-								}
-							/>
-						</div>
 
 						{/* password */}
 						<div>
@@ -188,43 +135,6 @@ export default function CreateUserModal({
 							/>
 						</div>
 
-						{/* districts */}
-						{userData?.role[0] == 'district_admin' ||
-						userData?.role[0] == 'village_admin' ? null : (
-							<div className='space-y-1'>
-								<Label>Аудан қала</Label>
-								<Select
-									onValueChange={val => {
-										setFormData({
-											...formData,
-											district_id: Number(val),
-										})
-
-										fetchData(`villages/${Number(val)}`).then(res => {
-											setVillages(res.data)
-										})
-									}}
-								>
-									<SelectTrigger className=''>
-										<SelectValue placeholder='-----------------' />
-									</SelectTrigger>
-									<SelectContent>
-										{districts &&
-											districts.map(district => (
-												<SelectItem
-													value={String(district.id)}
-													key={district.id}
-												>
-													{district.name}
-												</SelectItem>
-											))}
-									</SelectContent>
-								</Select>
-							</div>
-						)}
-
-						{/* villages */}
-						{userData?.role[0] == 'village_admin' ? null : (
 							<div className='space-y-1'>
 								<Label>Округ</Label>
 								<Select
@@ -248,7 +158,6 @@ export default function CreateUserModal({
 									</SelectContent>
 								</Select>
 							</div>
-						)}
 					</div>
 					<DialogFooter>
 						<Button

@@ -6,7 +6,7 @@ interface Props {}
 const Footer: NextPage<Props> = ({}) => {
 	return (
 		<footer className='bg-gray-900 py-12'>
-			<div className='w-9/12 mx-auto grid grid-cols-3 gap-10'>
+			<div className='w-11/12 lg:w-9/12 mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10'>
 				<div>
 					<span className='text-white text-2xl font-bold'>
 						Tleuliev VetTest

@@ -108,7 +108,7 @@ export default function Page() {
 				</div>
 
 				{/*breadcrumb*/}
-				<BreadcrumbsCustom items={['Аудан статика']} />
+				<BreadcrumbsCustom items={['Аудан статистика']} />
 
 				{reports.loading && <Loading />}
 

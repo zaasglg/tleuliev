@@ -35,9 +35,7 @@ export default function CreateUserModal({
 
 	const [formData, setFormData] = useState({
 		name: '',
-		email: '',
 		password: '',
-		birthday: '',
 		phone: '',
 		region_id: 0,
 		district_id: 0,
@@ -83,21 +81,6 @@ export default function CreateUserModal({
 							/>
 						</div>
 
-						{/* email */}
-						<div>
-							<Label htmlFor='email'>Email</Label>
-							<Input
-								id='email'
-								value={formData.email}
-								onChange={event =>
-									setFormData({
-										...formData,
-										email: event.target.value,
-									})
-								}
-							/>
-						</div>
-
 						{/* phone number */}
 						<div>
 							<Label htmlFor='phone'>Телефон номер</Label>
@@ -113,22 +96,6 @@ export default function CreateUserModal({
 							>
 								<Input id='phone' type='text' />
 							</MaskedInput>
-						</div>
-
-						{/* birthday */}
-						<div>
-							<Label htmlFor='date'>Туылған күні</Label>
-							<Input
-								id='date'
-								type='date'
-								value={formData.birthday}
-								onChange={event =>
-									setFormData({
-										...formData,
-										birthday: event.target.value,
-									})
-								}
-							/>
 						</div>
 
 						{/* password */}
@@ -242,9 +209,7 @@ export default function CreateUserModal({
 
 								setFormData({
 									name: '',
-									email: '',
 									password: '',
-									birthday: '',
 									phone: '',
 									region_id: 0,
 									district_id: 0,

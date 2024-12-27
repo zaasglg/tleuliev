@@ -2,7 +2,7 @@ import { Metadata } from "next";
 import LayoutsApp from "@/app/(dashboard)/layouts-app";
 
 export const metadata: Metadata = {
-    title: 'Жеке кабинет',
+    title: 'Нұсқаулық',
     description: '...',
 };
 

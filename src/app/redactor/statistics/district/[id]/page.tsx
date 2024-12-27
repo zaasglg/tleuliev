@@ -67,13 +67,13 @@ export default function Page({ params }: { params: { id: number } }) {
 				<div className='flex justify-between items-center gap-10'>
 					<div>
 						<h2 className='text-lg lg:text-4xl font-bold lg:font-medium'>
-							Аудан статика
+							Аудан статистика
 						</h2>
 					</div>
 				</div>
 
 				{/*breadcrumb*/}
-				<BreadcrumbsCustom items={['Аудан статика']} />
+				<BreadcrumbsCustom items={['Аудан статистика']} />
 
 				{reports.loading && <Loading />}
 
@@ -81,7 +81,7 @@ export default function Page({ params }: { params: { id: number } }) {
 					<Card className='mt-10'>
 						<CardHeader>
 							<CardTitle className='text-xl font-medium'>
-								Аудан статика
+								Аудан статистика
 							</CardTitle>
 						</CardHeader>
 						<CardContent>

@@ -36,11 +36,7 @@ export default function UsersTable({
 				<TableHeader>
 					<TableRow>
 						<TableHead>Аты</TableHead>
-						<TableHead>Email</TableHead>
-						<TableHead>Туылған күні</TableHead>
 						<TableHead>Телефон номер</TableHead>
-						<TableHead>Облыс</TableHead>
-						<TableHead>Аудан / қала</TableHead>
 						<TableHead>Округ</TableHead>
 						<TableHead>Әрекет</TableHead>
 						<TableHead>Әрекет</TableHead>
@@ -52,13 +48,7 @@ export default function UsersTable({
 					{users?.map(user => (
 						<TableRow key={user.id}>
 							<TableCell className='font-medium'>{user.name}</TableCell>
-							<TableCell className='font-medium'>{user.email}</TableCell>
-							<TableCell className='font-medium'>{user.birthday}</TableCell>
 							<TableCell className='font-medium'>{user.phone}</TableCell>
-							<TableCell className='font-medium'>{user.region_name}</TableCell>
-							<TableCell className='font-medium'>
-								{user.district_name}
-							</TableCell>
 							<TableCell className='font-medium'>{user.village_name}</TableCell>
 							<TableCell>
 								<UpdateUser fetchUsers={fetchUsers} user={user} />

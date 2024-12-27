@@ -51,12 +51,10 @@ export default function UpdateUser({
 		setFormData({
 			...formData,
 			name: user.name,
-			email: user.email,
-			birthday: user.birthday,
 			phone: String(user.phone),
-			region_id: user.region_id,
-			district_id: user.district_id,
-			village_id: user.village_id,
+			region_id: user.region_id ?? 0,
+			district_id: user.district_id ?? 0,
+			village_id: user.village_id ?? 0,
 		})
 
 		fetchData('regions').then(res => {

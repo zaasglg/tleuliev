@@ -34,30 +34,22 @@ export default function UpdateUser({
 
 	const [regions, setRegions] = useState<Regions[] | null>()
 	const [districts, setDistricts] = useState<Districts[] | null>()
-	const [villages, setVillages] = useState<Villages[] | null>()
 
 	const [formData, setFormData] = useState({
 		name: '',
-		email: '',
-		birthday: '',
 		phone: '',
 		region_id: 0,
 		district_id: 0,
-		village_id: 0,
 		role: '',
-		permission: '',
 	})
 
 	useEffect(() => {
 		setFormData({
 			...formData,
 			name: user.name,
-			email: user.email,
-			birthday: user.birthday,
 			phone: String(user.phone),
-			region_id: user.region_id,
-			district_id: user.district_id,
-			village_id: user.village_id,
+			region_id: user.region_id ?? 0,
+			district_id: user.district_id ?? 0,
 		})
 
 		fetchData('regions').then(res => {
@@ -93,21 +85,6 @@ export default function UpdateUser({
 							/>
 						</div>
 
-						{/* email */}
-						<div>
-							<Label htmlFor='email'>Email</Label>
-							<Input
-								id='email'
-								value={formData.email}
-								onChange={event =>
-									setFormData({
-										...formData,
-										email: event.target.value,
-									})
-								}
-							/>
-						</div>
-
 						{/* phone number */}
 						<div>
 							<Label htmlFor='phone'>Телефон номер</Label>
@@ -123,22 +100,6 @@ export default function UpdateUser({
 							>
 								<Input id='phone' type='text' />
 							</MaskedInput>
-						</div>
-
-						{/* birthday */}
-						<div>
-							<Label htmlFor='date'>Туылған күні</Label>
-							<Input
-								id='date'
-								type='date'
-								value={formData.birthday}
-								onChange={event =>
-									setFormData({
-										...formData,
-										birthday: event.target.value,
-									})
-								}
-							/>
 						</div>
 
 						{/* regions */}
@@ -182,10 +143,6 @@ export default function UpdateUser({
 											...formData,
 											district_id: Number(val),
 										})
-
-										fetchData(`villages/${Number(val)}`).then(res => {
-											setVillages(res.data)
-										})
 									}}
 								>
 									<SelectTrigger className=''>
@@ -206,33 +163,6 @@ export default function UpdateUser({
 							</div>
 						)}
 
-						{/* villages */}
-						{villages && (
-							<div className='space-y-1'>
-								<Label>Округ</Label>
-								<Select
-									value={String(formData.village_id)}
-									onValueChange={val => {
-										setFormData({
-											...formData,
-											village_id: Number(val),
-										})
-									}}
-								>
-									<SelectTrigger className=''>
-										<SelectValue placeholder='-----------------' />
-									</SelectTrigger>
-									<SelectContent>
-										{villages &&
-											villages.map(village => (
-												<SelectItem value={String(village.id)} key={village.id}>
-													{village.name}
-												</SelectItem>
-											))}
-									</SelectContent>
-								</Select>
-							</div>
-						)}
 					</div>
 					<DialogFooter>
 						<Button
@@ -244,7 +174,6 @@ export default function UpdateUser({
 								})
 
 								fetchData(`users/${user.id}`, 'PUT', formData).then(res => {
-									console.log(res)
 									fetchUsers()
 									setModal(false)
 								})

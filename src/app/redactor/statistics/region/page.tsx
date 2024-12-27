@@ -101,13 +101,13 @@ export default function Page() {
 				<div className='flex justify-between items-center gap-10'>
 					<div>
 						<h2 className='text-lg lg:text-4xl font-bold lg:font-medium'>
-							Облыс статика
+							Облыс статистика
 						</h2>
 					</div>
 				</div>
 
 				{/*breadcrumb*/}
-				<BreadcrumbsCustom items={['Облыс статика']} />
+				<BreadcrumbsCustom items={['Облыс статистика']} />
 
 				{reports.loading && <Loading />}
 
@@ -115,7 +115,7 @@ export default function Page() {
 					<Card className='mt-10'>
 						<CardHeader>
 							<CardTitle className='text-xl font-medium'>
-								Облыс статика
+								Облыс статистика
 							</CardTitle>
 							<div>
 								<Button

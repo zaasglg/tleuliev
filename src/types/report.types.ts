@@ -24,4 +24,5 @@ interface Report {
 	done_pct: string
 	correct: string
 	correct_pct: string
+	year: string
 }

@@ -14,8 +14,8 @@ const About: NextPage<Props> = ({}) => {
 			{/* MARK: HEADER */}
 			<Header />
 
-			<section className='px-4 py-16 mx-auto w-9/12'>
-				<div className='max-w-xl mb-10 md:mx-auto sm:text-center'>
+			<section className='px-4 py-16 mx-auto w-11/12 lg:w-9/12'>
+				<div className='lg:max-w-xl mb-10 md:mx-auto sm:text-center'>
 					<div>
 						<p className='inline-block px-3 py-px mb-4 text-xs font-semibold tracking-wider text-teal-900 uppercase rounded-full bg-teal-accent-400'>
 							TLEULIEV VetTest
@@ -58,7 +58,7 @@ const About: NextPage<Props> = ({}) => {
 				</div>
 				<div className='mb-8'>
 					<div className='relative mt-10'>
-						<img src='/video.png' alt='' className='rounded-lg h-[500px]' />
+						<img src='/video.png' alt='' className='rounded-lg h-[250px] lg:h-[500px]' />
 						<div className='absolute w-full bg-black bg-opacity-70 h-full top-0 left-0 rounded-lg flex items-center justify-center'>
 							<Button
 								variant='ghost'

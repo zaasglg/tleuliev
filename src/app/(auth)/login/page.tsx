@@ -34,20 +34,12 @@ export default function Login() {
 
 							fetchData(API_ENDPOINTS.user)
 								.then(res => {
-									// console.log();
 									if (res.data['role'][0] == 'user') {
 										router.push('/test')
-									} else if (res.data['role'][0] == 'region_admin' || res.data['role'][0] == 'district_admin' || res.data['role'][0] == 'village_admin	') {
-										if (res.data['permissions'][0] == 'region') {
-											router.push('/redactor/statistics/region')
-										} else if (res.data['permissions'][0] == 'district') {
-											router.push('/redactor/statistics/district')
-										} else if (res.data['permissions'][0] == 'village') {
-											router.push('/redactor/statistics/village')
-										} else {
-											router.push('/redactor/reports')
-										}
-										
+									} else if (res.data['role'][0] == 'district_admin') {
+										router.push('/redactor/users')
+									} else if (res.data['role'][0] == 'viewer_only') {
+										router.push('/statistics/region')
 									} else if (res.data['role'][0] == 'admin') {
 										router.push('/admin/users')
 									}

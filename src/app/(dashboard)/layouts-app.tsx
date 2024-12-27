@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import clsx from 'clsx'
 import { ReactNode, useState } from 'react'
 import NavLinks from './nav-links'
+import { Toaster } from '@/components/ui/toaster'
 
 export default function LayoutsApp({
 	children,
@@ -26,7 +27,7 @@ export default function LayoutsApp({
 				>
 					<Aside menu={menu} setMenu={setMenu} />
 				</div>
-				<div className='mt-60 lg:mt-0 flex-grow p-6 md:overflow-y-auto md:p-12 bg-gray-50'>
+				<div className='mt-[15px] lg:mt-0 flex-grow p-6 md:overflow-y-auto md:p-12 bg-gray-50'>
 					{children}
 				</div>
 			</div>
@@ -63,6 +64,8 @@ export default function LayoutsApp({
 					}}
 				></div>
 			</div>
+
+			<Toaster />
 		</>
 	)
 }
