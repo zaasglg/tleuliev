@@ -56,10 +56,6 @@ export default function Profile() {
 									<Input value={userData ? userData.name : ''} readOnly />
 								</div>
 								<div>
-									<Label>Email</Label>
-									<Input value={userData ? userData.email : ''} readOnly />
-								</div>
-								<div>
 									<Label>Телефон номер</Label>
 									<Input
 										value={
@@ -74,10 +70,6 @@ export default function Profile() {
 										}
 										readOnly
 									/>
-								</div>
-								<div>
-									<Label>Туылған күні</Label>
-									<Input value={userData ? userData.birthday : ''} readOnly />
 								</div>
 								<div>
 									<Label>Рөлі</Label>

@@ -48,8 +48,8 @@ export default function UpdateUser({
 			...formData,
 			name: user.name,
 			phone: String(user.phone),
-			region_id: user.region_id,
-			district_id: user.district_id,
+			region_id: user.region_id ?? 0,
+			district_id: user.district_id ?? 0,
 		})
 
 		fetchData('regions').then(res => {
