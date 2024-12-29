@@ -16,7 +16,7 @@ const NavLink = ({ href, children, onClick }: { href?: string; children: React.R
   <a
     href={href}
     onClick={onClick}
-    className="text-xs cursor-pointer text-black relative after:content-[''] after:block after:w-0 after:h-[3px] hover:font-bold after:bg-blue-800 after:mx-auto after:transition-all after:duration-300 after:ease-in-out after:rounded-none hover:after:w-1/2"
+    className="text-xs text-black relative after:content-['']  after:absolute after:block after:w-0 after:h-[2px] after:bg-blue-800 after:mx-auto after:transition-all after:duration-300 after:ease-in-out after:rounded-none hover:after:w-1/2 cursor-pointer"
   >
     {children}
   </a>
@@ -61,10 +61,7 @@ const DashboardHeader: NextPage = () => {
     <header className="bg-white py-8 border-b fixed w-full z-1">
       <nav className="px-1 lg:px-5 flex items-center justify-between">
         <div className="flex items-center space-x-5">
-          <Button variant="ghost" className="p-0 hover:bg-transparent hidden lg:block">
-            <Menu />
-          </Button>
-          <span className="font-extrabold text-black text-sm lg:text-xl">Tleuliev VetTest</span>
+          <img src="/images/logo.svg" alt="logo" className='h-10' />
         </div>
 
         <div className='block lg:hidden'>

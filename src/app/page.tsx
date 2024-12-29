@@ -11,36 +11,56 @@ import { useEffect, useState } from 'react'
 import AOS from 'aos';
 import 'aos/dist/aos.css';
 import Link from 'next/link'
+import fetchData from '@/utils/api/fetchData'
+import { API_ENDPOINTS } from '@/utils/endpoint'
+import { useToast } from '@/components/ui/use-toast'
+import { ToastAction } from '@/components/ui/toast'
+import { logout } from '@/utils/api/logout'
+import { User } from '@/types/user.types'
 
 export default function Home() {
+	const [userData, setUserData] = useState<User | null>()
 	const [page, setPage] = useState()
 	const router = useRouter()
+	const { toast } = useToast();
 
 	useEffect(() => {
     AOS.init({
-      duration: 1200, // Set animation duration
-      once: true, // Whether animation should happen only once
+      duration: 1000, 
+      once: true,
     });
   }, [])
 
-	
-	const words = [
-    {
-      text: "ВЕТЕРИНАРЛЫҚ ",
-    },
-    {
-      text: "МЕДИЦИНА",
-    },
-    {
-      text: "бойынша",
-    },
-    {
-      text: "тест",
-    },
-    {
-      text: "сұрақтары.",
-    },
-  ];
+		useEffect(() => {
+			fetchData(API_ENDPOINTS.user)
+				.then(res => {
+					if (res.status === 200) {
+						setUserData(res.data)
+					}
+				})
+				.catch(error => {
+					console.error('Failed to fetch user data:', error)
+				})
+		}, [])
+
+		const handleUnauthorizedAccess = () => {
+			toast({
+				title: 'Сіздің бұл мәзірге рұқсатыңыз жоқ',
+				description: 'Өзіңіздің жеке кабинетіңізден шығып қайтадан кіріп көруіңізді сұраймыз',
+				action: (
+					<ToastAction
+						onClick={() => {
+							logout();
+							router.push('/login');
+						}}
+						altText="Logout"
+					>
+						Аккаунттан шығу
+					</ToastAction>
+				),
+			});
+		};
+
 
 	return (
 		<>
@@ -73,14 +93,14 @@ export default function Home() {
 			<section className='bg-gray-50'>
 				<div className='w-11/12 lg:w-9/12 mx-auto py-12 grid grid-cols-1 lg:grid-cols-3 gap-5'>
 					{/* ======================================== */}
-					<div className='shadow bg-white rounded-md'>
+					<div className='shadow bg-white rounded-md' data-aos="fade-up">
 						<img
 							src='/images/for_test_pass.jpg'
 							alt=''
 							className='h-[200px] w-full object-cover rounded-t-md'
 							data-aos="flip-up"
 						/>
-						<div className='bg-white p-5 rounded-b-md' data-aos="fade-up">
+						<div className='bg-white p-5 rounded-b-md'>
 							<h2 className='text-left font-bold'>
 								Тест тапсырушы жүйесіне кіру
 							</h2>
@@ -88,70 +108,101 @@ export default function Home() {
 								Берілген логин және құпиясөз арқылы жүйеге кіріңіз
 							</p>
 
-							<Button className='mt-5 w-full transition duration-150 hover:-translate-y-2 hover:bg-blue-800 hover:text-white' variant='secondary' asChild>
-								<Link href='/test'>
-									Кіру
-								</Link>
-							</Button>
+							{userData ? (
+								userData.role?.[0] === 'user' ? (
+									<Button className='mt-5 w-full transition duration-150 hover:-translate-y-2 hover:bg-blue-800 hover:text-white' variant='secondary' asChild>
+										<Link href='/test'>
+											Кіру
+										</Link>
+									</Button>
+								) : (
+									<Button onClick={handleUnauthorizedAccess} className='mt-5 w-full transition duration-150 hover:-translate-y-2 hover:bg-blue-800 hover:text-white' variant='secondary'>
+											Кіру
+									</Button>
+								)
+							) : (
+								<Button className='mt-5 w-full transition duration-150 hover:-translate-y-2 hover:bg-blue-800 hover:text-white' variant='secondary' asChild>
+									<Link href='/test'>
+										Кіру
+									</Link>
+								</Button>
+							)}
+
 						</div>
 					</div>
 
 					{/* ======================================== */}
-					<div className='shadow bg-white rounded-md'>
+					<div className='shadow bg-white rounded-md' data-aos="fade-up">
 						<img
 							src='/images/for_statistics.png'
 							alt=''
 							className='h-[200px] w-full object-cover rounded-t-md'
 							data-aos="flip-up"
 						/>
-						<div className='bg-white p-5 rounded-b-md' data-aos="fade-up" data-aos-delay="500">
+						<div className='bg-white p-5 rounded-b-md'>
 							<h2 className='text-left font-bold'>Статистика жүйесіне кіру</h2>
 							<p className='text-left font-thin text-sm'>
 								Берілген логин және құпиясөз арқылы жүйеге кіріңіз
 							</p>
 
-							<Button asChild className='mt-5 w-full transition duration-150 hover:-translate-y-2 hover:bg-blue-800 hover:text-white' variant={'secondary'}>
-								<Link href='/redactor/reports'>
-									Кіру
-								</Link>
-							</Button>
+							{userData ? (
+								userData.role?.[0] === 'viewer_only' ? (
+									<Button className='mt-5 w-full transition duration-150 hover:-translate-y-2 hover:bg-blue-800 hover:text-white' variant='secondary' asChild>
+										<Link href='/statistics/region'>
+											Кіру
+										</Link>
+									</Button>
+								) : (
+									<Button onClick={handleUnauthorizedAccess} className='mt-5 w-full transition duration-150 hover:-translate-y-2 hover:bg-blue-800 hover:text-white' variant='secondary'>
+											Кіру
+									</Button>
+								)
+							) : (
+								<Button className='mt-5 w-full transition duration-150 hover:-translate-y-2 hover:bg-blue-800 hover:text-white' variant='secondary' asChild>
+									<Link href='/statistics/region'>
+										Кіру
+									</Link>
+								</Button>
+							)}
 						</div>
 					</div>
 
 					{/* ======================================== */}
-					<div className='shadow bg-white rounded-md'>
+					<div className='shadow bg-white rounded-md' data-aos="fade-up">
 						<img
-							src='/images/for_statistics.png'
+							src='/images/for_control_users.jpeg'
 							alt=''
 							className='h-[200px] w-full object-cover rounded-t-md'
 							data-aos="flip-up"
 						/>
-						<div className='bg-white p-5 rounded-b-md' data-aos="fade-up" data-aos-delay="1000">
+						<div className='bg-white p-5 rounded-b-md'>
 							<h2 className='text-left font-bold'>Мамандарды басқару жүйесіне кіру</h2>
 							<p className='text-left font-thin text-sm'>
 								Берілген логин және құпиясөз арқылы жүйеге кіріңіз
 							</p>
 
-							<Button className='mt-5 w-full transition duration-150 hover:-translate-y-2 hover:bg-blue-800 hover:text-white' variant='secondary' asChild>
-								<Link href='/admin/users'>
-									Кіру
-								</Link>
-							</Button>
+							{userData ? (
+								userData.role?.[0] === 'district_admin' ? (
+									<Button className='mt-5 w-full transition duration-150 hover:-translate-y-2 hover:bg-blue-800 hover:text-white' variant='secondary' asChild>
+										<Link href='/redactor/users'>
+											Кіру
+										</Link>
+									</Button>
+								) : (
+									<Button onClick={handleUnauthorizedAccess} className='mt-5 w-full transition duration-150 hover:-translate-y-2 hover:bg-blue-800 hover:text-white' variant='secondary'>
+											Кіру
+									</Button>
+								)
+							) : (
+								<Button className='mt-5 w-full transition duration-150 hover:-translate-y-2 hover:bg-blue-800 hover:text-white' variant='secondary' asChild>
+									<Link href='/redactor/users'>
+										Кіру
+									</Link>
+								</Button>
+							)}
 						</div>
 					</div>
 
-
-					{/* <div className='p-5 shadow bg-white rounded-md'>
-						<h2 className='text-left font-bold'>
-							Мамандарды басқару жүйесіне кіру
-						</h2>
-						<p className='text-left font-thin text-sm'>
-							Берілген логин және құпиясөз арқылы жүйеге кіріңіз
-						</p>
-						<Button className='mt-5 w-full' variant='secondary'>
-							Кіру
-						</Button>
-					</div> */}
 				</div>
 			</section>
 

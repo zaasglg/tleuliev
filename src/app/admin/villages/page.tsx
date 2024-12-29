@@ -95,7 +95,7 @@ export default function Page() {
 							</DialogTrigger>
 							<DialogContent className='sm:max-w-[425px]'>
 								<DialogHeader>
-									<DialogTitle>Жаңа аудан қосу</DialogTitle>
+									<DialogTitle>Жаңа Округ қосу</DialogTitle>
 								</DialogHeader>
 								<div>
 									<div>
@@ -105,6 +105,10 @@ export default function Page() {
 												setFormData({
 													...formData,
 													regionId: Number(val),
+												})
+
+												fetchData(`districts/${Number(val)}`).then(res => {
+													setDistricts(res.data)
 												})
 												
 											}}
@@ -133,6 +137,9 @@ export default function Page() {
 													...formData,
 													districtId: Number(val),
 												})
+
+												
+
 											}}
 										>
 											<SelectTrigger className=''>

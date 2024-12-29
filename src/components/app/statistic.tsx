@@ -65,10 +65,10 @@ const Statistic: NextPage<Props> = ({}) => {
 				</h2>
 
 				<div className='flex flex-wrap justify-center mt-10 space-x-3'>
-					<span
+					<button
 						className={
 							active == 0
-								? 'font-bold border py-3 px-5 text-white uppercase flex items-center space-x-2 cursor-pointer'
+								? 'font-bold border r py-3 px-5 text-white uppercase flex items-center space-x-2 cursor-pointer'
 								: 'py-3 px-5 text-white uppercase font-thin flex items-center space-x-2 cursor-pointer'
 						}
 						onClick={() => {
@@ -77,8 +77,8 @@ const Statistic: NextPage<Props> = ({}) => {
 					>
 						<Filter />
 						<span>Облыс бойынша</span>
-					</span>
-					<span
+					</button>
+					{/* <span
 						className={
 							active == 1
 								? 'font-bold border py-3 px-5 text-white uppercase flex items-center space-x-2 cursor-pointer'
@@ -103,7 +103,7 @@ const Statistic: NextPage<Props> = ({}) => {
 					>
 						<Filter />
 						<span>Округ бойынша</span>
-					</span>
+					</span> */}
 				</div>
 
 				<div className='grid items-center grid-cols-2 gap-10 mt-10'>
@@ -130,7 +130,7 @@ const Statistic: NextPage<Props> = ({}) => {
 								</Select>
 							</>
 						) : null}
-						{active == 1 ? (
+						{/* {active == 1 ? (
 							<>
 								<Label className='text-white'>Аудан</Label>
 								<Select
@@ -176,7 +176,7 @@ const Statistic: NextPage<Props> = ({}) => {
 									</SelectContent>
 								</Select>
 							</>
-						) : null}
+						) : null} */}
 					</div>
 
 					<div className='flex flex-col items-center justify-center'>
