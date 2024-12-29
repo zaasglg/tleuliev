@@ -52,10 +52,12 @@ export default function TestDetail({ params }: { params: { id: number } }) {
 				.then(res => {
 					fetchData(API_ENDPOINTS.userReportsDone, 'POST', {
 						correct: res.data.answer.correct,
-					}).then(res => {})
-				})
-				.finally(() => {
-					router.push('/result')
+					}).then(res => {
+						console.log(res);
+					})
+					.finally(() => {
+						router.push('/result')
+					})
 				})
 		} catch (error) {
 			// @ts-ignore

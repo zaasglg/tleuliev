@@ -57,7 +57,7 @@ export default function Page() {
         {/* tableHeader */}
         <TableHeader>
           <TableRow>
-            <TableHead>Аты</TableHead>
+            <TableHead>Аты жөні</TableHead>
             <TableHead>Телефон номер</TableHead>
             <TableHead>Толығырақ</TableHead>
             <TableHead>Әрекет</TableHead>

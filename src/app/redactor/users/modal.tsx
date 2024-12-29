@@ -87,7 +87,7 @@ export default function CreateUserModal({
 					<div className='grid grid-cols-2 gap-3'>
 						{/* name */}
 						<div>
-							<Label htmlFor='name'>Аты</Label>
+							<Label htmlFor='name'>Аты жөні</Label>
 							<Input
 								id='name'
 								value={formData.name}

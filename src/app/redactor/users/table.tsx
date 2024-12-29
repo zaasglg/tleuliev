@@ -35,7 +35,7 @@ export default function UsersTable({
 				{/* tableHeader */}
 				<TableHeader>
 					<TableRow>
-						<TableHead>Аты</TableHead>
+						<TableHead>Аты жөні</TableHead>
 						<TableHead>Телефон номер</TableHead>
 						<TableHead>Округ</TableHead>
 						<TableHead>Әрекет</TableHead>

@@ -64,7 +64,7 @@ export default function Page() {
 
 	const fetchVillages = () => {
 		fetchData('villages').then(res => {
-			setVillages(res.data)
+			setVillages(res.data.reverse())
 			setLoading(false)
 		})
 	}
@@ -206,9 +206,10 @@ export default function Page() {
 						<Label>Іздеу</Label>
 						<Input
 							onChange={val => {
-								fetchData('search/villages', 'POST', {
+								fetchData('seach/villages', 'POST', {
 									name: val.target.value,
 								}).then(res => {
+									console.log(res);
 									setVillages(res.data)
 								})
 							}}
