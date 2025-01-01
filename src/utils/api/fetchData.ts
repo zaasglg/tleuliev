@@ -1,45 +1,41 @@
-'use server'
+'use server';
 
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios'
-import { cookies } from 'next/headers'
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { cookies } from 'next/headers';
 
-type Method = 'GET' | 'POST' | 'PUT' | 'DELETE'
+type Method = 'GET' | 'POST' | 'PUT' | 'DELETE';
 
 export default async function fetchData(
-	url: string,
-	method: Method = 'GET',
-	data?: Record<string, any>
+  url: string,
+  method: Method = 'GET',
+  data?: Record<string, any>
 ): Promise<{ data?: any; message?: string; status: number }> {
-	try {
-		const token = cookies().get('token')
+  const token = cookies().get('token')?.value;
 
-		const options: AxiosRequestConfig = {
-			method: method,
-			url: `http://api.agroduken.kz/api/${url}`,
-			headers: {
-				Accept: 'application/json',
-				'Content-Type': 'application/json',
-				Authorization: `Bearer ${token?.value}`,
-			},
-		}
+  const options: AxiosRequestConfig = {
+    method,
+    url: `http://api.agroduken.kz/api/${url}`,
+    headers: {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      ...(token && { Authorization: `Bearer ${token}` }), // Add Authorization header only if token exists
+    },
+    ...(data && ['POST', 'PUT'].includes(method) && { data }), // Add data only for POST or PUT methods
+  };
 
-		if (data && (method === 'POST' || method === 'PUT')) {
-			options.data = data
-		}
+  try {
+    const response: AxiosResponse = await axios(options);
+    return { data: response.data, status: response.status };
+  } catch (error) {
+    console.error('Error fetching data:', error);
 
-		const response: AxiosResponse = await axios(options)
+    if (axios.isAxiosError(error) && error.response) {
+      return {
+        message: error.response.data?.message || 'Request failed',
+        status: error.response.status,
+      };
+    }
 
-		return { data: response.data, status: response.status }
-	} catch (error: unknown) {
-		console.error('Error fetching data:', error)
-
-		if (axios.isAxiosError(error) && error.response) {
-			return {
-				message: error.response.data.message || 'Request failed',
-				status: error.response.status,
-			}
-		}
-
-		return { message: 'Internal server error', status: 500 }
-	}
+    return { message: 'Internal server error', status: 500 };
+  }
 }

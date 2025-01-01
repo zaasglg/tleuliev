@@ -38,7 +38,7 @@ export default function Login() {
 										router.push('/test')
 									} else if (res.data['role'][0] == 'district_admin') {
 										router.push('/redactor/users')
-									} else if (res.data['role'][0] == 'viewer_only') {
+									} else if (res.data['role'][0] == 'viewer_only' || res.data['role'][0] == 'viewer_only_all') {
 										router.push('/statistics/region')
 									} else if (res.data['role'][0] == 'admin') {
 										router.push('/admin/users')

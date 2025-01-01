@@ -58,7 +58,7 @@ const DashboardHeader: NextPage = () => {
   };
 
   return (
-    <header className="bg-white py-8 border-b fixed w-full z-1">
+    <header className="bg-white p-8 border-b fixed w-full z-[99]">
       <nav className="px-1 lg:px-5 flex items-center justify-between">
         <div className="flex items-center space-x-5">
           <img src="/images/logo.svg" alt="logo" className='h-10' />

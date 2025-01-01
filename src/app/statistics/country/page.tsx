@@ -20,6 +20,7 @@ import ExcelJS from 'exceljs'
 import { saveAs } from 'file-saver'
 import { Eye, FileDown } from 'lucide-react'
 import { useRouter } from 'next/navigation'
+import { CountryReport } from '@/types/country-report.types'
 
 export default function Page() {
 	const [modal, setModal] = useState(false)
@@ -32,7 +33,7 @@ export default function Page() {
 	// ? Report
 	const [reports, setReports] = useState<{
 		loading: boolean
-		result: RegionReport[]
+		result: CountryReport[]
 		error: string
 	}>({
 		loading: true,
@@ -41,7 +42,7 @@ export default function Page() {
 	})
 
 	const fetchReports = () => {
-		fetchData('region-reports').then(res => {
+		fetchData('country-reports').then(res => {
 			console.log(res)
 			if (res.status === 200) {
 				setReports({
@@ -77,7 +78,7 @@ export default function Page() {
 		// Add data
 		reports.result.forEach(item => {
 			worksheet.addRow({
-				district_name: item.district_name,
+				district_name: item.region_name,
 				total_plan: item.total_plan,
 				total_done: item.total_done,
 				done_pct: `${item.done_pct} %`,
@@ -101,7 +102,7 @@ export default function Page() {
 				<div className='flex justify-between items-center gap-10'>
 					<div>
 						<h2 className='text-lg lg:text-4xl font-bold lg:font-medium'>
-							Облыс статистика
+							қазақстан статистика
 						</h2>
 					</div>
 				</div>
@@ -142,8 +143,8 @@ export default function Page() {
 								<TableBody>
 									{reports &&
 										reports.result.map(item => (
-											<TableRow key={item.district_id}>
-												<TableCell>{item.district_name}</TableCell>
+											<TableRow key={item.region_id}>
+												<TableCell>{item.region_name}</TableCell>
 												<TableCell>{item.total_plan}</TableCell>
 												<TableCell>{item.total_done}</TableCell>
 												<TableCell>{item.total_correct}</TableCell>
@@ -152,10 +153,12 @@ export default function Page() {
 														variant='ghost'
 														onClick={() => {
 															router.push(
-																`/redactor/statistics/district/${item.district_id}`
+																`/statistics/region/${item.region_id}`
 															)
 														}}
+														className='flex items-center space-x-3'
 													>
+														<span>Көру</span>
 														<Eye />
 													</Button>
 												</TableCell>

@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
 	Dialog,
 	DialogContent,
@@ -39,7 +40,6 @@ export default function CreateUserModal({
 		password: '',
 		phone: '',
 		region_id: 0,
-		district_id: 0,
 		role: 'viewer_only'
 	})
 
@@ -113,58 +113,60 @@ export default function CreateUserModal({
 
 
 						{/* regions */}
+						{
+							formData.role == "viewer_only" ? (
+								<div>
+								<Label>Облыс</Label>
+								<Select
+									onValueChange={val => {
+										setFormData({
+											...formData,
+											region_id: Number(val),
+										})
+	
+										fetchData(`districts/${Number(val)}`).then(res => {
+											setDistricts(res.data)
+										})
+									}}
+								>
+									<SelectTrigger className=''>
+										<SelectValue placeholder='-----------------' />
+									</SelectTrigger>
+									<SelectContent>
+										{regions &&
+											regions.map(region => (
+												<SelectItem value={String(region.id)} key={region.id}>
+													{region.name}
+												</SelectItem>
+											))}
+									</SelectContent>
+								</Select>
+							</div>
+							) : null
+						}
+
 						<div>
-							<Label>Облыс</Label>
-							<Select
-								onValueChange={val => {
-									setFormData({
-										...formData,
-										region_id: Number(val),
-									})
-
-									fetchData(`districts/${Number(val)}`).then(res => {
-										setDistricts(res.data)
-									})
-								}}
-							>
-								<SelectTrigger className=''>
-									<SelectValue placeholder='-----------------' />
-								</SelectTrigger>
-								<SelectContent>
-									{regions &&
-										regions.map(region => (
-											<SelectItem value={String(region.id)} key={region.id}>
-												{region.name}
-											</SelectItem>
-										))}
-								</SelectContent>
-							</Select>
-						</div>
-
-						{/* districts */}
-						<div className='space-y-1'>
-							<Label>Аудан қала</Label>
-							<Select
-								value={String(formData.district_id)}
-								onValueChange={val => {
-									setFormData({
-										...formData,
-										district_id: Number(val),
-									})
-								}}
-							>
-								<SelectTrigger className=''>
-									<SelectValue placeholder='-----------------' />
-								</SelectTrigger>
-								<SelectContent>
-									{districts &&
-										districts.map(district => (
-											<SelectItem value={String(district.id)} key={district.id}>
-												{district.name}
-											</SelectItem>
-										))}
-								</SelectContent>
-							</Select>
+							<div className="flex h-full items-end pb-3 space-x-2">
+								<Checkbox id="viewer_only_all" onCheckedChange={(val) => {
+									if (val == true) {
+										setFormData({
+											...formData,
+											role: 'viewer_only_all'
+										})
+									} else {
+										setFormData({
+											...formData,
+											role: 'viewer_only'
+										})
+									}
+								}} />
+								<label
+									htmlFor="viewer_only_all"
+									className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+								>
+									Қазақстан бойынша
+								</label>
+							</div>
 						</div>
 
 					</div>
@@ -172,10 +174,10 @@ export default function CreateUserModal({
 						<Button
 							type='submit'
 							onClick={() => {
+								
 								fetchData('users', 'POST', formData).then(res => {
-									console.log(res);
-									// fetchUsers()
-									// setModal(false)
+									fetchUsers()
+									setModal(false)
 								})
 
 								setFormData({
@@ -183,7 +185,6 @@ export default function CreateUserModal({
 									password: '',
 									phone: '',
 									region_id: 0,
-									district_id: 0,
 									role: 'viewer_only'
 								})
 							}}

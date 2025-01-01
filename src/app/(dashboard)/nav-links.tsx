@@ -52,6 +52,7 @@ export default function NavLinks() {
 		() => [
 			{ name: 'Жылдық жоспар', href: '/redactor/reports', icon: <ClipboardCheck />, },
 			{ name: 'Мамандар тізімі', href: '/redactor/users', icon: <ListTodo />, },
+			{ name: 'Статистика', href: '/redactor/statistics/district', icon: <ListTodo />, },
 			{ name: 'Нұсқаулық', href: '/instruction', icon: <ListTodo />, },
 		],
 		[userData]
@@ -65,6 +66,15 @@ export default function NavLinks() {
 		],
 		[]
 	)
+
+		// MARK: MENU Viewer All
+		const linksViewerAll: NavLink[] = useMemo(
+			() => [
+				{ name: 'Статистика', href: '/statistics/country', icon: <TvMinimal /> },
+				{ name: 'Нұсқаулық', href: '/instruction', icon: <ChartBar /> },
+			],
+			[]
+		)
 
 	// MARK: MENU Admin
 	const linksAdmin: NavLink[] = useMemo(
@@ -143,6 +153,7 @@ export default function NavLinks() {
 				{
 					district_admin: renderLinks(links),
 					viewer_only: renderLinks(linksViewer),
+					viewer_only_all: renderLinks(linksViewerAll),
 					admin: renderLinks(linksAdmin),
 					user: renderLinks(linksUser),
 				}[userData.role[0]]
